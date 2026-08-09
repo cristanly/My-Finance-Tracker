@@ -60,7 +60,7 @@
                         <i class="fa-solid fa-gear"></i>
                     </button>
 
-                    <!-- Dropdown Menu Content (Light Mode Option Removed) -->
+                    <!-- Dropdown Menu Content -->
                     <div id="settings-dropdown" class="hidden absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50">
                         <div id="dd-head-2" class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Data Management</div>
                         <button onclick="exportData()" id="dd-item-export" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-2">
@@ -123,14 +123,14 @@
                 <!-- Doughnut Chart -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
                     <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i> Budget Allocation Breakdown</h3>
-                    <div class="relative w-full h-64 flex justify-center items-center">
+                    <div class="relative w-full h-48 flex justify-center items-center">
                         <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
                 <!-- Bar Chart -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
                     <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-column mr-2 text-indigo-500"></i> Overall Financial Breakdown</h3>
-                    <div class="relative w-full h-64 flex justify-center items-center">
+                    <div class="relative w-full h-48 flex justify-center items-center">
                         <canvas id="summaryChart"></canvas>
                     </div>
                 </div>
@@ -612,7 +612,7 @@
         function updateCharts(income, expense, savings, lended) {
             const textColor = '#475569';
 
-            // Doughnut Chart (Expenses, Savings, Lended)
+            // Doughnut Chart
             const ctx1 = document.getElementById('expenseChart').getContext('2d');
             if (expenseChartInstance) expenseChartInstance.destroy();
             expenseChartInstance = new Chart(ctx1, {
@@ -635,7 +635,7 @@
                 }
             });
 
-            // Bar Chart (Income vs Expenses)
+            // Bar Chart (Ginawang mas payat ang mga bars gamit ang maxBarThickness)
             const ctx2 = document.getElementById('summaryChart').getContext('2d');
             if (summaryChartInstance) summaryChartInstance.destroy();
             summaryChartInstance = new Chart(ctx2, {
@@ -646,7 +646,8 @@
                         label: 'Amount',
                         data: [income, expense],
                         backgroundColor: ['#10b981', '#f43f5e'],
-                        borderRadius: 8
+                        borderRadius: 8,
+                        maxBarThickness: 40
                     }]
                 },
                 options: {
