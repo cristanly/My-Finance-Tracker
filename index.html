@@ -100,14 +100,14 @@
 
             <!-- Charts Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Doughnut Chart: Income vs Expenses -->
+                <!-- Doughnut Chart: Budget Allocation Breakdown (All Categories) -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
-                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-indigo-600"></i> Cash Flow Share (Income vs Expense)</h3>
+                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-indigo-600"></i> Budget Allocation Breakdown</h3>
                     <div class="relative w-full h-64 flex justify-center items-center">
                         <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
-                <!-- Bar Chart: Complete Financial Categories Overview -->
+                <!-- Bar Chart: Overall Financial Categories Overview -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
                     <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-column mr-2 text-indigo-600"></i> Overall Financial Breakdown</h3>
                     <div class="relative w-full h-64 flex justify-center items-center">
@@ -396,19 +396,19 @@
             const totalLended = (data.lended || []).reduce((acc, l) => acc + l.amount, 0);
             const totalRecurring = (data.recurring || []).reduce((acc, r) => acc + r.amount, 0);
 
-            // 1. Doughnut Chart: Income vs Expenses
+            // 1. Doughnut Chart: Budget Allocation Breakdown (Expenses, Savings, Credits, Lended, Bills)
             const ctxExpense = document.getElementById('expenseChart');
             if (ctxExpense) {
                 if (expenseChartInstance) expenseChartInstance.destroy();
                 
-                let hasCashFlow = totalIncome > 0 || totalExpense > 0;
+                let hasData = totalExpense > 0 || totalSavings > 0 || totalCredit > 0 || totalLended > 0 || totalRecurring > 0;
                 expenseChartInstance = new Chart(ctxExpense, {
                     type: 'doughnut',
                     data: {
-                        labels: hasCashFlow ? ['Total Income', 'Total Expenses'] : ['No Data Yet'],
+                        labels: hasData ? ['Expenses', 'Savings', 'Credits/Loans', 'Lended', 'Bills'] : ['No Data Yet'],
                         datasets: [{
-                            data: hasCashFlow ? [totalIncome, totalExpense] : [1],
-                            backgroundColor: hasCashFlow ? ['#10b981', '#f43f5e'] : ['#e2e8f0'],
+                            data: hasData ? [totalExpense, totalSavings, totalCredit, totalLended, totalRecurring] : [1],
+                            backgroundColor: hasData ? ['#f43f5e', '#14b8a6', '#e11d48', '#8b5cf6', '#f59e0b'] : ['#e2e8f0'],
                             borderWidth: 2,
                             borderColor: '#ffffff'
                         }]
@@ -424,7 +424,7 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        if (!hasCashFlow) return ' No data';
+                                        if (!hasData) return ' No data';
                                         let val = context.raw;
                                         return ` ${context.label}: ${cur}${formatMoney(val)}`;
                                     }
