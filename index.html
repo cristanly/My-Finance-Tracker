@@ -27,7 +27,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-slate-50 text-slate-800" onclick="closeDropdownOutside(event)">
 
     <div class="max-w-6xl mx-auto px-4 py-8">
         <!-- App Header with Personalized Welcome Message -->
@@ -41,7 +41,7 @@
                 </div>
                 <p class="text-sm text-slate-500 mt-1">Manage income, expenses, debts, savings, and bills in one place.</p>
             </div>
-            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end flex-wrap">
                 <!-- Currency Selector -->
                 <div class="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm">
                     <label class="text-xs font-medium text-slate-500 mr-2">Currency:</label>
@@ -53,9 +53,28 @@
                         <option value="¥">¥ (JPY)</option>
                     </select>
                 </div>
-                <button onclick="resetAllData()" class="text-xs bg-red-50 text-red-600 px-3 py-2 rounded-xl border border-red-100 hover:bg-red-100 transition whitespace-nowrap">
-                    <i class="fa-solid fa-trash-can mr-1"></i> Reset Data
-                </button>
+
+                <!-- Settings Dropdown (Gear Icon) -->
+                <div class="relative">
+                    <button onclick="toggleSettingsDropdown(event)" class="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition border border-slate-200" title="Settings & Backup">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+
+                    <!-- Dropdown Menu Content -->
+                    <div id="settings-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50">
+                        <button onclick="exportData()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-2">
+                            <i class="fa-solid fa-download w-4 text-indigo-500"></i> Export Backup
+                        </button>
+                        <label class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-upload w-4 text-emerald-500"></i> Import Backup
+                            <input type="file" id="import-file" accept=".json" onchange="importData(event)" class="hidden">
+                        </label>
+                        <div class="h-px bg-slate-100 my-1"></div>
+                        <button onclick="resetAllData()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">
+                            <i class="fa-solid fa-trash-can w-4 text-red-500"></i> Reset Data
+                        </button>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -242,6 +261,19 @@
         let expenseChartInstance = null;
         let summaryChartInstance = null;
 
+        function toggleSettingsDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('settings-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function closeDropdownOutside(event) {
+            const dropdown = document.getElementById('settings-dropdown');
+            if (dropdown && !dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        }
+
         function editUsername() {
             let currentName = data.username || 'User';
             let newName = prompt("Enter your name or nickname:", currentName);
@@ -344,6 +376,40 @@
             }
         }
 
+        // Export data as JSON file
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `finance_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        // Import data from JSON file
+        function importData(event) {
+            const fileReader = new FileReader();
+            if (event.target.files[0]) {
+                fileReader.readAsText(event.target.files[0], "UTF-8");
+                fileReader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        if (importedData && typeof importedData === 'object' && importedData.transaction) {
+                            data = importedData;
+                            saveAndRefresh();
+                            alert("Data successfully imported!");
+                        } else {
+                            alert("Invalid backup file format.");
+                        }
+                    } catch (error) {
+                        alert("Error reading JSON file.");
+                    }
+                    event.target.value = '';
+                };
+            }
+        }
+
         function checkRecurringBills() {
             if (!data.recurring || data.recurring.length === 0) return;
             
@@ -396,7 +462,7 @@
             const totalLended = (data.lended || []).reduce((acc, l) => acc + l.amount, 0);
             const totalRecurring = (data.recurring || []).reduce((acc, r) => acc + r.amount, 0);
 
-            // 1. Doughnut Chart: Budget Allocation Breakdown (Expenses, Savings, Credits, Lended, Bills)
+            // 1. Doughnut Chart: Budget Allocation Breakdown
             const ctxExpense = document.getElementById('expenseChart');
             if (ctxExpense) {
                 if (expenseChartInstance) expenseChartInstance.destroy();
@@ -436,7 +502,7 @@
                 });
             }
 
-            // 2. Bar Chart: Overall Categories (Income, Expenses, Savings, Credit, Lended, Bills)
+            // 2. Bar Chart: Overall Categories
             const ctxSummary = document.getElementById('summaryChart');
             if (ctxSummary) {
                 if (summaryChartInstance) summaryChartInstance.destroy();
