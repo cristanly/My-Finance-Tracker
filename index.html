@@ -35,7 +35,7 @@
         <header id="app-header" class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 transition-colors duration-300">
             <div>
                 <div class="flex items-center gap-2">
-                    <h1 id="welcome-title" class="text-2xl md:text-3xl font-bold tracking-tight">Hi, User! 👋</h1>
+                    <h1 id="welcome-title" class="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Hi, User! 👋</h1>
                     <button onclick="editUsername()" id="edit-name-btn" class="text-xs text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg transition font-medium">
                         <i class="fa-solid fa-pen mr-1"></i> Edit Name
                     </button>
@@ -45,8 +45,8 @@
             <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end flex-wrap">
                 <!-- Currency Selector -->
                 <div id="currency-box" class="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300">
-                    <label class="text-xs font-medium text-slate-500 mr-2">Currency:</label>
-                    <select id="currency-select" onchange="changeCurrency()" class="text-sm font-semibold bg-transparent focus:outline-none">
+                    <label id="currency-label" class="text-xs font-medium text-slate-500 mr-2">Currency:</label>
+                    <select id="currency-select" onchange="changeCurrency()" class="text-sm font-semibold bg-transparent focus:outline-none cursor-pointer">
                         <option value="$">$ (USD)</option>
                         <option value="€">€ (EUR)</option>
                         <option value="£">£ (GBP)</option>
@@ -57,33 +57,33 @@
 
                 <!-- Settings Dropdown (Gear Icon) -->
                 <div class="relative">
-                    <button onclick="toggleSettingsDropdown(event)" id="gear-btn" class="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition border border-slate-200" title="Settings & Backup">
+                    <button onclick="toggleSettingsDropdown(event)" id="gear-btn" class="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition border border-slate-200 shadow-sm" title="Settings & Backup">
                         <i class="fa-solid fa-gear"></i>
                     </button>
 
                     <!-- Dropdown Menu Content -->
                     <div id="settings-dropdown" class="hidden absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300">
-                        <div class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Appearance</div>
-                        <button onclick="changeTheme('default')" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-100 transition flex items-center gap-2">
+                        <div id="dd-head-1" class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Appearance</div>
+                        <button onclick="changeTheme('default')" id="dd-item-default" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2">
                             <i class="fa-solid fa-sun w-4 text-amber-500"></i> Default White
                         </button>
-                        <button onclick="changeTheme('dream')" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-purple-50 transition flex items-center gap-2">
+                        <button onclick="changeTheme('dream')" id="dd-item-dream" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-purple-50 transition flex items-center gap-2">
                             <i class="fa-solid fa-cloud-moon w-4 text-purple-400"></i> Dream Light
                         </button>
-                        <button onclick="changeTheme('dark')" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-800 hover:text-white transition flex items-center gap-2">
+                        <button onclick="changeTheme('dark')" id="dd-item-dark" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-800 hover:text-white transition flex items-center gap-2">
                             <i class="fa-solid fa-moon w-4 text-indigo-400"></i> Dark Mode
                         </button>
-                        <div class="h-px bg-slate-100 my-1"></div>
-                        <div class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Data Management</div>
-                        <button onclick="exportData()" class="w-full text-left px-4 py-2.5 text-xs font-medium hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-2">
+                        <div id="dd-divider-1" class="h-px bg-slate-100 my-1"></div>
+                        <div id="dd-head-2" class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Data Management</div>
+                        <button onclick="exportData()" id="dd-item-export" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-2">
                             <i class="fa-solid fa-download w-4 text-indigo-500"></i> Export Backup
                         </button>
-                        <label class="w-full text-left px-4 py-2.5 text-xs font-medium hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer">
+                        <label id="dd-item-import" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer">
                             <i class="fa-solid fa-upload w-4 text-emerald-500"></i> Import Backup
                             <input type="file" id="import-file" accept=".json" onchange="importData(event)" class="hidden">
                         </label>
-                        <div class="h-px bg-slate-100 my-1"></div>
-                        <button onclick="resetAllData()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">
+                        <div id="dd-divider-2" class="h-px bg-slate-100 my-1"></div>
+                        <button onclick="resetAllData()" id="dd-item-reset" class="w-full text-left px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2">
                             <i class="fa-solid fa-trash-can w-4 text-red-500"></i> Reset Data
                         </button>
                     </div>
@@ -105,28 +105,28 @@
         <div id="tab-dashboard" class="space-y-6 tab-content">
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Balance</p>
-                    <h2 id="dash-balance" class="text-lg font-bold mt-2 truncate whitespace-nowrap">0.00</h2>
+                    <p class="theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Balance</p>
+                    <h2 id="dash-balance" class="text-lg font-bold text-slate-900 mt-2 truncate whitespace-nowrap">0.00</h2>
                 </div>
                 <div class="theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Income</p>
-                    <h2 id="dash-income" class="text-lg font-bold text-emerald-500 mt-2 truncate whitespace-nowrap">+0.00</h2>
+                    <p class="theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Income</p>
+                    <h2 id="dash-income" class="text-lg font-bold text-emerald-600 mt-2 truncate whitespace-nowrap">+0.00</h2>
                 </div>
                 <div class="theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Expenses</p>
-                    <h2 id="dash-expense" class="text-lg font-bold text-rose-500 mt-2 truncate whitespace-nowrap">-0.00</h2>
+                    <p class="theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Expenses</p>
+                    <h2 id="dash-expense" class="text-lg font-bold text-rose-600 mt-2 truncate whitespace-nowrap">-0.00</h2>
                 </div>
                 <div class="theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Savings</p>
-                    <h2 id="dash-savings" class="text-lg font-bold text-teal-500 mt-2 truncate whitespace-nowrap">0.00</h2>
+                    <p class="theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Savings</p>
+                    <h2 id="dash-savings" class="text-lg font-bold text-teal-600 mt-2 truncate whitespace-nowrap">0.00</h2>
                 </div>
                 <div class="theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Lended</p>
-                    <h2 id="dash-lended" class="text-lg font-bold text-violet-500 mt-2 truncate whitespace-nowrap">0.00</h2>
+                    <p class="theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Lended</p>
+                    <h2 id="dash-lended" class="text-lg font-bold text-violet-600 mt-2 truncate whitespace-nowrap">0.00</h2>
                 </div>
                 <div class="theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Upcoming Bills</p>
-                    <h2 id="dash-recurring" class="text-lg font-bold text-amber-500 mt-2 truncate whitespace-nowrap">0.00</h2>
+                    <p class="theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider">Upcoming Bills</p>
+                    <h2 id="dash-recurring" class="text-lg font-bold text-amber-600 mt-2 truncate whitespace-nowrap">0.00</h2>
                 </div>
             </div>
 
@@ -134,14 +134,14 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Doughnut Chart -->
                 <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center transition-colors duration-300">
-                    <h3 class="chart-title text-sm font-semibold w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-indigo-500"></i> Budget Allocation Breakdown</h3>
+                    <h3 class="chart-title text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-indigo-600"></i> Budget Allocation Breakdown</h3>
                     <div class="relative w-full h-64 flex justify-center items-center">
                         <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
                 <!-- Bar Chart -->
                 <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center transition-colors duration-300">
-                    <h3 class="chart-title text-sm font-semibold w-full mb-4 text-left"><i class="fa-solid fa-chart-column mr-2 text-indigo-500"></i> Overall Financial Breakdown</h3>
+                    <h3 class="chart-title text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-column mr-2 text-indigo-600"></i> Overall Financial Breakdown</h3>
                     <div class="relative w-full h-64 flex justify-center items-center">
                         <canvas id="summaryChart"></canvas>
                     </div>
@@ -152,32 +152,32 @@
         <!-- TAB CONTENT: TRANSACTIONS -->
         <div id="tab-transactions" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit transition-colors duration-300">
-                <h2 class="text-lg font-semibold mb-4 text-emerald-600">Add Transaction</h2>
+                <h2 class="form-title-transaction text-lg font-semibold mb-4 text-emerald-700">Add Transaction</h2>
                 <form id="form-transaction" onsubmit="addEntry(event, 'transaction')" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Description</label>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Description</label>
                         <input type="text" id="t-desc" required placeholder="e.g., Grocery" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Amount</label>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Amount</label>
                         <input type="text" id="t-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Type</label>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Type</label>
                         <select id="t-type" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             <option value="income">Income</option>
                             <option value="expense">Expense</option>
                         </select>
                     </div>
-                    <button type="submit" class="w-full bg-emerald-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-emerald-700 transition">Add Transaction</button>
+                    <button type="submit" class="w-full bg-emerald-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-emerald-700 transition shadow-sm">Add Transaction</button>
                 </form>
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
-                <h2 class="table-heading text-lg font-semibold mb-4">Transaction History</h2>
+                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Transaction History</h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
-                            <tr class="border-b text-xs font-semibold text-slate-400">
+                            <tr class="table-header-row border-b text-xs font-semibold text-slate-400">
                                 <th class="pb-3">Description</th>
                                 <th class="pb-3">Type</th>
                                 <th class="pb-3 text-right">Amount</th>
@@ -193,67 +193,67 @@
         <!-- TAB CONTENT: CREDIT & LOANS -->
         <div id="tab-credit" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit transition-colors duration-300">
-                <h2 class="text-lg font-semibold mb-4 text-rose-600">Add Credit / Loan</h2>
+                <h2 class="form-title-credit text-lg font-semibold mb-4 text-rose-700">Add Credit / Loan</h2>
                 <form id="form-credit" onsubmit="addEntry(event, 'credit')" class="space-y-4">
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Loan Name / Lender</label><input type="text" id="c-desc" required placeholder="e.g., Bank Car Loan" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none"></div>
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Total Owed Amount</label><input type="text" id="c-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none"></div>
-                    <button type="submit" class="w-full bg-rose-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-rose-700 transition">Add Loan Record</button>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Loan Name / Lender</label><input type="text" id="c-desc" required placeholder="e.g., Bank Car Loan" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none"></div>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Total Owed Amount</label><input type="text" id="c-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none"></div>
+                    <button type="submit" class="w-full bg-rose-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-rose-700 transition shadow-sm">Add Loan Record</button>
                 </form>
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
-                <h2 class="table-heading text-lg font-semibold mb-4">Active Credits & Loans</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Name</th><th class="pb-3 text-right">Amount Owed</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-credit" class="text-sm divide-y"></tbody></table></div>
+                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Active Credits & Loans</h2>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3">Name</th><th class="pb-3 text-right">Amount Owed</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-credit" class="text-sm divide-y"></tbody></table></div>
             </div>
         </div>
 
         <!-- TAB CONTENT: SAVINGS -->
         <div id="tab-savings" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit transition-colors duration-300">
-                <h2 class="text-lg font-semibold mb-4 text-teal-600">Add Savings Goal</h2>
+                <h2 class="form-title-savings text-lg font-semibold mb-4 text-teal-700">Add Savings Goal</h2>
                 <form id="form-savings" onsubmit="addEntry(event, 'savings')" class="space-y-4">
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Goal Name</label><input type="text" id="s-desc" required placeholder="e.g., New Laptop" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></div>
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Current Saved Amount</label><input type="text" id="s-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></div>
-                    <button type="submit" class="w-full bg-teal-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-teal-700 transition">Add Savings Goal</button>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Goal Name</label><input type="text" id="s-desc" required placeholder="e.g., New Laptop" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></div>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Current Saved Amount</label><input type="text" id="s-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></div>
+                    <button type="submit" class="w-full bg-teal-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-teal-700 transition shadow-sm">Add Savings Goal</button>
                 </form>
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
-                <h2 class="table-heading text-lg font-semibold mb-4">Savings Goals</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Goal</th><th class="pb-3 text-right">Saved</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-savings" class="text-sm divide-y"></tbody></table></div>
+                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Savings Goals</h2>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3">Goal</th><th class="pb-3 text-right">Saved</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-savings" class="text-sm divide-y"></tbody></table></div>
             </div>
         </div>
 
         <!-- TAB CONTENT: LENDED MONEY -->
         <div id="tab-lended" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit transition-colors duration-300">
-                <h2 class="text-lg font-semibold mb-4 text-violet-600">Track Lended Money</h2>
+                <h2 class="form-title-lended text-lg font-semibold mb-4 text-violet-700">Track Lended Money</h2>
                 <form id="form-lended" onsubmit="addEntry(event, 'lended')" class="space-y-4">
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Borrower Name</label><input type="text" id="l-desc" required placeholder="e.g., John Doe" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"></div>
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Amount Lended</label><input type="text" id="l-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"></div>
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Date Lended</label><input type="date" id="l-date" required class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"></div>
-                    <button type="submit" class="w-full bg-violet-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-violet-700 transition">Add Lended Record</button>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Borrower Name</label><input type="text" id="l-desc" required placeholder="e.g., John Doe" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"></div>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Amount Lended</label><input type="text" id="l-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"></div>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Date Lended</label><input type="date" id="l-date" required class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"></div>
+                    <button type="submit" class="w-full bg-violet-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-violet-700 transition shadow-sm">Add Lended Record</button>
                 </form>
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
-                <h2 class="table-heading text-lg font-semibold mb-4">Money Owed To You</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Borrower</th><th class="pb-3">Date Lended</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-lended" class="text-sm divide-y"></tbody></table></div>
+                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Money Owed To You</h2>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3">Borrower</th><th class="pb-3">Date Lended</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-lended" class="text-sm divide-y"></tbody></table></div>
             </div>
         </div>
 
         <!-- TAB CONTENT: RECURRING & BILLS -->
         <div id="tab-recurring" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit transition-colors duration-300">
-                <h2 class="text-lg font-semibold mb-4 text-amber-600">Add Recurring Bill / Tx</h2>
+                <h2 class="form-title-recurring text-lg font-semibold mb-4 text-amber-700">Add Recurring Bill / Tx</h2>
                 <form id="form-recurring" onsubmit="addEntry(event, 'recurring')" class="space-y-4">
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Bill Name</label><input type="text" id="r-desc" required placeholder="e.g., Netflix / Rent" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></div>
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Amount</label><input type="text" id="r-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></div>
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Frequency</label><select id="r-freq" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"><option value="Monthly">Monthly</option><option value="Weekly">Weekly</option><option value="Yearly">Yearly</option></select></div>
-                    <div><label class="block text-xs font-medium text-slate-500 mb-1">Next Due Date</label><input type="date" id="r-date" required class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></div>
-                    <button type="submit" class="w-full bg-amber-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-amber-700 transition">Add Bill / Recurring</button>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Bill Name</label><input type="text" id="r-desc" required placeholder="e.g., Netflix / Rent" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></div>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Amount</label><input type="text" id="r-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></div>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Frequency</label><select id="r-freq" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"><option value="Monthly">Monthly</option><option value="Weekly">Weekly</option><option value="Yearly">Yearly</option></select></div>
+                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Next Due Date</label><input type="date" id="r-date" required class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></div>
+                    <button type="submit" class="w-full bg-amber-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-amber-700 transition shadow-sm">Add Bill / Recurring</button>
                 </form>
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
-                <h2 class="table-heading text-lg font-semibold mb-4">Upcoming Bills & Recurring Schedules</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Name</th><th class="pb-3">Frequency</th><th class="pb-3">Due Date</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-recurring" class="text-sm divide-y"></tbody></table></div>
+                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Upcoming Bills & Recurring Schedules</h2>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3">Name</th><th class="pb-3">Frequency</th><th class="pb-3">Due Date</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-recurring" class="text-sm divide-y"></tbody></table></div>
             </div>
         </div>
 
@@ -282,51 +282,116 @@
             const welcomeTitle = document.getElementById('welcome-title');
             const headerDesc = document.getElementById('header-desc');
             const currencyBox = document.getElementById('currency-box');
+            const currencyLabel = document.getElementById('currency-label');
             const gearBtn = document.getElementById('gear-btn');
             const dropdown = document.getElementById('settings-dropdown');
             const navContainer = document.getElementById('nav-container');
+            
+            // Dropdown parts
+            const ddHead1 = document.getElementById('dd-head-1');
+            const ddHead2 = document.getElementById('dd-head-2');
+            const ddItemDefault = document.getElementById('dd-item-default');
+            const ddItemDream = document.getElementById('dd-item-dream');
+            const ddItemDark = document.getElementById('dd-item-dark');
+            const ddItemExport = document.getElementById('dd-item-export');
+            const ddItemImport = document.getElementById('dd-item-import');
+            const ddItemReset = document.getElementById('dd-item-reset');
+            const ddDiv1 = document.getElementById('dd-divider-1');
+            const ddDiv2 = document.getElementById('dd-divider-2');
+
             const cards = document.querySelectorAll('.theme-card');
+            const labels = document.querySelectorAll('.theme-label');
+            const labelSm = document.querySelectorAll('.theme-label-sm');
             const inputs = document.querySelectorAll('.theme-input');
             const tableHeadings = document.querySelectorAll('.table-heading');
+            const tableHeaderRows = document.querySelectorAll('.table-header-row');
             const chartTitles = document.querySelectorAll('.chart-title');
+            
+            const formTitleT = document.querySelector('.form-title-transaction');
+            const formTitleC = document.querySelector('.form-title-credit');
+            const formTitleS = document.querySelector('.form-title-savings');
+            const formTitleL = document.querySelector('.form-title-lended');
+            const formTitleR = document.querySelector('.form-title-recurring');
 
             if (themeName === 'dark') {
-                body.className = "bg-slate-950 text-slate-100 transition-colors duration-300";
-                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 p-6 rounded-3xl shadow-lg border border-slate-800 transition-colors duration-300";
+                body.className = "bg-[#090d16] text-slate-100 transition-colors duration-300";
+                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-[#111827] p-6 rounded-3xl shadow-xl border border-slate-800/80 transition-colors duration-300";
                 welcomeTitle.className = "text-2xl md:text-3xl font-bold tracking-tight text-white";
                 headerDesc.className = "text-sm text-slate-400 mt-1";
-                currencyBox.className = "flex items-center bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300 text-slate-200";
-                gearBtn.className = "w-10 h-10 flex items-center justify-center bg-slate-800 text-slate-300 hover:bg-slate-700 rounded-xl transition border border-slate-700";
-                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl py-2 z-50 text-slate-200 transition-colors duration-300";
-                navContainer.className = "flex overflow-x-auto space-x-2 bg-slate-900 p-2 rounded-2xl shadow-lg border border-slate-800 mb-8 transition-colors duration-300";
+                currencyBox.className = "flex items-center bg-[#1f293d] border border-slate-700/80 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300 text-slate-200";
+                currencyLabel.className = "text-xs font-medium text-slate-400 mr-2";
+                gearBtn.className = "w-10 h-10 flex items-center justify-center bg-[#1f293d] text-slate-200 hover:bg-slate-700 rounded-xl transition border border-slate-700/80 shadow-sm";
+                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-[#111827] border border-slate-800 rounded-2xl shadow-2xl py-2 z-50 text-slate-200 transition-colors duration-300";
+                navContainer.className = "flex overflow-x-auto space-x-2 bg-[#111827] p-2 rounded-2xl shadow-xl border border-slate-800/80 mb-8 transition-colors duration-300";
                 
+                ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
+                ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
+                ddItemDefault.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2";
+                ddItemDream.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2";
+                ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2";
+                ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2";
+                ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2 cursor-pointer";
+                ddItemReset.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-red-400 hover:bg-red-950/40 transition flex items-center gap-2";
+                ddDiv1.className = "h-px bg-slate-800 my-1";
+                ddDiv2.className = "h-px bg-slate-800 my-1";
+
                 cards.forEach(card => {
-                    card.className = "theme-card bg-slate-900 p-5 rounded-2xl shadow-lg border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between text-slate-100";
+                    card.className = "theme-card bg-[#111827] p-5 rounded-2xl shadow-xl border border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between text-slate-100";
                 });
+                labels.forEach(lbl => lbl.className = "theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider");
+                labelSm.forEach(ls => ls.className = "theme-label-sm block text-xs font-medium text-slate-300 mb-1");
                 inputs.forEach(inp => {
-                    inp.className = "theme-input w-full px-3 py-2 bg-slate-800 border border-slate-700 text-slate-100 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none";
+                    inp.className = "theme-input w-full px-3 py-2 bg-[#1f293d] border border-slate-700 text-slate-100 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none placeholder-slate-400";
                 });
                 tableHeadings.forEach(th => th.className = "table-heading text-lg font-semibold mb-4 text-slate-100");
+                tableHeaderRows.forEach(thr => thr.className = "table-header-row border-b border-slate-800 text-xs font-semibold text-slate-400");
                 chartTitles.forEach(ct => ct.className = "chart-title text-sm font-semibold w-full mb-4 text-left text-slate-200");
+                
+                if(formTitleT) formTitleT.className = "form-title-transaction text-lg font-semibold mb-4 text-emerald-400";
+                if(formTitleC) formTitleC.className = "form-title-credit text-lg font-semibold mb-4 text-rose-400";
+                if(formTitleS) formTitleS.className = "form-title-savings text-lg font-semibold mb-4 text-teal-400";
+                if(formTitleL) formTitleL.className = "form-title-lended text-lg font-semibold mb-4 text-violet-400";
+                if(formTitleR) formTitleR.className = "form-title-recurring text-lg font-semibold mb-4 text-amber-400";
 
             } else if (themeName === 'dream') {
-                body.className = "bg-purple-50/40 text-slate-800 transition-colors duration-300";
-                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-purple-100 transition-colors duration-300";
+                body.className = "bg-[#f5f3ff] text-purple-950 transition-colors duration-300";
+                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-purple-200/80 transition-colors duration-300";
                 welcomeTitle.className = "text-2xl md:text-3xl font-bold tracking-tight text-purple-950";
-                headerDesc.className = "text-sm text-purple-700/70 mt-1";
-                currencyBox.className = "flex items-center bg-purple-50/60 border border-purple-200/60 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300";
-                gearBtn.className = "w-10 h-10 flex items-center justify-center bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-xl transition border border-purple-200/60";
-                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-white/95 backdrop-blur-md border border-purple-100 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300";
-                navContainer.className = "flex overflow-x-auto space-x-2 bg-white/80 backdrop-blur-md p-2 rounded-2xl shadow-sm border border-purple-100 mb-8 transition-colors duration-300";
+                headerDesc.className = "text-sm text-purple-800/70 mt-1";
+                currencyBox.className = "flex items-center bg-purple-50/70 border border-purple-200 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300";
+                currencyLabel.className = "text-xs font-medium text-purple-700/70 mr-2";
+                gearBtn.className = "w-10 h-10 flex items-center justify-center bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-xl transition border border-purple-200 shadow-sm";
+                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-white/95 backdrop-blur-md border border-purple-200 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300 text-purple-950";
+                navContainer.className = "flex overflow-x-auto space-x-2 bg-white/90 backdrop-blur-md p-2 rounded-2xl shadow-sm border border-purple-200/80 mb-8 transition-colors duration-300";
                 
+                ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-purple-400 uppercase tracking-wider";
+                ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-purple-400 uppercase tracking-wider";
+                ddItemDefault.className = "w-full text-left px-4 py-2 text-xs font-medium text-purple-900 hover:bg-purple-50 transition flex items-center gap-2";
+                ddItemDream.className = "w-full text-left px-4 py-2 text-xs font-medium text-purple-900 hover:bg-purple-50 transition flex items-center gap-2";
+                ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-purple-900 hover:bg-purple-50 transition flex items-center gap-2";
+                ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-purple-900 hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-2";
+                ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-purple-900 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer";
+                ddItemReset.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2";
+                ddDiv1.className = "h-px bg-purple-100 my-1";
+                ddDiv2.className = "h-px bg-purple-100 my-1";
+
                 cards.forEach(card => {
-                    card.className = "theme-card bg-white/80 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-purple-100/80 hover:shadow-md transition-all flex flex-col justify-between";
+                    card.className = "theme-card bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-purple-200/70 hover:shadow-md transition-all flex flex-col justify-between";
                 });
+                labels.forEach(lbl => lbl.className = "theme-label text-xs font-semibold text-purple-500 uppercase tracking-wider");
+                labelSm.forEach(ls => ls.className = "theme-label-sm block text-xs font-medium text-purple-900/80 mb-1");
                 inputs.forEach(inp => {
-                    inp.className = "theme-input w-full px-3 py-2 bg-purple-50/30 border border-purple-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none";
+                    inp.className = "theme-input w-full px-3 py-2 bg-purple-50/40 border border-purple-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none text-purple-950 placeholder-purple-300";
                 });
                 tableHeadings.forEach(th => th.className = "table-heading text-lg font-semibold mb-4 text-purple-950");
+                tableHeaderRows.forEach(thr => thr.className = "table-header-row border-b border-purple-100 text-xs font-semibold text-purple-400");
                 chartTitles.forEach(ct => ct.className = "chart-title text-sm font-semibold w-full mb-4 text-left text-purple-950");
+
+                if(formTitleT) formTitleT.className = "form-title-transaction text-lg font-semibold mb-4 text-emerald-700";
+                if(formTitleC) formTitleC.className = "form-title-credit text-lg font-semibold mb-4 text-rose-700";
+                if(formTitleS) formTitleS.className = "form-title-savings text-lg font-semibold mb-4 text-teal-700";
+                if(formTitleL) formTitleL.className = "form-title-lended text-lg font-semibold mb-4 text-violet-700";
+                if(formTitleR) formTitleR.className = "form-title-recurring text-lg font-semibold mb-4 text-amber-700";
 
             } else {
                 // Default White
@@ -335,18 +400,39 @@
                 welcomeTitle.className = "text-2xl md:text-3xl font-bold tracking-tight text-slate-900";
                 headerDesc.className = "text-sm text-slate-500 mt-1";
                 currencyBox.className = "flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300";
-                gearBtn.className = "w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition border border-slate-200";
-                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300";
+                currencyLabel.className = "text-xs font-medium text-slate-500 mr-2";
+                gearBtn.className = "w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition border border-slate-200 shadow-sm";
+                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300 text-slate-800";
                 navContainer.className = "flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 mb-8 transition-colors duration-300";
                 
+                ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
+                ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
+                ddItemDefault.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2";
+                ddItemDream.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-purple-50 transition flex items-center gap-2";
+                ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-800 hover:text-white transition flex items-center gap-2";
+                ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-2";
+                ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer";
+                ddItemReset.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2";
+                ddDiv1.className = "h-px bg-slate-100 my-1";
+                ddDiv2.className = "h-px bg-slate-100 my-1";
+
                 cards.forEach(card => {
                     card.className = "theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between";
                 });
+                labels.forEach(lbl => lbl.className = "theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider");
+                labelSm.forEach(ls => ls.className = "theme-label-sm block text-xs font-medium text-slate-600 mb-1");
                 inputs.forEach(inp => {
                     inp.className = "theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none";
                 });
                 tableHeadings.forEach(th => th.className = "table-heading text-lg font-semibold mb-4 text-slate-800");
+                tableHeaderRows.forEach(thr => thr.className = "table-header-row border-b border-slate-100 text-xs font-semibold text-slate-400");
                 chartTitles.forEach(ct => ct.className = "chart-title text-sm font-semibold w-full mb-4 text-left text-slate-700");
+
+                if(formTitleT) formTitleT.className = "form-title-transaction text-lg font-semibold mb-4 text-emerald-700";
+                if(formTitleC) formTitleC.className = "form-title-credit text-lg font-semibold mb-4 text-rose-700";
+                if(formTitleS) formTitleS.className = "form-title-savings text-lg font-semibold mb-4 text-teal-700";
+                if(formTitleL) formTitleL.className = "form-title-lended text-lg font-semibold mb-4 text-violet-700";
+                if(formTitleR) formTitleR.className = "form-title-recurring text-lg font-semibold mb-4 text-amber-700";
             }
         }
 
@@ -474,7 +560,6 @@
             }
         }
 
-        // Export data as JSON file
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
             const downloadAnchor = document.createElement('a');
@@ -485,7 +570,6 @@
             downloadAnchor.remove();
         }
 
-        // Import data from JSON file
         function importData(event) {
             const fileReader = new FileReader();
             if (event.target.files[0]) {
@@ -576,7 +660,7 @@
                             data: hasData ? [totalExpense, totalSavings, totalCredit, totalLended, totalRecurring] : [1],
                             backgroundColor: hasData ? ['#f43f5e', '#14b8a6', '#e11d48', '#8b5cf6', '#f59e0b'] : [isDark ? '#334155' : '#e2e8f0'],
                             borderWidth: 2,
-                            borderColor: isDark ? '#0f172a' : '#ffffff'
+                            borderColor: isDark ? '#111827' : '#ffffff'
                         }]
                     },
                     options: {
@@ -638,7 +722,7 @@
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                grid: { color: isDark ? '#1e293b' : '#f1f5f9' },
+                                grid: { color: isDark ? '#1f293d' : '#f1f5f9' },
                                 ticks: { 
                                     color: isDark ? '#94a3b8' : '#64748b',
                                     font: { family: "'Plus Jakarta Sans', sans-serif", size: 10 } 
@@ -670,6 +754,7 @@
             const currencySelect = document.getElementById('currency-select');
             if (currencySelect) currencySelect.value = data.currency;
             const cur = data.currency || '$';
+            const isDark = data.theme === 'dark';
 
             // Render Lists Safely
             ['transaction', 'credit', 'savings', 'lended', 'recurring'].forEach(type => {
@@ -682,10 +767,11 @@
                 } else {
                     data[type].forEach(item => {
                         let row = document.createElement('tr');
+                        row.className = isDark ? "border-slate-800" : "border-slate-100";
                         if (type === 'transaction') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
-                                <td class="py-3"><span class="px-2.5 py-0.5 text-xs rounded-full font-medium ${item.txType === 'income' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}">${item.txType}</span></td>
+                                <td class="py-3"><span class="px-2.5 py-0.5 text-xs rounded-full font-medium ${item.txType === 'income' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}">${item.txType}</span></td>
                                 <td class="py-3 text-right font-semibold ${item.txType === 'income' ? 'text-emerald-500' : ''}">${item.txType === 'income' ? '+' : '-'}${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('transaction', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'credit') {
