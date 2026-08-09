@@ -6,14 +6,34 @@
     <title>Advanced Finance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        /* Smooth Fade & Slide Animation for Tabs */
+        .tab-content {
+            animation: fadeInSlide 0.3s ease-in-out forwards;
+        }
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800">
+<body class="bg-slate-50 text-slate-800">
 
     <div class="max-w-6xl mx-auto px-4 py-8">
         <!-- App Header -->
         <header class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900">Finance Tracker Pro</h1>
+                <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Easy Finance Tracker</h1>
                 <p class="text-sm text-slate-500">Manage income, expenses, debts, savings, and bills in one place.</p>
             </div>
             <div class="flex items-center gap-3">
@@ -34,37 +54,37 @@
             </div>
         </header>
 
-        <!-- Navigation Tabs -->
+        <!-- Navigation Tabs with Unique Colors & Hover Effects -->
         <div class="flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 mb-8">
-            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition bg-indigo-600 text-white whitespace-nowrap">Dashboard</button>
-            <button onclick="switchTab('transactions')" id="btn-transactions" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Transactions</button>
-            <button onclick="switchTab('credit')" id="btn-credit" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Credit & Loans</button>
-            <button onclick="switchTab('savings')" id="btn-savings" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Savings Goals</button>
-            <button onclick="switchTab('lended')" id="btn-lended" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Lended Money</button>
-            <button onclick="switchTab('recurring')" id="btn-recurring" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Recurring & Bills</button>
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" data-active-class="bg-indigo-600 text-white shadow-indigo-100 shadow-lg" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 bg-indigo-600 text-white shadow-indigo-100 shadow-lg whitespace-nowrap"><i class="fa-solid fa-chart-pie mr-1.5"></i> Dashboard</button>
+            <button onclick="switchTab('transactions')" id="btn-transactions" data-active-class="bg-emerald-600 text-white shadow-emerald-100 shadow-lg" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 whitespace-nowrap"><i class="fa-solid fa-wallet mr-1.5"></i> Transactions</button>
+            <button onclick="switchTab('credit')" id="btn-credit" data-active-class="bg-rose-600 text-white shadow-rose-100 shadow-lg" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 text-slate-600 hover:bg-rose-50 hover:text-rose-700 whitespace-nowrap"><i class="fa-solid fa-credit-card mr-1.5"></i> Credit & Loans</button>
+            <button onclick="switchTab('savings')" id="btn-savings" data-active-class="bg-teal-600 text-white shadow-teal-100 shadow-lg" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 text-slate-600 hover:bg-teal-50 hover:text-teal-700 whitespace-nowrap"><i class="fa-solid fa-piggy-bank mr-1.5"></i> Savings Goals</button>
+            <button onclick="switchTab('lended')" id="btn-lended" data-active-class="bg-violet-600 text-white shadow-violet-100 shadow-lg" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 text-slate-600 hover:bg-violet-50 hover:text-violet-700 whitespace-nowrap"><i class="fa-solid fa-hand-holding-dollar mr-1.5"></i> Lended Money</button>
+            <button onclick="switchTab('recurring')" id="btn-recurring" data-active-class="bg-amber-600 text-white shadow-amber-100 shadow-lg" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 text-slate-600 hover:bg-amber-50 hover:text-amber-700 whitespace-nowrap"><i class="fa-solid fa-receipt mr-1.5"></i> Recurring & Bills</button>
         </div>
 
         <!-- TAB CONTENT: DASHBOARD -->
         <div id="tab-dashboard" class="space-y-6 tab-content">
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Net Balance</p>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Balance</p>
                     <h2 id="dash-balance" class="text-xl font-bold text-slate-900 mt-1">0.00</h2>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Income</p>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Income</p>
                     <h2 id="dash-income" class="text-xl font-bold text-emerald-600 mt-1">+0.00</h2>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Expenses</p>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Expenses</p>
                     <h2 id="dash-expense" class="text-xl font-bold text-rose-600 mt-1">-0.00</h2>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Lended</p>
-                    <h2 id="dash-lended" class="text-xl font-bold text-indigo-600 mt-1">0.00</h2>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Lended</p>
+                    <h2 id="dash-lended" class="text-xl font-bold text-violet-600 mt-1">0.00</h2>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Upcoming Bills</p>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Upcoming Bills</p>
                     <h2 id="dash-recurring" class="text-xl font-bold text-amber-600 mt-1">0.00</h2>
                 </div>
             </div>
@@ -73,24 +93,24 @@
         <!-- TAB CONTENT: TRANSACTIONS -->
         <div id="tab-transactions" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
-                <h2 class="text-lg font-semibold mb-4">Add Transaction</h2>
+                <h2 class="text-lg font-semibold mb-4 text-emerald-700">Add Transaction</h2>
                 <form id="form-transaction" onsubmit="addEntry(event, 'transaction')" class="space-y-4">
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">Description</label>
-                        <input type="text" id="t-desc" required placeholder="e.g., Grocery" class="w-full px-3 py-2 border rounded-xl text-sm">
+                        <input type="text" id="t-desc" required placeholder="e.g., Grocery" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">Amount</label>
-                        <input type="text" id="t-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm">
+                        <input type="text" id="t-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">Type</label>
-                        <select id="t-type" class="w-full px-3 py-2 border rounded-xl text-sm">
+                        <select id="t-type" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             <option value="income">Income</option>
                             <option value="expense">Expense</option>
                         </select>
                     </div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-indigo-700">Add Transaction</button>
+                    <button type="submit" class="w-full bg-emerald-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-emerald-700 transition">Add Transaction</button>
                 </form>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
@@ -114,11 +134,11 @@
         <!-- TAB CONTENT: CREDIT & LOANS -->
         <div id="tab-credit" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
-                <h2 class="text-lg font-semibold mb-4">Add Credit / Loan</h2>
+                <h2 class="text-lg font-semibold mb-4 text-rose-700">Add Credit / Loan</h2>
                 <form id="form-credit" onsubmit="addEntry(event, 'credit')" class="space-y-4">
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Loan Name / Lender</label><input type="text" id="c-desc" required placeholder="e.g., Bank Car Loan" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Total Owed Amount</label><input type="text" id="c-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Loan Record</button>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Loan Name / Lender</label><input type="text" id="c-desc" required placeholder="e.g., Bank Car Loan" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Total Owed Amount</label><input type="text" id="c-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-500 focus:outline-none"></div>
+                    <button type="submit" class="w-full bg-rose-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-rose-700 transition">Add Loan Record</button>
                 </form>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
@@ -130,11 +150,11 @@
         <!-- TAB CONTENT: SAVINGS -->
         <div id="tab-savings" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
-                <h2 class="text-lg font-semibold mb-4">Add Savings Goal</h2>
+                <h2 class="text-lg font-semibold mb-4 text-teal-700">Add Savings Goal</h2>
                 <form id="form-savings" onsubmit="addEntry(event, 'savings')" class="space-y-4">
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Goal Name</label><input type="text" id="s-desc" required placeholder="e.g., New Laptop" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Current Saved Amount</label><input type="text" id="s-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Savings Goal</button>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Goal Name</label><input type="text" id="s-desc" required placeholder="e.g., New Laptop" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Current Saved Amount</label><input type="text" id="s-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></div>
+                    <button type="submit" class="w-full bg-teal-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-teal-700 transition">Add Savings Goal</button>
                 </form>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
@@ -146,12 +166,12 @@
         <!-- TAB CONTENT: LENDED MONEY -->
         <div id="tab-lended" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
-                <h2 class="text-lg font-semibold mb-4">Track Lended Money</h2>
+                <h2 class="text-lg font-semibold mb-4 text-violet-700">Track Lended Money</h2>
                 <form id="form-lended" onsubmit="addEntry(event, 'lended')" class="space-y-4">
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Borrower Name</label><input type="text" id="l-desc" required placeholder="e.g., John Doe" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount Lended</label><input type="text" id="l-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Date Lended</label><input type="date" id="l-date" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Lended Record</button>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Borrower Name</label><input type="text" id="l-desc" required placeholder="e.g., John Doe" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount Lended</label><input type="text" id="l-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Date Lended</label><input type="date" id="l-date" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"></div>
+                    <button type="submit" class="w-full bg-violet-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-violet-700 transition">Add Lended Record</button>
                 </form>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
@@ -163,13 +183,13 @@
         <!-- TAB CONTENT: RECURRING & BILLS -->
         <div id="tab-recurring" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
-                <h2 class="text-lg font-semibold mb-4">Add Recurring Bill / Tx</h2>
+                <h2 class="text-lg font-semibold mb-4 text-amber-700">Add Recurring Bill / Tx</h2>
                 <form id="form-recurring" onsubmit="addEntry(event, 'recurring')" class="space-y-4">
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Bill Name</label><input type="text" id="r-desc" required placeholder="e.g., Netflix / Rent" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount</label><input type="text" id="r-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Frequency</label><select id="r-freq" class="w-full px-3 py-2 border rounded-xl text-sm"><option value="Monthly">Monthly</option><option value="Weekly">Weekly</option><option value="Yearly">Yearly</option></select></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Next Due Date</label><input type="date" id="r-date" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Bill / Recurring</button>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Bill Name</label><input type="text" id="r-desc" required placeholder="e.g., Netflix / Rent" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount</label><input type="text" id="r-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Frequency</label><select id="r-freq" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"><option value="Monthly">Monthly</option><option value="Weekly">Weekly</option><option value="Yearly">Yearly</option></select></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Next Due Date</label><input type="date" id="r-date" required class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></div>
+                    <button type="submit" class="w-full bg-amber-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-amber-700 transition">Add Bill / Recurring</button>
                 </form>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
@@ -198,14 +218,16 @@
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Reset all tab buttons to default inactive styles
             document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('bg-indigo-600', 'text-white');
-                el.classList.add('text-slate-600', 'hover:bg-slate-50');
+                el.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 text-slate-600 hover:bg-slate-100 whitespace-nowrap";
             });
+
             document.getElementById('tab-' + tabId).classList.remove('hidden');
             const activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.classList.add('bg-indigo-600', 'text-white');
-            activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+            const activeClass = activeBtn.getAttribute('data-active-class');
+            activeBtn.className = `tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${activeClass} whitespace-nowrap`;
         }
 
         function saveAndRefresh() {
@@ -296,7 +318,6 @@
 
                 // If due date has arrived or passed, record as expense and roll over date
                 while (dueDate <= today) {
-                    // Auto-record to transactions as an expense
                     data.transaction.push({
                         id: Date.now() + Math.random(),
                         desc: `[Auto-Bill] ${bill.desc}`,
@@ -304,7 +325,6 @@
                         txType: 'expense'
                     });
 
-                    // Advance due date based on frequency
                     if (bill.freq === 'Weekly') {
                         dueDate.setDate(dueDate.getDate() + 7);
                     } else if (bill.freq === 'Monthly') {
@@ -312,12 +332,11 @@
                     } else if (bill.freq === 'Yearly') {
                         dueDate.setFullYear(dueDate.getFullYear() + 1);
                     } else {
-                        break; // Fallback safeguard
+                        break;
                     }
                     updated = true;
                 }
 
-                // Update bill's next due date format back to YYYY-MM-DD string
                 let year = dueDate.getFullYear();
                 let month = String(dueDate.getMonth() + 1).padStart(2, '0');
                 let day = String(dueDate.getDate()).padStart(2, '0');
@@ -330,7 +349,6 @@
         }
 
         function initApp() {
-            // Check recurring bills for auto-recording on load
             checkRecurringBills();
 
             const currencySelect = document.getElementById('currency-select');
@@ -351,32 +369,32 @@
                         if (type === 'transaction') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
-                                <td class="py-3"><span class="px-2 py-0.5 text-xs rounded-full font-medium ${item.txType === 'income' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">${item.txType}</span></td>
+                                <td class="py-3"><span class="px-2.5 py-0.5 text-xs rounded-full font-medium ${item.txType === 'income' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">${item.txType}</span></td>
                                 <td class="py-3 text-right font-semibold ${item.txType === 'income' ? 'text-emerald-600' : ''}">${item.txType === 'income' ? '+' : '-'}${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('transaction', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
+                                <td class="py-3 text-center"><button onclick="deleteItem('transaction', ${item.id})" class="text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'credit') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
                                 <td class="py-3 text-right font-semibold text-rose-600">${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('credit', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
+                                <td class="py-3 text-center"><button onclick="deleteItem('credit', ${item.id})" class="text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'savings') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
-                                <td class="py-3 text-right font-semibold text-emerald-600">${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('savings', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
+                                <td class="py-3 text-right font-semibold text-teal-600">${cur}${formatMoney(item.amount)}</td>
+                                <td class="py-3 text-center"><button onclick="deleteItem('savings', ${item.id})" class="text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'lended') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
                                 <td class="py-3 text-slate-500">${item.date || 'N/A'}</td>
-                                <td class="py-3 text-right font-semibold text-indigo-600">${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('lended', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
+                                <td class="py-3 text-right font-semibold text-violet-600">${cur}${formatMoney(item.amount)}</td>
+                                <td class="py-3 text-center"><button onclick="deleteItem('lended', ${item.id})" class="text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'recurring') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
                                 <td class="py-3 text-slate-500">${item.freq}</td>
                                 <td class="py-3 text-slate-500">${item.date}</td>
                                 <td class="py-3 text-right font-semibold">${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('recurring', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
+                                <td class="py-3 text-center"><button onclick="deleteItem('recurring', ${item.id})" class="text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         }
                         tbody.appendChild(row);
                     });
