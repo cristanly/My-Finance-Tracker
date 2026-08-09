@@ -64,7 +64,7 @@
                     <!-- Dropdown Menu Content -->
                     <div id="settings-dropdown" class="hidden absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300">
                         <div id="dd-head-1" class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Appearance</div>
-                        <button onclick="changeTheme('default')" id="dd-item-default" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2">
+                        <button onclick="changeTheme('light')" id="dd-item-light" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2">
                             <i class="fa-solid fa-sun w-4 text-amber-500"></i> Light Mode
                         </button>
                         <button onclick="changeTheme('dark')" id="dd-item-dark" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-800 hover:text-white transition flex items-center gap-2">
@@ -103,7 +103,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between">
                     <p class="theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Balance</p>
-                    <h2 id="dash-balance" class="text-lg font-bold text-slate-800 mt-2 truncate whitespace-nowrap">0.00</h2>
+                    <h2 id="dash-balance" class="text-lg font-bold text-slate-800 dark:text-slate-100 mt-2 truncate whitespace-nowrap">0.00</h2>
                 </div>
                 <div class="theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between">
                     <p class="theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Income</p>
@@ -172,13 +172,13 @@
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
                 <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Transaction History</h2>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                    <table class="w-full text-left table-fixed">
                         <thead>
                             <tr class="table-header-row border-b text-xs font-semibold text-slate-400">
-                                <th class="pb-3">Description</th>
-                                <th class="pb-3">Type</th>
-                                <th class="pb-3 text-right">Amount</th>
-                                <th class="pb-3 text-center">Action</th>
+                                <th class="pb-3 w-5/12">Description</th>
+                                <th class="pb-3 w-3/12">Type</th>
+                                <th class="pb-3 w-3/12 text-right">Amount</th>
+                                <th class="pb-3 w-1/12 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody id="list-transaction" class="text-sm divide-y"></tbody>
@@ -199,7 +199,7 @@
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
                 <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Active Credits & Loans</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3">Name</th><th class="pb-3 text-right">Amount Owed</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-credit" class="text-sm divide-y"></tbody></table></div>
+                <div class="overflow-x-auto"><table class="w-full text-left table-fixed"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3 w-7/12">Name</th><th class="pb-3 w-4/12 text-right">Amount Owed</th><th class="pb-3 w-1/12 text-center">Action</th></tr></thead><tbody id="list-credit" class="text-sm divide-y"></tbody></table></div>
             </div>
         </div>
 
@@ -215,7 +215,7 @@
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
                 <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Savings Goals</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3">Goal</th><th class="pb-3 text-right">Saved</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-savings" class="text-sm divide-y"></tbody></table></div>
+                <div class="overflow-x-auto"><table class="w-full text-left table-fixed"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3 w-7/12">Goal</th><th class="pb-3 w-4/12 text-right">Saved</th><th class="pb-3 w-1/12 text-center">Action</th></tr></thead><tbody id="list-savings" class="text-sm divide-y"></tbody></table></div>
             </div>
         </div>
 
@@ -232,7 +232,7 @@
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
                 <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Money Owed To You</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3">Borrower</th><th class="pb-3">Date Lended</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-lended" class="text-sm divide-y"></tbody></table></div>
+                <div class="overflow-x-auto"><table class="w-full text-left table-fixed"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3 w-5/12">Borrower</th><th class="pb-3 w-3/12">Date Lended</th><th class="pb-3 w-3/12 text-right">Amount</th><th class="pb-3 w-1/12 text-center">Action</th></tr></thead><tbody id="list-lended" class="text-sm divide-y"></tbody></table></div>
             </div>
         </div>
 
@@ -250,7 +250,7 @@
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
                 <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Upcoming Bills & Recurring Schedules</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3">Name</th><th class="pb-3">Frequency</th><th class="pb-3">Due Date</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-recurring" class="text-sm divide-y"></tbody></table></div>
+                <div class="overflow-x-auto"><table class="w-full text-left table-fixed"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3 w-4/12">Name</th><th class="pb-3 w-3/12">Frequency</th><th class="pb-3 w-2/12">Due Date</th><th class="pb-3 w-2/12 text-right">Amount</th><th class="pb-3 w-1/12 text-center">Action</th></tr></thead><tbody id="list-recurring" class="text-sm divide-y"></tbody></table></div>
             </div>
         </div>
 
@@ -261,7 +261,7 @@
         let data = JSON.parse(localStorage.getItem('finance_data_balanced')) || {
             username: 'User',
             currency: '$',
-            theme: 'default',
+            theme: 'light',
             transaction: [],
             credit: [],
             savings: [],
@@ -273,8 +273,8 @@
         let summaryChartInstance = null;
 
         function applyTheme(themeName) {
-            if (themeName === 'dream') themeName = 'dark';
-            data.theme = themeName || 'default';
+            if (themeName === 'dream' || themeName === 'default') themeName = 'light';
+            data.theme = themeName || 'light';
             
             const body = document.body;
             const header = document.getElementById('app-header');
@@ -290,7 +290,7 @@
             // Dropdown parts
             const ddHead1 = document.getElementById('dd-head-1');
             const ddHead2 = document.getElementById('dd-head-2');
-            const ddItemDefault = document.getElementById('dd-item-default');
+            const ddItemLight = document.getElementById('dd-item-light');
             const ddItemDark = document.getElementById('dd-item-dark');
             const ddItemExport = document.getElementById('dd-item-export');
             const ddItemImport = document.getElementById('dd-item-import');
@@ -326,7 +326,7 @@
                 
                 ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
                 ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
-                ddItemDefault.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 transition flex items-center gap-2";
+                ddItemLight.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 transition flex items-center gap-2";
                 ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 transition flex items-center gap-2";
                 ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-700 transition flex items-center gap-2";
                 ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-700 transition flex items-center gap-2 cursor-pointer";
@@ -366,7 +366,7 @@
                 
                 ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
                 ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
-                ddItemDefault.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2";
+                ddItemLight.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2";
                 ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2";
                 ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition flex items-center gap-2";
                 ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition flex items-center gap-2 cursor-pointer";
@@ -512,7 +512,7 @@
         function resetAllData() {
             if (confirm("Reset all finance records?")) {
                 let currentName = data.username || 'User';
-                let currentTheme = data.theme || 'default';
+                let currentTheme = data.theme || 'light';
                 data = { username: currentName, currency: '$', theme: currentTheme, transaction: [], credit: [], savings: [], lended: [], recurring: [] };
                 saveAndRefresh();
             }
@@ -537,7 +537,7 @@
                         const importedData = JSON.parse(e.target.result);
                         if (importedData && typeof importedData === 'object' && importedData.transaction) {
                             data = importedData;
-                            if(!data.theme || data.theme === 'dream') data.theme = 'default';
+                            if(!data.theme || data.theme === 'dream' || data.theme === 'default') data.theme = 'light';
                             saveAndRefresh();
                             alert("Data successfully imported!");
                         } else {
@@ -701,8 +701,8 @@
 
         function initApp() {
             checkRecurringBills();
-            if (data.theme === 'dream') data.theme = 'default';
-            applyTheme(data.theme || 'default');
+            if (data.theme === 'dream' || data.theme === 'default') data.theme = 'light';
+            applyTheme(data.theme || 'light');
 
             // Set Username
             const welcomeTitle = document.getElementById('welcome-title');
@@ -743,31 +743,31 @@
                         row.className = isDark ? "border-slate-700" : "border-slate-100";
                         if (type === 'transaction') {
                             row.innerHTML = `
-                                <td class="py-3 font-medium">${item.desc}</td>
+                                <td class="py-3 font-medium truncate">${item.desc}</td>
                                 <td class="py-3"><span class="px-2.5 py-0.5 text-xs rounded-full font-medium ${item.txType === 'income' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}">${item.txType}</span></td>
                                 <td class="py-3 text-right font-semibold ${item.txType === 'income' ? 'text-emerald-500 dark:text-emerald-400' : 'text-rose-500 dark:text-rose-400'}">${item.txType === 'income' ? '+' : '-'}${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('transaction', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'credit') {
                             row.innerHTML = `
-                                <td class="py-3 font-medium">${item.desc}</td>
+                                <td class="py-3 font-medium truncate">${item.desc}</td>
                                 <td class="py-3 text-right font-semibold text-rose-500 dark:text-rose-400">${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('credit', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'savings') {
                             row.innerHTML = `
-                                <td class="py-3 font-medium">${item.desc}</td>
+                                <td class="py-3 font-medium truncate">${item.desc}</td>
                                 <td class="py-3 text-right font-semibold text-teal-600 dark:text-teal-400">${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('savings', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'lended') {
                             row.innerHTML = `
-                                <td class="py-3 font-medium">${item.desc}</td>
-                                <td class="py-3 opacity-80">${item.date || 'N/A'}</td>
+                                <td class="py-3 font-medium truncate">${item.desc}</td>
+                                <td class="py-3 opacity-80 truncate">${item.date || 'N/A'}</td>
                                 <td class="py-3 text-right font-semibold text-violet-600 dark:text-violet-400">${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('lended', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'recurring') {
                             row.innerHTML = `
-                                <td class="py-3 font-medium">${item.desc}</td>
-                                <td class="py-3 opacity-80">${item.freq}</td>
-                                <td class="py-3 opacity-80">${item.date}</td>
+                                <td class="py-3 font-medium truncate">${item.desc}</td>
+                                <td class="py-3 opacity-80 truncate">${item.freq}</td>
+                                <td class="py-3 opacity-80 truncate">${item.date}</td>
                                 <td class="py-3 text-right font-semibold text-amber-600 dark:text-amber-400">${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('recurring', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
                         }
