@@ -184,14 +184,14 @@
             </div>
         </div>
 
-        <!-- TAB CONTENT: WALLETS & SALARY -->
-        <div id="tab-wallets" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 h-fit">
+        <!-- TAB CONTENT: WALLETS & SALARY (RE-DESIGNED CARDS VIEW) -->
+        <div id="tab-wallets" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/85 max-w-xl">
                 <h2 class="text-lg font-semibold mb-4 text-violet-600">Add Wallet / Account</h2>
                 <form id="form-wallet" onsubmit="addWallet(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Wallet Name</label>
-                        <input type="text" id="w-name" required placeholder="e.g., GCash, BPI, Cash on Hand" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none text-slate-800">
+                        <input type="text" id="w-name" required placeholder="e.g., Gcash, Maribank, BPI, Cash" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none text-slate-800">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Initial Balance / Sahod (₱)</label>
@@ -200,19 +200,11 @@
                     <button type="submit" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Save Wallet</button>
                 </form>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 md:col-span-2">
+
+            <div>
                 <h2 class="text-lg font-semibold mb-4 text-slate-800">Your Wallets & Balances</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left min-w-[400px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 text-xs font-semibold text-slate-400">
-                                <th class="pb-3 w-6/12">Wallet Name</th>
-                                <th class="pb-3 w-5/12 text-right">Current Balance</th>
-                                <th class="pb-3 w-1/12 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="list-wallets" class="text-sm divide-y divide-slate-100"></tbody>
-                    </table>
+                <div id="list-wallets" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                    <!-- Dynamic Wallet Cards Grid -->
                 </div>
             </div>
         </div>
@@ -391,8 +383,9 @@
         let db = {
             username: "User",
             wallets: [
-                { id: 1, name: "GCash", balance: 0 },
-                { id: 2, name: "Cash on Hand", balance: 0 }
+                { id: 1, name: "Gcash", balance: 150.26 },
+                { id: 2, name: "Maribank", balance: 4034.74 },
+                { id: 3, name: "1k Bills", balance: 3000.00 }
             ],
             budgets: {
                 "Food": 5000,
@@ -410,7 +403,7 @@
         let summaryChartInstance = null;
 
         function loadData() {
-            const saved = localStorage.getItem('easy_finance_tracker_php_v2');
+            const saved = localStorage.getItem('easy_finance_tracker_php_v3');
             if (saved) {
                 try {
                     db = JSON.parse(saved);
@@ -431,7 +424,7 @@
         }
 
         function saveData() {
-            localStorage.setItem('easy_finance_tracker_php_v2', JSON.stringify(db));
+            localStorage.setItem('easy_finance_tracker_php_v3', JSON.stringify(db));
         }
 
         function editUsername() {
@@ -451,7 +444,6 @@
             return `₱${Number(amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         }
 
-        // Helper para sa Alphabetical Month Format (e.g., August 9, 2026)
         function formatDateReadable(dateStr) {
             if (!dateStr) return '';
             const parts = dateStr.split('-');
@@ -531,6 +523,54 @@
                 customBox.classList.add('hidden');
                 customInput.removeAttribute('required');
                 customInput.value = '';
+            }
+        }
+
+        // Helper para sa kulay at logo/icon design batay sa pangalan ng Wallet/Bank
+        function getWalletTheme(name) {
+            const lower = name.toLowerCase();
+            if (lower.includes('gcash')) {
+                return {
+                    bg: 'bg-white',
+                    border: 'border-slate-200/80 hover:border-blue-400',
+                    badgeBg: 'bg-blue-50 border border-blue-100',
+                    icon: '<div class="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm"><i class="fa-solid fa-g"></i></div>'
+                };
+            } else if (lower.includes('maribank') || lower.includes('mari')) {
+                return {
+                    bg: 'bg-orange-50/30',
+                    border: 'border-orange-200/60 hover:border-orange-400',
+                    badgeBg: 'bg-orange-50 border border-orange-100',
+                    icon: '<div class="w-10 h-10 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-bold text-base shadow-sm"><i class="fa-solid fa-m"></i></div>'
+                };
+            } else if (lower.includes('bills') || lower.includes('bill')) {
+                return {
+                    bg: 'bg-emerald-50/30',
+                    border: 'border-emerald-200/60 hover:border-emerald-400',
+                    badgeBg: 'bg-emerald-50 border border-emerald-100',
+                    icon: '<div class="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-sm"><i class="fa-solid fa-receipt"></i></div>'
+                };
+            } else if (lower.includes('bpi') || lower.includes('bdo') || lower.includes('bank')) {
+                return {
+                    bg: 'bg-white',
+                    border: 'border-slate-200/80 hover:border-red-400',
+                    badgeBg: 'bg-red-50 border border-red-100',
+                    icon: '<div class="w-10 h-10 rounded-2xl bg-red-600 text-white flex items-center justify-center font-bold text-sm shadow-sm"><i class="fa-solid fa-building-columns"></i></div>'
+                };
+            } else if (lower.includes('maya')) {
+                return {
+                    bg: 'bg-white',
+                    border: 'border-slate-200/80 hover:border-emerald-400',
+                    badgeBg: 'bg-emerald-50 border border-emerald-100',
+                    icon: '<div class="w-10 h-10 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shadow-sm">M</div>'
+                };
+            } else {
+                return {
+                    bg: 'bg-white',
+                    border: 'border-slate-200/80 hover:border-violet-400',
+                    badgeBg: 'bg-violet-50 border border-violet-100',
+                    icon: '<div class="w-10 h-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center font-bold text-sm shadow-sm"><i class="fa-solid fa-wallet"></i></div>'
+                };
             }
         }
 
@@ -700,22 +740,36 @@
             });
         }
 
+        // Render Wallets with Custom Cards, Themes, and Logos/Icons (Inspired by user image)
         function renderWallets() {
-            const tbody = document.getElementById('list-wallets');
-            tbody.innerHTML = '';
+            const container = document.getElementById('list-wallets');
+            container.innerHTML = '';
             if (db.wallets.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="py-6 text-center text-slate-400 text-xs">No wallets added.</td></tr>`;
+                container.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs bg-white rounded-2xl border border-slate-200/80">No wallets added.</div>`;
                 return;
             }
             db.wallets.forEach(w => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50/80 transition";
-                tr.innerHTML = `
-                    <td class="py-3 font-medium text-slate-700"><i class="fa-solid fa-wallet mr-2 text-violet-500"></i>${w.name}</td>
-                    <td class="py-3 text-right font-semibold text-violet-600">${formatAmount(w.balance)}</td>
-                    <td class="py-3 text-center"><button onclick="deleteWallet(${w.id})" class="text-slate-400 hover:text-pink-500 transition"><i class="fa-solid fa-trash-can text-xs"></i></button></td>
+                const theme = getWalletTheme(w.name);
+                const card = document.createElement('div');
+                card.className = `${theme.bg} p-5 rounded-3xl shadow-sm border ${theme.border} transition-all flex flex-col justify-between relative group`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">${w.name}</h3>
+                            <p class="text-xl font-extrabold text-slate-900 mt-2">${formatAmount(w.balance)}</p>
+                        </div>
+                        <div class="p-2.5 rounded-2xl ${theme.badgeBg} shadow-sm">
+                            ${theme.icon}
+                        </div>
+                    </div>
+                    <div class="mt-6 flex items-center justify-between pt-3 border-t border-slate-100">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">PHP</span>
+                        <button onclick="deleteWallet(${w.id})" class="text-slate-300 hover:text-pink-500 transition p-1" title="Delete Wallet">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                container.appendChild(card);
             });
         }
 
@@ -940,8 +994,8 @@
 
         function resetAllData() {
             if (confirm("Are you sure you want to reset all data? This cannot be undone.")) {
-                localStorage.removeItem('easy_finance_tracker_php_v2');
-                db = { username: "User", wallets: [{ id: 1, name: "GCash", balance: 0 }, { id: 2, name: "Cash on Hand", balance: 0 }], budgets: {"Food": 5000, "Bills": 3000}, transactions: [], credit: [], savings: [], recurring: [] };
+                localStorage.removeItem('easy_finance_tracker_php_v3');
+                db = { username: "User", wallets: [{ id: 1, name: "Gcash", balance: 0 }, { id: 2, name: "Maribank", balance: 0 }], budgets: {"Food": 5000, "Bills": 3000}, transactions: [], credit: [], savings: [], recurring: [] };
                 loadData();
             }
         }
