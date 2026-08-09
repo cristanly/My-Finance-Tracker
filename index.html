@@ -326,7 +326,7 @@
         let db = {
             username: "User",
             currency: "$",
-            theme: "light",
+            theme: "light", // Naka-default na sa light
             transactions: [],
             credit: [],
             savings: [],
@@ -345,6 +345,8 @@
                 } catch(e) {
                     console.error("Error parsing stored data", e);
                 }
+            } else {
+                db.theme = "light"; // Siguraduhing light kung walang save data
             }
             document.getElementById('currency-select').value = db.currency || "$";
             updateUsernameDisplay();
@@ -425,22 +427,22 @@
             const navContainer = document.getElementById('nav-container');
 
             if (isDark) {
-                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-700 transition-colors duration-300";
-                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-slate-800 border border-slate-700 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300";
-                currencyBox.className = "flex items-center bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300";
-                navContainer.className = "flex overflow-x-auto space-x-2 bg-slate-800 p-2 rounded-2xl shadow-sm border border-slate-700 mb-8 transition-colors duration-300";
+                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-700 transition-colors duration-300 text-slate-100";
+                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-slate-800 border border-slate-700 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300 text-slate-100";
+                currencyBox.className = "flex items-center bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300 text-slate-100";
+                navContainer.className = "flex overflow-x-auto space-x-2 bg-slate-800 p-2 rounded-2xl shadow-sm border border-slate-700 mb-8 transition-colors duration-300 text-slate-100";
             } else {
-                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 transition-colors duration-300";
-                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300";
-                currencyBox.className = "flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300";
-                navContainer.className = "flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 mb-8 transition-colors duration-300";
+                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 transition-colors duration-300 text-slate-800";
+                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300 text-slate-800";
+                currencyBox.className = "flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300 text-slate-800";
+                navContainer.className = "flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 mb-8 transition-colors duration-300 text-slate-800";
             }
 
             document.querySelectorAll('.theme-card').forEach(card => {
                 if (isDark) {
-                    card.className = card.className.replace(/bg-white|border-slate-100/g, '') + " bg-slate-800 border border-slate-700";
+                    card.className = card.className.replace(/bg-white|border-slate-100/g, '') + " bg-slate-800 border border-slate-700 text-slate-100";
                 } else {
-                    card.className = card.className.replace(/bg-slate-800|border-slate-700/g, '') + " bg-white border border-slate-100";
+                    card.className = card.className.replace(/bg-slate-800|border-slate-700|text-slate-100/g, '') + " bg-white border border-slate-100 text-slate-800";
                 }
             });
 
@@ -453,6 +455,9 @@
             });
 
             updateActiveTabStyling();
+            if (summaryChartInstance && expenseChartInstance) {
+                updateDashboard();
+            }
         }
 
         function switchTab(tabName) {
