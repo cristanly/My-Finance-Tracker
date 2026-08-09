@@ -258,6 +258,10 @@
                         <label class="block text-xs font-medium text-slate-400 mb-1">Amount Lended</label>
                         <input type="text" id="l-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none text-slate-100">
                     </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Date Given</label>
+                        <input type="date" id="l-date" required class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none text-slate-100 cursor-pointer">
+                    </div>
                     <button type="submit" class="w-full bg-violet-400 hover:bg-violet-300 text-slate-950 font-semibold py-2.5 rounded-xl text-sm transition shadow-[0_0_15px_rgba(167,139,250,0.4)]">Add Record</button>
                 </form>
             </div>
@@ -267,8 +271,9 @@
                     <table class="w-full text-left table-fixed">
                         <thead>
                             <tr class="border-b border-slate-800 text-xs font-semibold text-slate-400">
-                                <th class="pb-3 w-7/12">Borrower</th>
-                                <th class="pb-3 w-4/12 text-right">Amount</th>
+                                <th class="pb-3 w-5/12">Borrower</th>
+                                <th class="pb-3 w-3/12">Date</th>
+                                <th class="pb-3 w-3/12 text-right">Amount</th>
                                 <th class="pb-3 w-1/12 text-center">Action</th>
                             </tr>
                         </thead>
@@ -288,8 +293,17 @@
                         <input type="text" id="r-desc" required placeholder="e.g., Netflix, Rent" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none text-slate-100">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-400 mb-1">Monthly Amount</label>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Amount</label>
                         <input type="text" id="r-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Frequency / Schedule</label>
+                        <select id="r-frequency" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none text-slate-100">
+                            <option value="Monthly">Monthly</option>
+                            <option value="Twice a Month">Twice a Month</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Yearly">Yearly</option>
+                        </select>
                     </div>
                     <button type="submit" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold py-2.5 rounded-xl text-sm transition shadow-[0_0_15px_rgba(251,191,36,0.4)]">Add Bill</button>
                 </form>
@@ -300,8 +314,9 @@
                     <table class="w-full text-left table-fixed">
                         <thead>
                             <tr class="border-b border-slate-800 text-xs font-semibold text-slate-400">
-                                <th class="pb-3 w-7/12">Bill Name</th>
-                                <th class="pb-3 w-4/12 text-right">Amount</th>
+                                <th class="pb-3 w-5/12">Bill Name</th>
+                                <th class="pb-3 w-3/12">Frequency</th>
+                                <th class="pb-3 w-3/12 text-right">Amount</th>
                                 <th class="pb-3 w-1/12 text-center">Action</th>
                             </tr>
                         </thead>
@@ -337,6 +352,11 @@
                 }
             }
             document.getElementById('currency-select').value = db.currency || "$";
+            // Default date for lended form to today if empty
+            const today = new Date().toISOString().split('T')[0];
+            const lDateEl = document.getElementById('l-date');
+            if(lDateEl) lDateEl.value = today;
+
             updateUsernameDisplay();
             renderAll();
         }
@@ -446,14 +466,17 @@
             } else if (type === 'lended') {
                 const desc = document.getElementById('l-desc').value.trim();
                 const amount = parseFloat(document.getElementById('l-amount').value);
-                if (!desc || isNaN(amount)) return;
-                db.lended.push({ id: Date.now(), desc, amount });
+                const date = document.getElementById('l-date').value;
+                if (!desc || isNaN(amount) || !date) return;
+                db.lended.push({ id: Date.now(), desc, amount, date });
                 document.getElementById('form-lended').reset();
+                document.getElementById('l-date').value = new Date().toISOString().split('T')[0];
             } else if (type === 'recurring') {
                 const desc = document.getElementById('r-desc').value.trim();
                 const amount = parseFloat(document.getElementById('r-amount').value);
+                const frequency = document.getElementById('r-frequency').value;
                 if (!desc || isNaN(amount)) return;
-                db.recurring.push({ id: Date.now(), desc, amount });
+                db.recurring.push({ id: Date.now(), desc, amount, frequency });
                 document.getElementById('form-recurring').reset();
             }
             saveData();
@@ -554,13 +577,14 @@
             const tbody = document.getElementById('list-lended');
             tbody.innerHTML = '';
             if (db.lended.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="py-4 text-center text-slate-500 text-xs">No lended money recorded.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-500 text-xs">No lended money recorded.</td></tr>`;
                 return;
             }
             db.lended.forEach(l => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-800/40 transition">
                         <td class="py-3 truncate pr-2 text-slate-200">${escapeHtml(l.desc)}</td>
+                        <td class="py-3 text-slate-400 text-xs">${l.date || 'N/A'}</td>
                         <td class="py-3 text-right font-semibold text-violet-400">${formatAmount(l.amount)}</td>
                         <td class="py-3 text-center"><button onclick="deleteEntry('lended', ${l.id})" class="text-slate-500 hover:text-pink-400 transition"><i class="fa-solid fa-trash text-xs"></i></button></td>
                     </tr>
@@ -572,14 +596,15 @@
             const tbody = document.getElementById('list-recurring');
             tbody.innerHTML = '';
             if (db.recurring.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="py-4 text-center text-slate-500 text-xs">No recurring bills or subscriptions.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-500 text-xs">No recurring bills or subscriptions.</td></tr>`;
                 return;
             }
             db.recurring.forEach(r => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-800/40 transition">
                         <td class="py-3 truncate pr-2 text-slate-200">${escapeHtml(r.desc)}</td>
-                        <td class="py-3 text-right font-semibold text-amber-400">${formatAmount(r.amount)}/mo</td>
+                        <td class="py-3 text-slate-400 text-xs">${r.frequency || 'Monthly'}</td>
+                        <td class="py-3 text-right font-semibold text-amber-400">${formatAmount(r.amount)}</td>
                         <td class="py-3 text-center"><button onclick="deleteEntry('recurring', ${r.id})" class="text-slate-500 hover:text-pink-400 transition"><i class="fa-solid fa-trash text-xs"></i></button></td>
                     </tr>
                 `;
@@ -612,7 +637,6 @@
         function updateCharts(income, expense, savings, lended) {
             const textColor = '#94a3b8';
 
-            // Doughnut Chart (Neon colors)
             const ctx1 = document.getElementById('expenseChart').getContext('2d');
             if (expenseChartInstance) expenseChartInstance.destroy();
             expenseChartInstance = new Chart(ctx1, {
@@ -635,7 +659,6 @@
                 }
             });
 
-            // Bar Chart (Neon Green & Neon Pink)
             const ctx2 = document.getElementById('summaryChart').getContext('2d');
             if (summaryChartInstance) summaryChartInstance.destroy();
             summaryChartInstance = new Chart(ctx2, {
