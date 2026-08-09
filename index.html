@@ -18,7 +18,7 @@
         input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800" onclick="closeDropdownOutside(event)">
+<body class="bg-slate-50 text-slate-800" onclick="closeAllDropdowns(event)">
 
     <div class="max-w-7xl mx-auto px-4 py-8">
         <!-- App Header -->
@@ -184,7 +184,7 @@
             </div>
         </div>
 
-        <!-- TAB CONTENT: ACCOUNTS / WALLETS (EXACT MATCH STYLE) -->
+        <!-- TAB CONTENT: ACCOUNTS / WALLETS -->
         <div id="tab-wallets" class="tab-content hidden space-y-8">
             <!-- Top Header & Add Button -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -224,7 +224,7 @@
                 </div>
             </div>
 
-            <!-- Add Wallet Modal Drawer (Hidden by default) -->
+            <!-- Add Wallet Modal Drawer -->
             <div id="add-wallet-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                 <div class="bg-white p-6 rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full relative animate-fadeInSlide">
                     <button onclick="toggleAddAccountModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
@@ -240,7 +240,33 @@
                             <label class="block text-xs font-medium text-slate-500 mb-1">Initial Balance (₱)</label>
                             <input type="text" id="w-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-800">
                         </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Custom Icon Image (Optional)</label>
+                            <input type="file" id="w-image" accept="image/*" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 cursor-pointer">
+                        </div>
                         <button type="submit" class="w-full bg-teal-900 hover:bg-teal-950 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Save Account</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit Wallet Modal Drawer -->
+            <div id="edit-wallet-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div class="bg-white p-6 rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full relative animate-fadeInSlide">
+                    <button onclick="closeEditWalletModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                    <h3 class="text-lg font-bold text-slate-900 mb-4">Edit Account</h3>
+                    <form id="form-edit-wallet" onsubmit="saveEditWallet(event)" class="space-y-4">
+                        <input type="hidden" id="edit-w-id">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Account Name</label>
+                            <input type="text" id="edit-w-name" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Custom Image / Icon (Optional)</label>
+                            <input type="file" id="edit-w-image" accept="image/*" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 cursor-pointer">
+                        </div>
+                        <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Update Account</button>
                     </form>
                 </div>
             </div>
@@ -420,14 +446,14 @@
         let db = {
             username: "User",
             wallets: [
-                { id: 1, name: "Lend", balance: 0.00 },
-                { id: 2, name: "My wallet", balance: 532.00 },
-                { id: 3, name: "Gcash", balance: 150.26 },
-                { id: 4, name: "Maribank", balance: 4034.74 },
-                { id: 5, name: "1k Bills", balance: 3000.00 },
-                { id: 6, name: "GoTyme", balance: 4.10 },
-                { id: 7, name: "Maya", balance: 2.78 },
-                { id: 8, name: "Shopeepay", balance: 33.09 }
+                { id: 1, name: "Lend", balance: 0.00, customImage: null },
+                { id: 2, name: "My wallet", balance: 532.00, customImage: null },
+                { id: 3, name: "Gcash", balance: 150.26, customImage: null },
+                { id: 4, name: "Maribank", balance: 4034.74, customImage: null },
+                { id: 5, name: "1k Bills", balance: 3000.00, customImage: null },
+                { id: 6, name: "GoTyme", balance: 4.10, customImage: null },
+                { id: 7, name: "Maya", balance: 2.78, customImage: null },
+                { id: 8, name: "Shopeepay", balance: 33.09, customImage: null }
             ],
             budgets: {
                 "Food": 5000,
@@ -446,7 +472,7 @@
         let isNetWorthHidden = false;
 
         function loadData() {
-            const saved = localStorage.getItem('easy_finance_tracker_php_v4');
+            const saved = localStorage.getItem('easy_finance_tracker_php_v6');
             if (saved) {
                 try {
                     db = JSON.parse(saved);
@@ -467,7 +493,7 @@
         }
 
         function saveData() {
-            localStorage.setItem('easy_finance_tracker_php_v4', JSON.stringify(db));
+            localStorage.setItem('easy_finance_tracker_php_v6', JSON.stringify(db));
         }
 
         function editUsername() {
@@ -513,11 +539,23 @@
             document.getElementById('settings-dropdown').classList.toggle('hidden');
         }
 
-        function closeDropdownOutside(e) {
+        function toggleWalletMenu(e, id) {
+            e.stopPropagation();
+            document.querySelectorAll('.wallet-menu').forEach(m => {
+                if (m.id !== `wallet-menu-${id}`) m.classList.add('hidden');
+            });
+            const menu = document.getElementById(`wallet-menu-${id}`);
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function closeAllDropdowns(e) {
             const dropdown = document.getElementById('settings-dropdown');
             const gearBtn = document.getElementById('gear-btn');
             if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(e.target) && !gearBtn.contains(e.target)) {
                 dropdown.classList.add('hidden');
+            }
+            if (!e.target.closest('.relative')) {
+                document.querySelectorAll('.wallet-menu').forEach(m => m.classList.add('hidden'));
             }
         }
 
@@ -585,8 +623,16 @@
             }
         }
 
-        // Custom Logo & Theme Generator batay sa iyong sample image
-        function getWalletTheme(name) {
+        function getWalletTheme(name, customImage) {
+            if (customImage) {
+                return {
+                    cardBg: 'bg-white',
+                    cardBorder: 'border-slate-200/80 hover:border-cyan-400',
+                    badgeBg: 'bg-white border border-slate-100',
+                    icon: `<div class="w-9 h-9 rounded-2xl overflow-hidden shadow-sm flex items-center justify-center bg-slate-100"><img src="${customImage}" class="w-full h-full object-cover"></div>`
+                };
+            }
+
             const lower = name.toLowerCase();
             if (lower.includes('gcash')) {
                 return {
@@ -658,9 +704,23 @@
             e.preventDefault();
             const name = document.getElementById('w-name').value.trim();
             const balance = parseFloat(document.getElementById('w-amount').value);
+            const imageInput = document.getElementById('w-image');
             if (!name || isNaN(balance)) return;
 
-            db.wallets.push({ id: Date.now(), name, balance });
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    db.wallets.push({ id: Date.now(), name, balance, customImage: evt.target.result });
+                    finalizeAddWallet();
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                db.wallets.push({ id: Date.now(), name, balance, customImage: null });
+                finalizeAddWallet();
+            }
+        }
+
+        function finalizeAddWallet() {
             document.getElementById('form-wallet').reset();
             toggleAddAccountModal();
             saveData();
@@ -668,11 +728,70 @@
             renderAll();
         }
 
-        function deleteWallet(id) {
-            db.wallets = db.wallets.filter(w => w.id !== id);
+        function openEditWalletModal(id) {
+            const wallet = db.wallets.find(w => w.id === id);
+            if (!wallet) return;
+            document.getElementById('edit-w-id').value = wallet.id;
+            document.getElementById('edit-w-name').value = wallet.name;
+            document.getElementById('edit-w-image').value = '';
+            document.getElementById('edit-wallet-modal').classList.remove('hidden');
+        }
+
+        function closeEditWalletModal() {
+            document.getElementById('edit-wallet-modal').classList.add('hidden');
+        }
+
+        function saveEditWallet(e) {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('edit-w-id').value);
+            const name = document.getElementById('edit-w-name').value.trim();
+            const imageInput = document.getElementById('edit-w-image');
+            const wallet = db.wallets.find(w => w.id === id);
+            if (!wallet || !name) return;
+
+            wallet.name = name;
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    wallet.customImage = evt.target.result;
+                    finalizeEditWallet();
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                finalizeEditWallet();
+            }
+        }
+
+        function finalizeEditWallet() {
+            closeEditWalletModal();
             saveData();
             updateWalletDropdown();
             renderAll();
+        }
+
+        function reconcileWallet(id) {
+            const wallet = db.wallets.find(w => w.id === id);
+            if (!wallet) return;
+            const input = prompt(`Reconcile balance for "${wallet.name}". Enter current actual balance:`, wallet.balance);
+            if (input !== null) {
+                const newBalance = parseFloat(input);
+                if (!isNaN(newBalance)) {
+                    wallet.balance = newBalance;
+                    saveData();
+                    renderAll();
+                } else {
+                    alert("Invalid number entered.");
+                }
+            }
+        }
+
+        function deleteWallet(id) {
+            if (confirm("Are you sure you want to delete this account?")) {
+                db.wallets = db.wallets.filter(w => w.id !== id);
+                saveData();
+                updateWalletDropdown();
+                renderAll();
+            }
         }
 
         function saveBudget(e) {
@@ -821,7 +940,7 @@
             });
         }
 
-        // Render Wallets matching user's exact design layout
+        // Render Wallets with the requested 3-slide dropdown options
         function renderWallets() {
             const container = document.getElementById('list-wallets');
             container.innerHTML = '';
@@ -829,7 +948,6 @@
             let totalWallets = 0;
             db.wallets.forEach(w => totalWallets += w.balance);
 
-            // Update Combined Net Worth & Group Total
             const netWorthDisplay = isNetWorthHidden ? "₱••••••" : formatAmount(totalWallets);
             document.getElementById('combined-net-worth').innerText = netWorthDisplay;
             document.getElementById('cash-group-total').innerText = formatAmount(totalWallets);
@@ -840,25 +958,39 @@
             }
 
             db.wallets.forEach(w => {
-                const theme = getWalletTheme(w.name);
+                const theme = getWalletTheme(w.name, w.customImage);
                 const displayBalance = isNetWorthHidden ? "₱••••" : formatAmount(w.balance);
                 const card = document.createElement('div');
-                card.className = `${theme.cardBg} p-4 rounded-2xl shadow-sm border ${theme.cardBorder} transition-all flex flex-col justify-between relative group`;
+                card.className = `${theme.cardBg} p-5 rounded-3xl shadow-sm border ${theme.cardBorder} transition-all flex flex-col justify-between relative group`;
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="font-bold text-slate-800 text-sm">${w.name}</h3>
                             <p class="text-base font-extrabold text-slate-900 mt-1">${displayBalance}</p>
                         </div>
-                        <div class="p-2 rounded-xl ${theme.badgeBg} shadow-sm">
-                            ${theme.icon}
+                        <div class="relative">
+                            <button onclick="toggleWalletMenu(event, ${w.id})" class="w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition border border-slate-200 shadow-sm" title="Options">
+                                <i class="fa-solid fa-ellipsis text-xs"></i>
+                            </button>
+                            <div id="wallet-menu-${w.id}" class="wallet-menu hidden absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-xl py-1.5 z-20">
+                                <button onclick="openEditWalletModal(${w.id})" class="w-full text-left px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-cyan-50 hover:text-cyan-600 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-pen w-3.5 text-cyan-500"></i> Edit (Name/Image)
+                                </button>
+                                <button onclick="reconcileWallet(${w.id})" class="w-full text-left px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-scale-balanced w-3.5 text-emerald-500"></i> Reconcile balance
+                                </button>
+                                <div class="h-px bg-slate-100 my-1"></div>
+                                <button onclick="deleteWallet(${w.id})" class="w-full text-left px-3.5 py-2 text-xs font-medium text-pink-600 hover:bg-pink-50 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-trash-can w-3.5 text-pink-500"></i> Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="mt-4 flex items-center justify-between pt-2 border-t border-slate-100">
+                    <div class="mt-4 flex items-center justify-between pt-3 border-t border-slate-100/80">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">PHP</span>
-                        <button onclick="deleteWallet(${w.id})" class="text-slate-300 hover:text-pink-500 transition p-1" title="Delete Account">
-                            <i class="fa-solid fa-trash-can text-[10px]"></i>
-                        </button>
+                        <div class="p-1 rounded-xl ${theme.badgeBg} shadow-sm">
+                            ${theme.icon}
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1086,7 +1218,7 @@
 
         function resetAllData() {
             if (confirm("Are you sure you want to reset all data? This cannot be undone.")) {
-                localStorage.removeItem('easy_finance_tracker_php_v4');
+                localStorage.removeItem('easy_finance_tracker_php_v6');
                 loadData();
             }
         }
