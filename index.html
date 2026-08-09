@@ -81,7 +81,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">Amount</label>
-                        <input type="number" step="0.01" id="t-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm">
+                        <input type="text" id="t-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">Type</label>
@@ -117,7 +117,7 @@
                 <h2 class="text-lg font-semibold mb-4">Add Credit / Loan</h2>
                 <form id="form-credit" onsubmit="addEntry(event, 'credit')" class="space-y-4">
                     <div><label class="block text-xs font-medium text-slate-600 mb-1">Loan Name / Lender</label><input type="text" id="c-desc" required placeholder="e.g., Bank Car Loan" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Total Owed Amount</label><input type="number" step="0.01" id="c-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Total Owed Amount</label><input type="text" id="c-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
                     <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Loan Record</button>
                 </form>
             </div>
@@ -133,7 +133,7 @@
                 <h2 class="text-lg font-semibold mb-4">Add Savings Goal</h2>
                 <form id="form-savings" onsubmit="addEntry(event, 'savings')" class="space-y-4">
                     <div><label class="block text-xs font-medium text-slate-600 mb-1">Goal Name</label><input type="text" id="s-desc" required placeholder="e.g., New Laptop" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Current Saved Amount</label><input type="number" step="0.01" id="s-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Current Saved Amount</label><input type="text" id="s-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
                     <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Savings Goal</button>
                 </form>
             </div>
@@ -149,7 +149,7 @@
                 <h2 class="text-lg font-semibold mb-4">Track Lended Money</h2>
                 <form id="form-lended" onsubmit="addEntry(event, 'lended')" class="space-y-4">
                     <div><label class="block text-xs font-medium text-slate-600 mb-1">Borrower Name</label><input type="text" id="l-desc" required placeholder="e.g., John Doe" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount Lended</label><input type="number" step="0.01" id="l-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount Lended</label><input type="text" id="l-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
                     <div><label class="block text-xs font-medium text-slate-600 mb-1">Date Lended</label><input type="date" id="l-date" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
                     <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Lended Record</button>
                 </form>
@@ -166,7 +166,7 @@
                 <h2 class="text-lg font-semibold mb-4">Add Recurring Bill / Tx</h2>
                 <form id="form-recurring" onsubmit="addEntry(event, 'recurring')" class="space-y-4">
                     <div><label class="block text-xs font-medium text-slate-600 mb-1">Bill Name</label><input type="text" id="r-desc" required placeholder="e.g., Netflix / Rent" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="r-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount</label><input type="text" id="r-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
                     <div><label class="block text-xs font-medium text-slate-600 mb-1">Frequency</label><select id="r-freq" class="w-full px-3 py-2 border rounded-xl text-sm"><option value="Monthly">Monthly</option><option value="Weekly">Weekly</option><option value="Yearly">Yearly</option></select></div>
                     <div><label class="block text-xs font-medium text-slate-600 mb-1">Next Due Date</label><input type="date" id="r-date" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
                     <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Bill / Recurring</button>
@@ -213,27 +213,50 @@
             initApp();
         }
 
+        // Real-time comma separator formatting for input fields
+        function formatInputAmount(input) {
+            let value = input.value.replace(/,/g, '');
+            if (value === '' || isNaN(value)) {
+                input.value = value;
+                return;
+            }
+            let parts = value.split('.');
+            parts[0] = Number(parts[0]).toLocaleString('en-US');
+            input.value = parts.length > 1 ? parts[0] + '.' + parts[1] : parts[0];
+        }
+
+        // Clean amount string back to clean numeric value for data storage
+        function parseCleanAmount(val) {
+            if (!val) return 0;
+            return parseFloat(String(val).replace(/,/g, '')) || 0;
+        }
+
+        // Format numbers with commas and decimals for tables and dashboards
+        function formatMoney(amount) {
+            return Number(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
         function addEntry(e, type) {
             e.preventDefault();
             let newItem = { id: Date.now() };
             
             if (type === 'transaction') {
                 newItem.desc = document.getElementById('t-desc').value;
-                newItem.amount = parseFloat(document.getElementById('t-amount').value);
+                newItem.amount = parseCleanAmount(document.getElementById('t-amount').value);
                 newItem.txType = document.getElementById('t-type').value;
             } else if (type === 'credit') {
                 newItem.desc = document.getElementById('c-desc').value;
-                newItem.amount = parseFloat(document.getElementById('c-amount').value);
+                newItem.amount = parseCleanAmount(document.getElementById('c-amount').value);
             } else if (type === 'savings') {
                 newItem.desc = document.getElementById('s-desc').value;
-                newItem.amount = parseFloat(document.getElementById('s-amount').value);
+                newItem.amount = parseCleanAmount(document.getElementById('s-amount').value);
             } else if (type === 'lended') {
                 newItem.desc = document.getElementById('l-desc').value;
-                newItem.amount = parseFloat(document.getElementById('l-amount').value);
+                newItem.amount = parseCleanAmount(document.getElementById('l-amount').value);
                 newItem.date = document.getElementById('l-date').value;
             } else if (type === 'recurring') {
                 newItem.desc = document.getElementById('r-desc').value;
-                newItem.amount = parseFloat(document.getElementById('r-amount').value);
+                newItem.amount = parseCleanAmount(document.getElementById('r-amount').value);
                 newItem.freq = document.getElementById('r-freq').value;
                 newItem.date = document.getElementById('r-date').value;
             }
@@ -258,7 +281,58 @@
             }
         }
 
+        // Automatically check and process due recurring bills against today's date
+        function checkRecurringBills() {
+            if (!data.recurring || data.recurring.length === 0) return;
+            
+            let today = new Date();
+            today.setHours(0, 0, 0, 0);
+            let updated = false;
+
+            data.recurring.forEach(bill => {
+                if (!bill.date) return;
+                let dueDate = new Date(bill.date);
+                dueDate.setHours(0, 0, 0, 0);
+
+                // If due date has arrived or passed, record as expense and roll over date
+                while (dueDate <= today) {
+                    // Auto-record to transactions as an expense
+                    data.transaction.push({
+                        id: Date.now() + Math.random(),
+                        desc: `[Auto-Bill] ${bill.desc}`,
+                        amount: bill.amount,
+                        txType: 'expense'
+                    });
+
+                    // Advance due date based on frequency
+                    if (bill.freq === 'Weekly') {
+                        dueDate.setDate(dueDate.getDate() + 7);
+                    } else if (bill.freq === 'Monthly') {
+                        dueDate.setMonth(dueDate.getMonth() + 1);
+                    } else if (bill.freq === 'Yearly') {
+                        dueDate.setFullYear(dueDate.getFullYear() + 1);
+                    } else {
+                        break; // Fallback safeguard
+                    }
+                    updated = true;
+                }
+
+                // Update bill's next due date format back to YYYY-MM-DD string
+                let year = dueDate.getFullYear();
+                let month = String(dueDate.getMonth() + 1).padStart(2, '0');
+                let day = String(dueDate.getDate()).padStart(2, '0');
+                bill.date = `${year}-${month}-${day}`;
+            });
+
+            if (updated) {
+                localStorage.setItem('finance_data_pro', JSON.stringify(data));
+            }
+        }
+
         function initApp() {
+            // Check recurring bills for auto-recording on load
+            checkRecurringBills();
+
             const currencySelect = document.getElementById('currency-select');
             if (currencySelect) currencySelect.value = data.currency;
             const cur = data.currency || '$';
@@ -278,30 +352,30 @@
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
                                 <td class="py-3"><span class="px-2 py-0.5 text-xs rounded-full font-medium ${item.txType === 'income' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">${item.txType}</span></td>
-                                <td class="py-3 text-right font-semibold ${item.txType === 'income' ? 'text-emerald-600' : ''}">${item.txType === 'income' ? '+' : '-'}${cur}${item.amount.toFixed(2)}</td>
+                                <td class="py-3 text-right font-semibold ${item.txType === 'income' ? 'text-emerald-600' : ''}">${item.txType === 'income' ? '+' : '-'}${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('transaction', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'credit') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
-                                <td class="py-3 text-right font-semibold text-rose-600">${cur}${item.amount.toFixed(2)}</td>
+                                <td class="py-3 text-right font-semibold text-rose-600">${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('credit', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'savings') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
-                                <td class="py-3 text-right font-semibold text-emerald-600">${cur}${item.amount.toFixed(2)}</td>
+                                <td class="py-3 text-right font-semibold text-emerald-600">${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('savings', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'lended') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
                                 <td class="py-3 text-slate-500">${item.date || 'N/A'}</td>
-                                <td class="py-3 text-right font-semibold text-indigo-600">${cur}${item.amount.toFixed(2)}</td>
+                                <td class="py-3 text-right font-semibold text-indigo-600">${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('lended', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'recurring') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
                                 <td class="py-3 text-slate-500">${item.freq}</td>
                                 <td class="py-3 text-slate-500">${item.date}</td>
-                                <td class="py-3 text-right font-semibold">${cur}${item.amount.toFixed(2)}</td>
+                                <td class="py-3 text-right font-semibold">${cur}${formatMoney(item.amount)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('recurring', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
                         }
                         tbody.appendChild(row);
@@ -322,11 +396,11 @@
             const dashLended = document.getElementById('dash-lended');
             const dashRecurring = document.getElementById('dash-recurring');
 
-            if (dashBalance) dashBalance.textContent = `${net < 0 ? '-' : ''}${cur}${Math.abs(net).toFixed(2)}`;
-            if (dashIncome) dashIncome.textContent = `+${cur}${totalIncome.toFixed(2)}`;
-            if (dashExpense) dashExpense.textContent = `-${cur}${totalExpense.toFixed(2)}`;
-            if (dashLended) dashLended.textContent = `${cur}${totalLended.toFixed(2)}`;
-            if (dashRecurring) dashRecurring.textContent = `${cur}${totalRecurring.toFixed(2)}`;
+            if (dashBalance) dashBalance.textContent = `${net < 0 ? '-' : ''}${cur}${formatMoney(Math.abs(net))}`;
+            if (dashIncome) dashIncome.textContent = `+${cur}${formatMoney(totalIncome)}`;
+            if (dashExpense) dashExpense.textContent = `-${cur}${formatMoney(totalExpense)}`;
+            if (dashLended) dashLended.textContent = `${cur}${formatMoney(totalLended)}`;
+            if (dashRecurring) dashRecurring.textContent = `${cur}${formatMoney(totalRecurring)}`;
         }
 
         initApp();
