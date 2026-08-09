@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Finance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        /* Smooth Fade & Slide Animation for Tabs */
         .tab-content {
             animation: fadeInSlide 0.3s ease-in-out forwards;
         }
@@ -86,6 +86,24 @@
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Upcoming Bills</p>
                     <h2 id="dash-recurring" class="text-xl font-bold text-amber-600 mt-1">0.00</h2>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Doughnut Chart: Expenses by Category/Description -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
+                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-indigo-600"></i> Expense Breakdown</h3>
+                    <div class="relative w-full h-64 flex justify-center items-center">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+                <!-- Bar Chart: Overview Summary -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
+                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-column mr-2 text-indigo-600"></i> Financial Summary</h3>
+                    <div class="relative w-full h-64 flex justify-center items-center">
+                        <canvas id="summaryChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -211,6 +229,9 @@
             recurring: []
         };
 
+        let expenseChartInstance = null;
+        let summaryChartInstance = null;
+
         function changeCurrency() {
             data.currency = document.getElementById('currency-select').value;
             saveAndRefresh();
@@ -219,7 +240,6 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             
-            // Reset all tab buttons to default inactive styles
             document.querySelectorAll('.tab-btn').forEach(el => {
                 el.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 text-slate-600 hover:bg-slate-100 whitespace-nowrap";
             });
@@ -228,6 +248,11 @@
             const activeBtn = document.getElementById('btn-' + tabId);
             const activeClass = activeBtn.getAttribute('data-active-class');
             activeBtn.className = `tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${activeClass} whitespace-nowrap`;
+
+            // Refresh charts if switching back to dashboard to ensure proper scaling
+            if (tabId === 'dashboard') {
+                setTimeout(updateCharts, 50);
+            }
         }
 
         function saveAndRefresh() {
@@ -235,7 +260,6 @@
             initApp();
         }
 
-        // Real-time comma separator formatting for input fields
         function formatInputAmount(input) {
             let value = input.value.replace(/,/g, '');
             if (value === '' || isNaN(value)) {
@@ -247,13 +271,11 @@
             input.value = parts.length > 1 ? parts[0] + '.' + parts[1] : parts[0];
         }
 
-        // Clean amount string back to clean numeric value for data storage
         function parseCleanAmount(val) {
             if (!val) return 0;
             return parseFloat(String(val).replace(/,/g, '')) || 0;
         }
 
-        // Format numbers with commas and decimals for tables and dashboards
         function formatMoney(amount) {
             return Number(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
@@ -303,7 +325,6 @@
             }
         }
 
-        // Automatically check and process due recurring bills against today's date
         function checkRecurringBills() {
             if (!data.recurring || data.recurring.length === 0) return;
             
@@ -316,7 +337,6 @@
                 let dueDate = new Date(bill.date);
                 dueDate.setHours(0, 0, 0, 0);
 
-                // If due date has arrived or passed, record as expense and roll over date
                 while (dueDate <= today) {
                     data.transaction.push({
                         id: Date.now() + Math.random(),
@@ -345,6 +365,106 @@
 
             if (updated) {
                 localStorage.setItem('finance_data_pro', JSON.stringify(data));
+            }
+        }
+
+        function updateCharts() {
+            const cur = data.currency || '$';
+            const expenses = (data.transaction || []).filter(t => t.txType === 'expense');
+            const totalIncome = (data.transaction || []).filter(t => t.txType === 'income').reduce((acc, t) => acc + t.amount, 0);
+            const totalExpense = expenses.reduce((acc, t) => acc + t.amount, 0);
+
+            // 1. Expense Breakdown Doughnut Chart Data Preparation
+            let expenseMap = {};
+            expenses.forEach(item => {
+                expenseMap[item.desc] = (expenseMap[item.desc] || 0) + item.amount;
+            });
+
+            let expenseLabels = Object.keys(expenseMap);
+            let expenseValues = Object.values(expenseMap);
+
+            const ctxExpense = document.getElementById('expenseChart');
+            if (ctxExpense) {
+                if (expenseChartInstance) expenseChartInstance.destroy();
+                
+                expenseChartInstance = new Chart(ctxExpense, {
+                    type: 'doughnut',
+                    data: {
+                        labels: expenseLabels.length > 0 ? expenseLabels : ['No Expenses Yet'],
+                        datasets: [{
+                            data: expenseValues.length > 0 ? expenseValues : [1],
+                            backgroundColor: expenseValues.length > 0 ? 
+                                ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6'] : 
+                                ['#e2e8f0'],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { boxWidth: 12, font: { family: "'Plus Jakarta Sans', sans-serif", size: 11 } }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (expenseValues.length === 0) return ' No data';
+                                        let val = context.raw;
+                                        return ` ${context.label}: ${cur}${formatMoney(val)}`;
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '65%'
+                    }
+                });
+            }
+
+            // 2. Summary Bar Chart Data Preparation
+            const ctxSummary = document.getElementById('summaryChart');
+            if (ctxSummary) {
+                if (summaryChartInstance) summaryChartInstance.destroy();
+
+                summaryChartInstance = new Chart(ctxSummary, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Income', 'Expenses'],
+                        datasets: [{
+                            data: [totalIncome, totalExpense],
+                            backgroundColor: ['#10b981', '#f43f5e'],
+                            borderRadius: 8,
+                            barThickness: 36
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` Amount: ${cur}${formatMoney(context.raw)}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#f1f5f9' },
+                                ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 10 } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '600' } }
+                            }
+                        }
+                    }
+                });
             }
         }
 
@@ -419,6 +539,9 @@
             if (dashExpense) dashExpense.textContent = `-${cur}${formatMoney(totalExpense)}`;
             if (dashLended) dashLended.textContent = `${cur}${formatMoney(totalLended)}`;
             if (dashRecurring) dashRecurring.textContent = `${cur}${formatMoney(totalRecurring)}`;
+
+            // Update/Draw Charts
+            updateCharts();
         }
 
         initApp();
