@@ -46,18 +46,26 @@
 
         <!-- TAB CONTENT: DASHBOARD -->
         <div id="tab-dashboard" class="space-y-6 tab-content">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-sm font-medium text-slate-500">Total Net Balance</p>
-                    <h2 id="dash-balance" class="text-2xl font-bold text-slate-900 mt-1">0.00</h2>
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Net Balance</p>
+                    <h2 id="dash-balance" class="text-xl font-bold text-slate-900 mt-1">0.00</h2>
                 </div>
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-sm font-medium text-slate-500">Total Income</p>
-                    <h2 id="dash-income" class="text-2xl font-bold text-emerald-600 mt-1">+0.00</h2>
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Income</p>
+                    <h2 id="dash-income" class="text-xl font-bold text-emerald-600 mt-1">+0.00</h2>
                 </div>
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-sm font-medium text-slate-500">Total Expenses</p>
-                    <h2 id="dash-expense" class="text-2xl font-bold text-rose-600 mt-1">-0.00</h2>
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Expenses</p>
+                    <h2 id="dash-expense" class="text-xl font-bold text-rose-600 mt-1">-0.00</h2>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Lended</p>
+                    <h2 id="dash-lended" class="text-xl font-bold text-indigo-600 mt-1">0.00</h2>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Upcoming Bills</p>
+                    <h2 id="dash-recurring" class="text-xl font-bold text-amber-600 mt-1">0.00</h2>
                 </div>
             </div>
         </div>
@@ -304,15 +312,21 @@
             // Calculate Dashboard totals
             let totalIncome = (data.transaction || []).filter(t => t.txType === 'income').reduce((acc, t) => acc + t.amount, 0);
             let totalExpense = (data.transaction || []).filter(t => t.txType === 'expense').reduce((acc, t) => acc + t.amount, 0);
+            let totalLended = (data.lended || []).reduce((acc, l) => acc + l.amount, 0);
+            let totalRecurring = (data.recurring || []).reduce((acc, r) => acc + r.amount, 0);
             let net = totalIncome - totalExpense;
 
             const dashBalance = document.getElementById('dash-balance');
             const dashIncome = document.getElementById('dash-income');
             const dashExpense = document.getElementById('dash-expense');
+            const dashLended = document.getElementById('dash-lended');
+            const dashRecurring = document.getElementById('dash-recurring');
 
             if (dashBalance) dashBalance.textContent = `${net < 0 ? '-' : ''}${cur}${Math.abs(net).toFixed(2)}`;
             if (dashIncome) dashIncome.textContent = `+${cur}${totalIncome.toFixed(2)}`;
             if (dashExpense) dashExpense.textContent = `-${cur}${totalExpense.toFixed(2)}`;
+            if (dashLended) dashLended.textContent = `${cur}${totalLended.toFixed(2)}`;
+            if (dashRecurring) dashRecurring.textContent = `${cur}${totalRecurring.toFixed(2)}`;
         }
 
         initApp();
