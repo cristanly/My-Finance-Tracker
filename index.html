@@ -142,12 +142,13 @@
                 <form id="form-lended" onsubmit="addEntry(event, 'lended')" class="space-y-4">
                     <div><label class="block text-xs font-medium text-slate-600 mb-1">Borrower Name</label><input type="text" id="l-desc" required placeholder="e.g., John Doe" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
                     <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount Lended</label><input type="number" step="0.01" id="l-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Date Lended</label><input type="date" id="l-date" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
                     <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Lended Record</button>
                 </form>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
                 <h2 class="text-lg font-semibold mb-4">Money Owed To You</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Borrower</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-lended" class="text-sm divide-y"></tbody></table></div>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Borrower</th><th class="pb-3">Date Lended</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-lended" class="text-sm divide-y"></tbody></table></div>
             </div>
         </div>
 
@@ -221,6 +222,7 @@
             } else if (type === 'lended') {
                 newItem.desc = document.getElementById('l-desc').value;
                 newItem.amount = parseFloat(document.getElementById('l-amount').value);
+                newItem.date = document.getElementById('l-date').value;
             } else if (type === 'recurring') {
                 newItem.desc = document.getElementById('r-desc').value;
                 newItem.amount = parseFloat(document.getElementById('r-amount').value);
@@ -283,6 +285,7 @@
                         } else if (type === 'lended') {
                             row.innerHTML = `
                                 <td class="py-3 font-medium">${item.desc}</td>
+                                <td class="py-3 text-slate-500">${item.date || 'N/A'}</td>
                                 <td class="py-3 text-right font-semibold text-indigo-600">${cur}${item.amount.toFixed(2)}</td>
                                 <td class="py-3 text-center"><button onclick="deleteItem('lended', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
                         } else if (type === 'recurring') {
