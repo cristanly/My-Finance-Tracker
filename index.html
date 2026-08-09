@@ -451,6 +451,21 @@
             return `₱${Number(amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         }
 
+        // Helper para sa Alphabetical Month Format (e.g., August 9, 2026)
+        function formatDateReadable(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            const year = parts[0];
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthIndex = parseInt(parts[1], 10) - 1;
+            const day = parseInt(parts[2], 10);
+            if (monthIndex >= 0 && monthIndex < 12) {
+                return `${monthNames[monthIndex]} ${day}, ${year}`;
+            }
+            return dateStr;
+        }
+
         function formatInputAmount(input) {
             let val = input.value.replace(/[^0-9.]/g, '');
             const parts = val.split('.');
@@ -583,7 +598,6 @@
 
                 if (!desc || isNaN(amount)) return;
 
-                // Update Wallet Balance
                 const wallet = db.wallets.find(w => w.name === walletName);
                 if (wallet) {
                     if (ttype === 'income') wallet.balance += amount;
@@ -678,7 +692,7 @@
                     <td class="py-3 font-medium text-slate-700">${item.desc}</td>
                     <td class="py-3"><span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-600">${item.category || 'General'}</span></td>
                     <td class="py-3 text-slate-500 text-xs"><i class="fa-solid fa-wallet mr-1 text-violet-500"></i>${item.wallet || 'Cash'}</td>
-                    <td class="py-3 text-slate-500 text-xs">${item.date}</td>
+                    <td class="py-3 text-slate-500 text-xs">${formatDateReadable(item.date)}</td>
                     <td class="py-3 text-right font-semibold ${isInc ? 'text-emerald-600' : 'text-pink-500'}">${isInc ? '+' : '-'}${formatAmount(item.amount)}</td>
                     <td class="py-3 text-center"><button onclick="deleteEntry('transactions', ${item.id})" class="text-slate-400 hover:text-pink-500 transition"><i class="fa-solid fa-trash-can text-xs"></i></button></td>
                 `;
@@ -709,7 +723,6 @@
             const tbody = document.getElementById('list-budgets');
             tbody.innerHTML = '';
             
-            // Calculate expenses per category
             const spentMap = {};
             db.transactions.forEach(t => {
                 if (t.type === 'expense' && t.category) {
@@ -758,7 +771,7 @@
                 tr.className = "hover:bg-slate-50/80 transition";
                 tr.innerHTML = `
                     <td class="py-3 font-medium text-slate-700">${item.desc}</td>
-                    <td class="py-3 text-slate-500 text-xs">${item.date}</td>
+                    <td class="py-3 text-slate-500 text-xs">${formatDateReadable(item.date)}</td>
                     <td class="py-3 text-right font-semibold text-pink-500">${formatAmount(item.amount)}</td>
                     <td class="py-3 text-center"><button onclick="deleteEntry('credit', ${item.id})" class="text-slate-400 hover:text-pink-500 transition"><i class="fa-solid fa-trash-can text-xs"></i></button></td>
                 `;
@@ -784,7 +797,7 @@
                             <div class="bg-teal-500 h-1.5 rounded-full" style="width: ${percent}%"></div>
                         </div>
                     </td>
-                    <td class="py-3 text-slate-500 text-xs">${item.date}</td>
+                    <td class="py-3 text-slate-500 text-xs">${formatDateReadable(item.date)}</td>
                     <td class="py-3 text-right font-semibold text-teal-600">${formatAmount(item.saved)} / ${formatAmount(item.target)}</td>
                     <td class="py-3 text-center"><button onclick="addSavingsFunds(${item.id})" class="px-2.5 py-1 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-lg text-xs font-semibold transition border border-teal-200"><i class="fa-solid fa-plus mr-1"></i>Add</button></td>
                     <td class="py-3 text-center"><button onclick="deleteEntry('savings', ${item.id})" class="text-slate-400 hover:text-pink-500 transition"><i class="fa-solid fa-trash-can text-xs"></i></button></td>
@@ -806,7 +819,7 @@
                 tr.innerHTML = `
                     <td class="py-3 font-medium text-slate-700">${item.desc}</td>
                     <td class="py-3 text-slate-500 text-xs">${item.frequency}</td>
-                    <td class="py-3 text-right text-slate-600 text-xs font-semibold">${item.date}</td>
+                    <td class="py-3 text-right text-slate-600 text-xs font-semibold">${formatDateReadable(item.date)}</td>
                     <td class="py-3 text-right font-semibold text-amber-600">${formatAmount(item.amount)}</td>
                     <td class="py-3 text-center"><button onclick="deleteEntry('recurring', ${item.id})" class="text-slate-400 hover:text-pink-500 transition"><i class="fa-solid fa-trash-can text-xs"></i></button></td>
                 `;
@@ -845,7 +858,6 @@
             document.getElementById('dash-wallets').innerText = formatAmount(totalWallets);
             document.getElementById('dash-recurring').innerText = formatAmount(totalRecurring);
 
-            // Render Charts
             const ctxExpense = document.getElementById('expenseChart').getContext('2d');
             if (expenseChartInstance) expenseChartInstance.destroy();
 
