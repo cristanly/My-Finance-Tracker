@@ -25,7 +25,6 @@
                 transform: translateY(0);
             }
         }
-        /* Custom styling para lumitaw ang calendar icon sa light mode */
         input[type="date"]::-webkit-calendar-picker-indicator {
             cursor: pointer;
         }
@@ -34,8 +33,8 @@
 <body class="bg-slate-50 text-slate-800" onclick="closeDropdownOutside(event)">
 
     <div class="max-w-6xl mx-auto px-4 py-8">
-        <!-- App Header with Personalized Welcome Message -->
-        <header id="app-header" class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-200/80">
+        <!-- App Header -->
+        <header id="app-header" class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-200/85">
             <div>
                 <div class="flex items-center gap-3">
                     <h1 id="welcome-title" class="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Hi, User! 👋</h1>
@@ -58,24 +57,23 @@
                     </select>
                 </div>
 
-                <!-- Settings Dropdown (Gear Icon) -->
+                <!-- Settings Dropdown -->
                 <div class="relative">
                     <button onclick="toggleSettingsDropdown(event)" id="gear-btn" class="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition border border-slate-200 shadow-sm" title="Settings & Backup">
                         <i class="fa-solid fa-gear"></i>
                     </button>
 
-                    <!-- Dropdown Menu Content -->
                     <div id="settings-dropdown" class="hidden absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 z-50">
-                        <div id="dd-head-2" class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Data Management</div>
-                        <button onclick="exportData()" id="dd-item-export" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-600 hover:bg-cyan-50 hover:text-cyan-600 transition flex items-center gap-2">
+                        <div class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Data Management</div>
+                        <button onclick="exportData()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-600 hover:bg-cyan-50 hover:text-cyan-600 transition flex items-center gap-2">
                             <i class="fa-solid fa-download w-4 text-cyan-500"></i> Export Backup
                         </button>
-                        <label id="dd-item-import" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer">
+                        <label class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer">
                             <i class="fa-solid fa-upload w-4 text-emerald-500"></i> Import Backup
                             <input type="file" id="import-file" accept=".json" onchange="importData(event)" class="hidden">
                         </label>
-                        <div id="dd-divider-2" class="h-px bg-slate-100 my-1"></div>
-                        <button onclick="resetAllData()" id="dd-item-reset" class="w-full text-left px-4 py-2.5 text-xs font-medium text-pink-600 hover:bg-pink-50 transition flex items-center gap-2">
+                        <div class="h-px bg-slate-100 my-1"></div>
+                        <button onclick="resetAllData()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-pink-600 hover:bg-pink-50 transition flex items-center gap-2">
                             <i class="fa-solid fa-trash-can w-4 text-pink-500"></i> Reset Data
                         </button>
                     </div>
@@ -83,7 +81,7 @@
             </div>
         </header>
 
-        <!-- Navigation Tabs -->
+        <!-- Navigation Tabs (Naka-light neon/pastel glow kapag active) -->
         <div id="nav-container" class="flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-200/80 mb-8">
             <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-chart-pie mr-1.5"></i> Dashboard</button>
             <button onclick="switchTab('transactions')" id="btn-transactions" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-wallet mr-1.5"></i> Transactions</button>
@@ -124,14 +122,12 @@
 
             <!-- Charts Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Doughnut Chart -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col items-center">
                     <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-pink-500"></i> Budget Allocation Breakdown</h3>
                     <div class="relative w-full h-48 flex justify-center items-center">
                         <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
-                <!-- Bar Chart -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col items-center">
                     <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-column mr-2 text-cyan-600"></i> Overall Financial Breakdown</h3>
                     <div class="relative w-full h-48 flex justify-center items-center">
@@ -234,11 +230,11 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 md:col-span-2">
                 <h2 class="text-lg font-semibold mb-4 text-slate-800">Savings Goals Progress</h2>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left table-fixed">
+                    <table class="w-full text-left min-w-[500px]">
                         <thead>
                             <tr class="border-b border-slate-100 text-xs font-semibold text-slate-400">
-                                <th class="pb-3 w-5/12">Goal</th>
-                                <th class="pb-3 w-4/12 text-right">Saved / Target</th>
+                                <th class="pb-3 w-4/12">Goal</th>
+                                <th class="pb-3 w-5/12 text-right">Saved / Target</th>
                                 <th class="pb-3 w-2/12 text-center">Add Funds</th>
                                 <th class="pb-3 w-1/12 text-center">Action</th>
                             </tr>
@@ -357,7 +353,6 @@
             }
             document.getElementById('currency-select').value = db.currency || "$";
             
-            // Default date para sa lended form na naka-set ngayon
             const today = new Date().toISOString().split('T')[0];
             const lDateEl = document.getElementById('l-date');
             if(lDateEl) lDateEl.value = today;
@@ -435,12 +430,13 @@
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 const id = btn.id.replace('btn-', '');
                 if (id === activeTab) {
-                    if (id === 'dashboard') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap bg-cyan-500 text-white font-semibold shadow-sm";
-                    else if (id === 'transactions') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap bg-emerald-500 text-white font-semibold shadow-sm";
-                    else if (id === 'credit') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap bg-pink-500 text-white font-semibold shadow-sm";
-                    else if (id === 'savings') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap bg-teal-500 text-white font-semibold shadow-sm";
-                    else if (id === 'lended') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap bg-violet-500 text-white font-semibold shadow-sm";
-                    else if (id === 'recurring') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap bg-amber-500 text-white font-semibold shadow-sm";
+                    // Light neon/pastel aesthetic with soft glow for active tabs
+                    if (id === 'dashboard') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 whitespace-nowrap bg-cyan-100 text-cyan-800 shadow-sm border border-cyan-300/60";
+                    else if (id === 'transactions') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 whitespace-nowrap bg-emerald-100 text-emerald-800 shadow-sm border border-emerald-300/60";
+                    else if (id === 'credit') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 whitespace-nowrap bg-pink-100 text-pink-800 shadow-sm border border-pink-300/60";
+                    else if (id === 'savings') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 whitespace-nowrap bg-teal-100 text-teal-800 shadow-sm border border-teal-300/60";
+                    else if (id === 'lended') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 whitespace-nowrap bg-violet-100 text-violet-800 shadow-sm border border-violet-300/60";
+                    else if (id === 'recurring') btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 whitespace-nowrap bg-amber-100 text-amber-800 shadow-sm border border-amber-300/60";
                 } else {
                     btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap text-slate-500 hover:text-slate-800 hover:bg-slate-100";
                 }
@@ -564,15 +560,22 @@
                 const pct = s.target > 0 ? Math.min(100, Math.round((s.saved / s.target) * 100)) : 0;
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="py-3 truncate pr-2 text-slate-700">
-                            <div class="font-medium">${escapeHtml(s.desc)}</div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden">
+                        <td class="py-3 pr-2 text-slate-700 align-middle">
+                            <div class="font-medium break-words">${escapeHtml(s.desc)}</div>
+                            <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
                                 <div class="bg-teal-500 h-full rounded-full" style="width: ${pct}%"></div>
                             </div>
                         </td>
-                        <td class="py-3 text-right font-semibold text-teal-600">${formatAmount(s.saved)} / ${formatAmount(s.target)} (${pct}%)</td>
-                        <td class="py-3 text-center"><button onclick="addToSavings(${s.id})" class="px-2.5 py-1 bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200 rounded-lg text-xs font-medium transition"><i class="fa-solid fa-plus mr-1"></i>Add</button></td>
-                        <td class="py-3 text-center"><button onclick="deleteEntry('savings', ${s.id})" class="text-slate-400 hover:text-pink-600 transition"><i class="fa-solid fa-trash text-xs"></i></button></td>
+                        <td class="py-3 text-right align-middle whitespace-nowrap">
+                            <div class="font-semibold text-teal-600 text-sm">${formatAmount(s.saved)} / ${formatAmount(s.target)}</div>
+                            <div class="text-xs text-slate-400 mt-0.5">(${pct}%)</div>
+                        </td>
+                        <td class="py-3 text-center align-middle whitespace-nowrap">
+                            <button onclick="addToSavings(${s.id})" class="px-2.5 py-1 bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200 rounded-lg text-xs font-medium transition"><i class="fa-solid fa-plus mr-1"></i>Add</button>
+                        </td>
+                        <td class="py-3 text-center align-middle whitespace-nowrap">
+                            <button onclick="deleteEntry('savings', ${s.id})" class="text-slate-400 hover:text-pink-600 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                        </td>
                     </tr>
                 `;
             });
