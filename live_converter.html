@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Currency to PHP Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9f5ed;
+            border-radius: 6px;
+            text-align: center;
+            color: #2e7d32;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Live Currency to PHP</h2>
+    
+    <div class="input-group">
+        <label for="amount">Halaga (Amount):</label>
+        <input type="number" id="amount" placeholder="Ilagay ang halaga" value="1">
+    </div>
+
+    <div class="input-group">
+        <label for="fromCurrency">Mula sa Currency:</label>
+        <select id="fromCurrency">
+            <option value="USD">USD - US Dollar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="JPY">JPY - Japanese Yen</option>
+            <option value="GBP">GBP - British Pound</option>
+            <option value="AUD">AUD - Australian Dollar</option>
+            <option value="CAD">CAD - Canadian Dollar</option>
+            <option value="SGD">SGD - Singapore Dollar</option>
+        </select>
+    </div>
+
+    <button onclick="convertCurrency()">I-convert sa PHP</button>
+
+    <div class="result" id="resultText">
+        ₱0.00
+    </div>
+</div>
+
+<script>
+    async function convertCurrency() {
+        const amount = document.getElementById('amount').value;
+        const fromCurrency = document.getElementById('fromCurrency').value;
+        const resultText = document.getElementById('resultText');
+
+        if (!amount || amount <= 0) {
+            resultText.innerText = "Maglagay ng wastong halaga.";
+            return;
+        }
+
+        resultText.innerText = "Kinukuha ang live rate...";
+
+        try {
+            // Gumagamit tayo ng libreng API para sa live rates
+            const response = await fetch(`https://open.er-api.com/v6/latest/${fromCurrency}`);
+            const data = await response.json();
+
+            if (data && data.rates && data.rates.PHP) {
+                const rate = data.rates.PHP;
+                const converted = amount * rate;
+                
+                // I-format ang resulta patungong Philippine Peso style
+                resultText.innerHTML = `₱${converted.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})} <br><small style="font-size: 12px; font-weight: normal; color: #555;">Rate: 1 ${fromCurrency} = ₱${rate.toFixed(2)}</small>`;
+            } else {
+                resultText.innerText = "Nabigo sa pagkuha ng exchange rate.";
+            }
+        } catch (error) {
+            console.error(error);
+            resultText.innerText = "May nangyaring error sa internet connection.";
+        }
+    }
+
+    // Patakbuhin agad pagka-load para sa default value
+    convertCurrency();
+</script>
+
+</body>
+</html>
