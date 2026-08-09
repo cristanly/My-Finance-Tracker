@@ -67,9 +67,6 @@
                         <button onclick="changeTheme('default')" id="dd-item-default" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2">
                             <i class="fa-solid fa-sun w-4 text-amber-500"></i> Default White
                         </button>
-                        <button onclick="changeTheme('dream')" id="dd-item-dream" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-purple-50 transition flex items-center gap-2">
-                            <i class="fa-solid fa-cloud-moon w-4 text-purple-400"></i> Dream Light
-                        </button>
                         <button onclick="changeTheme('dark')" id="dd-item-dark" class="w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-800 hover:text-white transition flex items-center gap-2">
                             <i class="fa-solid fa-moon w-4 text-indigo-400"></i> Dark Mode
                         </button>
@@ -276,7 +273,10 @@
         let summaryChartInstance = null;
 
         function applyTheme(themeName) {
+            // Fallback kung dream man ang naka-save sa lumang localStorage
+            if (themeName === 'dream') themeName = 'dark';
             data.theme = themeName || 'default';
+            
             const body = document.body;
             const header = document.getElementById('app-header');
             const welcomeTitle = document.getElementById('welcome-title');
@@ -291,7 +291,6 @@
             const ddHead1 = document.getElementById('dd-head-1');
             const ddHead2 = document.getElementById('dd-head-2');
             const ddItemDefault = document.getElementById('dd-item-default');
-            const ddItemDream = document.getElementById('dd-item-dream');
             const ddItemDark = document.getElementById('dd-item-dark');
             const ddItemExport = document.getElementById('dd-item-export');
             const ddItemImport = document.getElementById('dd-item-import');
@@ -327,7 +326,6 @@
                 ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
                 ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
                 ddItemDefault.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2";
-                ddItemDream.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2";
                 ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2";
                 ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2";
                 ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-200 hover:bg-slate-800 transition flex items-center gap-2 cursor-pointer";
@@ -353,46 +351,6 @@
                 if(formTitleL) formTitleL.className = "form-title-lended text-lg font-semibold mb-4 text-violet-400";
                 if(formTitleR) formTitleR.className = "form-title-recurring text-lg font-semibold mb-4 text-amber-400";
 
-            } else if (themeName === 'dream') {
-                body.className = "bg-[#f5f3ff] text-purple-950 transition-colors duration-300";
-                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-purple-200/80 transition-colors duration-300";
-                welcomeTitle.className = "text-2xl md:text-3xl font-bold tracking-tight text-purple-950";
-                headerDesc.className = "text-sm text-purple-800/70 mt-1";
-                currencyBox.className = "flex items-center bg-purple-50/70 border border-purple-200 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300";
-                currencyLabel.className = "text-xs font-medium text-purple-700/70 mr-2";
-                gearBtn.className = "w-10 h-10 flex items-center justify-center bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-xl transition border border-purple-200 shadow-sm";
-                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-white/95 backdrop-blur-md border border-purple-200 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300 text-purple-950";
-                navContainer.className = "flex overflow-x-auto space-x-2 bg-white/90 backdrop-blur-md p-2 rounded-2xl shadow-sm border border-purple-200/80 mb-8 transition-colors duration-300";
-                
-                ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-purple-400 uppercase tracking-wider";
-                ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-purple-400 uppercase tracking-wider";
-                ddItemDefault.className = "w-full text-left px-4 py-2 text-xs font-medium text-purple-900 hover:bg-purple-50 transition flex items-center gap-2";
-                ddItemDream.className = "w-full text-left px-4 py-2 text-xs font-medium text-purple-900 hover:bg-purple-50 transition flex items-center gap-2";
-                ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-purple-900 hover:bg-purple-50 transition flex items-center gap-2";
-                ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-purple-900 hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-2";
-                ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-purple-900 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer";
-                ddItemReset.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-2";
-                ddDiv1.className = "h-px bg-purple-100 my-1";
-                ddDiv2.className = "h-px bg-purple-100 my-1";
-
-                cards.forEach(card => {
-                    card.className = "theme-card bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-purple-200/70 hover:shadow-md transition-all flex flex-col justify-between";
-                });
-                labels.forEach(lbl => lbl.className = "theme-label text-xs font-semibold text-purple-500 uppercase tracking-wider");
-                labelSm.forEach(ls => ls.className = "theme-label-sm block text-xs font-medium text-purple-900/80 mb-1");
-                inputs.forEach(inp => {
-                    inp.className = "theme-input w-full px-3 py-2 bg-purple-50/40 border border-purple-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-400 focus:outline-none text-purple-950 placeholder-purple-300";
-                });
-                tableHeadings.forEach(th => th.className = "table-heading text-lg font-semibold mb-4 text-purple-950");
-                tableHeaderRows.forEach(thr => thr.className = "table-header-row border-b border-purple-100 text-xs font-semibold text-purple-400");
-                chartTitles.forEach(ct => ct.className = "chart-title text-sm font-semibold w-full mb-4 text-left text-purple-950");
-
-                if(formTitleT) formTitleT.className = "form-title-transaction text-lg font-semibold mb-4 text-emerald-700";
-                if(formTitleC) formTitleC.className = "form-title-credit text-lg font-semibold mb-4 text-rose-700";
-                if(formTitleS) formTitleS.className = "form-title-savings text-lg font-semibold mb-4 text-teal-700";
-                if(formTitleL) formTitleL.className = "form-title-lended text-lg font-semibold mb-4 text-violet-700";
-                if(formTitleR) formTitleR.className = "form-title-recurring text-lg font-semibold mb-4 text-amber-700";
-
             } else {
                 // Default White
                 body.className = "bg-slate-50 text-slate-800 transition-colors duration-300";
@@ -408,7 +366,6 @@
                 ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
                 ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
                 ddItemDefault.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2";
-                ddItemDream.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-purple-50 transition flex items-center gap-2";
                 ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-800 hover:text-white transition flex items-center gap-2";
                 ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition flex items-center gap-2";
                 ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer";
@@ -473,8 +430,7 @@
             
             document.querySelectorAll('.tab-btn').forEach(el => {
                 let isDark = data.theme === 'dark';
-                let isDream = data.theme === 'dream';
-                let defaultHover = isDark ? "text-slate-300 hover:bg-slate-800" : (isDream ? "text-purple-900 hover:bg-purple-100/60" : "text-slate-600 hover:bg-slate-100");
+                let defaultHover = isDark ? "text-slate-300 hover:bg-[#1f293d]" : "text-slate-600 hover:bg-slate-100";
                 el.className = `tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${defaultHover} whitespace-nowrap`;
             });
 
@@ -579,7 +535,7 @@
                         const importedData = JSON.parse(e.target.result);
                         if (importedData && typeof importedData === 'object' && importedData.transaction) {
                             data = importedData;
-                            if(!data.theme) data.theme = 'default';
+                            if(!data.theme || data.theme === 'dream') data.theme = 'default';
                             saveAndRefresh();
                             alert("Data successfully imported!");
                         } else {
@@ -743,6 +699,7 @@
 
         function initApp() {
             checkRecurringBills();
+            if (data.theme === 'dream') data.theme = 'dark';
             applyTheme(data.theme || 'default');
 
             // Set Username
