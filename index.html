@@ -30,15 +30,20 @@
 <body class="bg-slate-50 text-slate-800">
 
     <div class="max-w-6xl mx-auto px-4 py-8">
-        <!-- App Header -->
-        <header class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <!-- App Header with Personalized Welcome Message -->
+        <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Easy Finance Tracker</h1>
-                <p class="text-sm text-slate-500">Manage income, expenses, debts, savings, and bills in one place.</p>
+                <div class="flex items-center gap-2">
+                    <h1 id="welcome-title" class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">Hi, User! 👋</h1>
+                    <button onclick="editUsername()" class="text-xs text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg transition font-medium">
+                        <i class="fa-solid fa-pen mr-1"></i> Edit Name
+                    </button>
+                </div>
+                <p class="text-sm text-slate-500 mt-1">Manage income, expenses, debts, savings, and bills in one place.</p>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
                 <!-- Currency Selector -->
-                <div class="flex items-center bg-white border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm">
+                <div class="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm">
                     <label class="text-xs font-medium text-slate-500 mr-2">Currency:</label>
                     <select id="currency-select" onchange="changeCurrency()" class="text-sm font-semibold bg-transparent focus:outline-none">
                         <option value="$">$ (USD)</option>
@@ -48,7 +53,7 @@
                         <option value="¥">¥ (JPY)</option>
                     </select>
                 </div>
-                <button onclick="resetAllData()" class="text-xs bg-red-50 text-red-600 px-3 py-2 rounded-xl border border-red-100 hover:bg-red-100 transition">
+                <button onclick="resetAllData()" class="text-xs bg-red-50 text-red-600 px-3 py-2 rounded-xl border border-red-100 hover:bg-red-100 transition whitespace-nowrap">
                     <i class="fa-solid fa-trash-can mr-1"></i> Reset Data
                 </button>
             </div>
@@ -95,16 +100,16 @@
 
             <!-- Charts Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Doughnut Chart: Expenses by Category/Description -->
+                <!-- Doughnut Chart: Income vs Expenses -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
-                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-indigo-600"></i> Expense Breakdown</h3>
+                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-indigo-600"></i> Cash Flow Share (Income vs Expense)</h3>
                     <div class="relative w-full h-64 flex justify-center items-center">
                         <canvas id="expenseChart"></canvas>
                     </div>
                 </div>
-                <!-- Bar Chart: Overview Summary -->
+                <!-- Bar Chart: Complete Financial Categories Overview -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center">
-                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-column mr-2 text-indigo-600"></i> Financial Summary</h3>
+                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-column mr-2 text-indigo-600"></i> Overall Financial Breakdown</h3>
                     <div class="relative w-full h-64 flex justify-center items-center">
                         <canvas id="summaryChart"></canvas>
                     </div>
@@ -225,6 +230,7 @@
     <!-- JavaScript Data Logic -->
     <script>
         let data = JSON.parse(localStorage.getItem('finance_data_pro')) || {
+            username: 'User',
             currency: '$',
             transaction: [],
             credit: [],
@@ -235,6 +241,15 @@
 
         let expenseChartInstance = null;
         let summaryChartInstance = null;
+
+        function editUsername() {
+            let currentName = data.username || 'User';
+            let newName = prompt("Enter your name or nickname:", currentName);
+            if (newName !== null && newName.trim() !== "") {
+                data.username = newName.trim();
+                saveAndRefresh();
+            }
+        }
 
         function changeCurrency() {
             data.currency = document.getElementById('currency-select').value;
@@ -323,7 +338,8 @@
 
         function resetAllData() {
             if (confirm("Reset all finance records?")) {
-                data = { currency: '$', transaction: [], credit: [], savings: [], lended: [], recurring: [] };
+                let currentName = data.username || 'User';
+                data = { username: currentName, currency: '$', transaction: [], credit: [], savings: [], lended: [], recurring: [] };
                 saveAndRefresh();
             }
         }
@@ -373,34 +389,26 @@
 
         function updateCharts() {
             const cur = data.currency || '$';
-            const expenses = (data.transaction || []).filter(t => t.txType === 'expense');
             const totalIncome = (data.transaction || []).filter(t => t.txType === 'income').reduce((acc, t) => acc + t.amount, 0);
-            const totalExpense = expenses.reduce((acc, t) => acc + t.amount, 0);
+            const totalExpense = (data.transaction || []).filter(t => t.txType === 'expense').reduce((acc, t) => acc + t.amount, 0);
+            const totalSavings = (data.savings || []).reduce((acc, s) => acc + s.amount, 0);
+            const totalCredit = (data.credit || []).reduce((acc, c) => acc + c.amount, 0);
+            const totalLended = (data.lended || []).reduce((acc, l) => acc + l.amount, 0);
+            const totalRecurring = (data.recurring || []).reduce((acc, r) => acc + r.amount, 0);
 
-            // 1. Expense Breakdown Doughnut Chart Data Preparation
-            let expenseMap = {};
-            expenses.forEach(item => {
-                expenseMap[item.desc] = (expenseMap[item.desc] || 0) + item.amount;
-            });
-
-            let expenseLabels = Object.keys(expenseMap);
-            let expenseValues = Object.values(expenseMap);
-
+            // 1. Doughnut Chart: Income vs Expenses
             const ctxExpense = document.getElementById('expenseChart');
             if (ctxExpense) {
-                if (expenseChartInstance) {
-                    expenseChartInstance.destroy();
-                }
+                if (expenseChartInstance) expenseChartInstance.destroy();
                 
+                let hasCashFlow = totalIncome > 0 || totalExpense > 0;
                 expenseChartInstance = new Chart(ctxExpense, {
                     type: 'doughnut',
                     data: {
-                        labels: expenseLabels.length > 0 ? expenseLabels : ['No Expenses Yet'],
+                        labels: hasCashFlow ? ['Total Income', 'Total Expenses'] : ['No Data Yet'],
                         datasets: [{
-                            data: expenseValues.length > 0 ? expenseValues : [1],
-                            backgroundColor: expenseValues.length > 0 ? 
-                                ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6'] : 
-                                ['#e2e8f0'],
+                            data: hasCashFlow ? [totalIncome, totalExpense] : [1],
+                            backgroundColor: hasCashFlow ? ['#10b981', '#f43f5e'] : ['#e2e8f0'],
                             borderWidth: 2,
                             borderColor: '#ffffff'
                         }]
@@ -416,7 +424,7 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(context) {
-                                        if (expenseValues.length === 0) return ' No data';
+                                        if (!hasCashFlow) return ' No data';
                                         let val = context.raw;
                                         return ` ${context.label}: ${cur}${formatMoney(val)}`;
                                     }
@@ -428,22 +436,20 @@
                 });
             }
 
-            // 2. Summary Bar Chart Data Preparation
+            // 2. Bar Chart: Overall Categories (Income, Expenses, Savings, Credit, Lended, Bills)
             const ctxSummary = document.getElementById('summaryChart');
             if (ctxSummary) {
-                if (summaryChartInstance) {
-                    summaryChartInstance.destroy();
-                }
+                if (summaryChartInstance) summaryChartInstance.destroy();
 
                 summaryChartInstance = new Chart(ctxSummary, {
                     type: 'bar',
                     data: {
-                        labels: ['Income', 'Expenses'],
+                        labels: ['Income', 'Expenses', 'Savings', 'Credits', 'Lended', 'Bills'],
                         datasets: [{
-                            data: [totalIncome, totalExpense],
-                            backgroundColor: ['#10b981', '#f43f5e'],
+                            data: [totalIncome, totalExpense, totalSavings, totalCredit, totalLended, totalRecurring],
+                            backgroundColor: ['#10b981', '#f43f5e', '#14b8a6', '#e11d48', '#8b5cf6', '#f59e0b'],
                             borderRadius: 8,
-                            barThickness: 36
+                            barThickness: 28
                         }]
                     },
                     options: {
@@ -467,7 +473,7 @@
                             },
                             x: {
                                 grid: { display: false },
-                                ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '600' } }
+                                ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 10, weight: '600' } }
                             }
                         }
                     }
@@ -477,6 +483,12 @@
 
         function initApp() {
             checkRecurringBills();
+
+            // Set Username
+            const welcomeTitle = document.getElementById('welcome-title');
+            if (welcomeTitle) {
+                welcomeTitle.innerHTML = `Hi, ${data.username || 'User'}! 👋`;
+            }
 
             const currencySelect = document.getElementById('currency-select');
             if (currencySelect) currencySelect.value = data.currency;
@@ -550,7 +562,6 @@
             if (dashLended) dashLended.textContent = `${cur}${formatMoney(totalLended)}`;
             if (dashRecurring) dashRecurring.textContent = `${cur}${formatMoney(totalRecurring)}`;
 
-            // Update/Draw Charts immediately
             updateCharts();
         }
 
