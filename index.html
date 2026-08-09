@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .tab-content { animation: fadeInSlide 0.3s ease-in-out forwards; }
@@ -20,7 +20,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800" onclick="closeDropdownOutside(event)">
 
-    <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="max-w-7xl mx-auto px-4 py-8">
         <!-- App Header -->
         <header id="app-header" class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-200/85">
             <div>
@@ -62,7 +62,7 @@
         <div id="nav-container" class="flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-200/80 mb-8">
             <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-chart-pie mr-1.5"></i> Dashboard</button>
             <button onclick="switchTab('transactions')" id="btn-transactions" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-wallet mr-1.5"></i> Transactions</button>
-            <button onclick="switchTab('wallets')" id="btn-wallets" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-credit-card mr-1.5"></i> Wallets & Salary</button>
+            <button onclick="switchTab('wallets')" id="btn-wallets" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-credit-card mr-1.5"></i> Accounts</button>
             <button onclick="switchTab('budgets')" id="btn-budgets" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-bullseye mr-1.5"></i> Budget Limits</button>
             <button onclick="switchTab('credit')" id="btn-credit" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-file-invoice-dollar mr-1.5"></i> Loans</button>
             <button onclick="switchTab('savings')" id="btn-savings" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-piggy-bank mr-1.5"></i> Savings Goals</button>
@@ -184,27 +184,64 @@
             </div>
         </div>
 
-        <!-- TAB CONTENT: WALLETS & SALARY (RE-DESIGNED CARDS VIEW) -->
+        <!-- TAB CONTENT: ACCOUNTS / WALLETS (EXACT MATCH STYLE) -->
         <div id="tab-wallets" class="tab-content hidden space-y-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/85 max-w-xl">
-                <h2 class="text-lg font-semibold mb-4 text-violet-600">Add Wallet / Account</h2>
-                <form id="form-wallet" onsubmit="addWallet(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Wallet Name</label>
-                        <input type="text" id="w-name" required placeholder="e.g., Gcash, Maribank, BPI, Cash" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none text-slate-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Initial Balance / Sahod (₱)</label>
-                        <input type="text" id="w-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none text-slate-800">
-                    </div>
-                    <button type="submit" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Save Wallet</button>
-                </form>
+            <!-- Top Header & Add Button -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Accounts</h2>
+                    <p class="text-sm text-slate-500 mt-1">See every account at a glance before drilling into transactions.</p>
+                </div>
+                <button onclick="toggleAddAccountModal()" class="bg-teal-900 hover:bg-teal-950 text-white font-semibold px-5 py-2.5 rounded-full text-sm transition shadow-sm flex items-center gap-2">
+                    <i class="fa-solid fa-plus text-xs"></i> Add Account
+                </button>
             </div>
 
-            <div>
-                <h2 class="text-lg font-semibold mb-4 text-slate-800">Your Wallets & Balances</h2>
-                <div id="list-wallets" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                    <!-- Dynamic Wallet Cards Grid -->
+            <!-- Combined Net Worth Section -->
+            <div class="space-y-1">
+                <div class="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <span>Combined Net Worth</span>
+                    <button onclick="toggleMaskNetWorth()" class="text-slate-400 hover:text-slate-600 transition" title="Toggle visibility">
+                        <i id="eye-icon" class="fa-solid fa-eye text-xs"></i>
+                    </button>
+                </div>
+                <h3 id="combined-net-worth" class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">₱0.00</h3>
+            </div>
+
+            <!-- Cash & Cash Equivalents Section -->
+            <div class="space-y-4 pt-2">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-slate-900"></span>
+                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cash & Cash Equivalents</h4>
+                    </div>
+                    <span id="cash-group-total" class="text-xs font-bold text-cyan-800">₱0.00</span>
+                </div>
+
+                <!-- Cards Grid -->
+                <div id="list-wallets" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <!-- Dynamic Wallet Cards -->
+                </div>
+            </div>
+
+            <!-- Add Wallet Modal Drawer (Hidden by default) -->
+            <div id="add-wallet-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div class="bg-white p-6 rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full relative animate-fadeInSlide">
+                    <button onclick="toggleAddAccountModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                    <h3 class="text-lg font-bold text-slate-900 mb-4">Add New Account</h3>
+                    <form id="form-wallet" onsubmit="addWallet(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Account Name</label>
+                            <input type="text" id="w-name" required placeholder="e.g., Gcash, Maribank, Gotyme" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 mb-1">Initial Balance (₱)</label>
+                            <input type="text" id="w-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-800">
+                        </div>
+                        <button type="submit" class="w-full bg-teal-900 hover:bg-teal-950 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Save Account</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -383,9 +420,14 @@
         let db = {
             username: "User",
             wallets: [
-                { id: 1, name: "Gcash", balance: 150.26 },
-                { id: 2, name: "Maribank", balance: 4034.74 },
-                { id: 3, name: "1k Bills", balance: 3000.00 }
+                { id: 1, name: "Lend", balance: 0.00 },
+                { id: 2, name: "My wallet", balance: 532.00 },
+                { id: 3, name: "Gcash", balance: 150.26 },
+                { id: 4, name: "Maribank", balance: 4034.74 },
+                { id: 5, name: "1k Bills", balance: 3000.00 },
+                { id: 6, name: "GoTyme", balance: 4.10 },
+                { id: 7, name: "Maya", balance: 2.78 },
+                { id: 8, name: "Shopeepay", balance: 33.09 }
             ],
             budgets: {
                 "Food": 5000,
@@ -401,9 +443,10 @@
 
         let expenseChartInstance = null;
         let summaryChartInstance = null;
+        let isNetWorthHidden = false;
 
         function loadData() {
-            const saved = localStorage.getItem('easy_finance_tracker_php_v3');
+            const saved = localStorage.getItem('easy_finance_tracker_php_v4');
             if (saved) {
                 try {
                     db = JSON.parse(saved);
@@ -424,7 +467,7 @@
         }
 
         function saveData() {
-            localStorage.setItem('easy_finance_tracker_php_v3', JSON.stringify(db));
+            localStorage.setItem('easy_finance_tracker_php_v4', JSON.stringify(db));
         }
 
         function editUsername() {
@@ -478,6 +521,22 @@
             }
         }
 
+        function toggleAddAccountModal() {
+            const modal = document.getElementById('add-wallet-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function toggleMaskNetWorth() {
+            isNetWorthHidden = !isNetWorthHidden;
+            const icon = document.getElementById('eye-icon');
+            if (isNetWorthHidden) {
+                icon.className = "fa-solid fa-eye-slash text-xs";
+            } else {
+                icon.className = "fa-solid fa-eye text-xs";
+            }
+            renderWallets();
+        }
+
         function switchTab(tabName) {
             ['dashboard', 'transactions', 'wallets', 'budgets', 'credit', 'savings', 'recurring'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
@@ -526,50 +585,71 @@
             }
         }
 
-        // Helper para sa kulay at logo/icon design batay sa pangalan ng Wallet/Bank
+        // Custom Logo & Theme Generator batay sa iyong sample image
         function getWalletTheme(name) {
             const lower = name.toLowerCase();
             if (lower.includes('gcash')) {
                 return {
-                    bg: 'bg-white',
-                    border: 'border-slate-200/80 hover:border-blue-400',
-                    badgeBg: 'bg-blue-50 border border-blue-100',
-                    icon: '<div class="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm"><i class="fa-solid fa-g"></i></div>'
+                    cardBg: 'bg-white',
+                    cardBorder: 'border-slate-200/80 hover:border-blue-400',
+                    badgeBg: 'bg-blue-50/80 border border-blue-100',
+                    icon: '<div class="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-extrabold text-sm shadow-sm"><i class="fa-solid fa-g"></i></div>'
                 };
             } else if (lower.includes('maribank') || lower.includes('mari')) {
                 return {
-                    bg: 'bg-orange-50/30',
-                    border: 'border-orange-200/60 hover:border-orange-400',
-                    badgeBg: 'bg-orange-50 border border-orange-100',
-                    icon: '<div class="w-10 h-10 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-bold text-base shadow-sm"><i class="fa-solid fa-m"></i></div>'
+                    cardBg: 'bg-orange-50/20',
+                    cardBorder: 'border-orange-200/60 hover:border-orange-400',
+                    badgeBg: 'bg-orange-50/80 border border-orange-100',
+                    icon: '<div class="w-9 h-9 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-extrabold text-sm shadow-sm"><i class="fa-solid fa-m"></i></div>'
                 };
             } else if (lower.includes('bills') || lower.includes('bill')) {
                 return {
-                    bg: 'bg-emerald-50/30',
-                    border: 'border-emerald-200/60 hover:border-emerald-400',
-                    badgeBg: 'bg-emerald-50 border border-emerald-100',
-                    icon: '<div class="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-sm"><i class="fa-solid fa-receipt"></i></div>'
+                    cardBg: 'bg-emerald-50/20',
+                    cardBorder: 'border-emerald-200/60 hover:border-emerald-400',
+                    badgeBg: 'bg-emerald-50/80 border border-emerald-100',
+                    icon: '<div class="w-9 h-9 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-bold text-xs shadow-sm"><i class="fa-solid fa-receipt"></i></div>'
                 };
-            } else if (lower.includes('bpi') || lower.includes('bdo') || lower.includes('bank')) {
+            } else if (lower.includes('gotyme')) {
                 return {
-                    bg: 'bg-white',
-                    border: 'border-slate-200/80 hover:border-red-400',
-                    badgeBg: 'bg-red-50 border border-red-100',
-                    icon: '<div class="w-10 h-10 rounded-2xl bg-red-600 text-white flex items-center justify-center font-bold text-sm shadow-sm"><i class="fa-solid fa-building-columns"></i></div>'
+                    cardBg: 'bg-white',
+                    cardBorder: 'border-slate-200/80 hover:border-cyan-400',
+                    badgeBg: 'bg-cyan-50/80 border border-cyan-100',
+                    icon: '<div class="w-9 h-9 rounded-2xl bg-cyan-400 text-teal-950 flex items-center justify-center font-bold text-[10px] shadow-sm tracking-tighter">GO</div>'
                 };
             } else if (lower.includes('maya')) {
                 return {
-                    bg: 'bg-white',
-                    border: 'border-slate-200/80 hover:border-emerald-400',
-                    badgeBg: 'bg-emerald-50 border border-emerald-100',
-                    icon: '<div class="w-10 h-10 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-bold text-sm shadow-sm">M</div>'
+                    cardBg: 'bg-white',
+                    cardBorder: 'border-slate-200/80 hover:border-emerald-500',
+                    badgeBg: 'bg-slate-900 border border-slate-800',
+                    icon: '<div class="w-9 h-9 rounded-2xl bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-[10px] shadow-sm">maya</div>'
+                };
+            } else if (lower.includes('shopee') || lower.includes('shopeepay')) {
+                return {
+                    cardBg: 'bg-white',
+                    cardBorder: 'border-slate-200/80 hover:border-orange-400',
+                    badgeBg: 'bg-purple-50 border border-purple-100',
+                    icon: '<div class="w-9 h-9 rounded-2xl bg-purple-200 text-purple-700 flex items-center justify-center font-bold text-xs shadow-sm"><i class="fa-solid fa-wallet"></i></div>'
+                };
+            } else if (lower.includes('lend') || lower.includes('utang')) {
+                return {
+                    cardBg: 'bg-white',
+                    cardBorder: 'border-slate-200/80 hover:border-emerald-400',
+                    badgeBg: 'bg-emerald-50/80 border border-emerald-100',
+                    icon: '<div class="w-9 h-9 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-bold text-xs shadow-sm"><i class="fa-solid fa-money-bill-wave"></i></div>'
+                };
+            } else if (lower.includes('wallet') || lower.includes('cash')) {
+                return {
+                    cardBg: 'bg-white',
+                    cardBorder: 'border-slate-200/80 hover:border-amber-400',
+                    badgeBg: 'bg-amber-50/80 border border-amber-100',
+                    icon: '<div class="w-9 h-9 rounded-2xl bg-amber-400 text-white flex items-center justify-center font-bold text-xs shadow-sm"><i class="fa-solid fa-coins"></i></div>'
                 };
             } else {
                 return {
-                    bg: 'bg-white',
-                    border: 'border-slate-200/80 hover:border-violet-400',
-                    badgeBg: 'bg-violet-50 border border-violet-100',
-                    icon: '<div class="w-10 h-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center font-bold text-sm shadow-sm"><i class="fa-solid fa-wallet"></i></div>'
+                    cardBg: 'bg-white',
+                    cardBorder: 'border-slate-200/80 hover:border-violet-400',
+                    badgeBg: 'bg-violet-50/80 border border-violet-100',
+                    icon: '<div class="w-9 h-9 rounded-2xl bg-violet-600 text-white flex items-center justify-center font-bold text-xs shadow-sm"><i class="fa-solid fa-wallet"></i></div>'
                 };
             }
         }
@@ -582,6 +662,7 @@
 
             db.wallets.push({ id: Date.now(), name, balance });
             document.getElementById('form-wallet').reset();
+            toggleAddAccountModal();
             saveData();
             updateWalletDropdown();
             renderAll();
@@ -740,32 +821,43 @@
             });
         }
 
-        // Render Wallets with Custom Cards, Themes, and Logos/Icons (Inspired by user image)
+        // Render Wallets matching user's exact design layout
         function renderWallets() {
             const container = document.getElementById('list-wallets');
             container.innerHTML = '';
+            
+            let totalWallets = 0;
+            db.wallets.forEach(w => totalWallets += w.balance);
+
+            // Update Combined Net Worth & Group Total
+            const netWorthDisplay = isNetWorthHidden ? "₱••••••" : formatAmount(totalWallets);
+            document.getElementById('combined-net-worth').innerText = netWorthDisplay;
+            document.getElementById('cash-group-total').innerText = formatAmount(totalWallets);
+
             if (db.wallets.length === 0) {
-                container.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs bg-white rounded-2xl border border-slate-200/80">No wallets added.</div>`;
+                container.innerHTML = `<div class="col-span-full py-8 text-center text-slate-400 text-xs bg-white rounded-2xl border border-slate-200/80">No accounts added yet.</div>`;
                 return;
             }
+
             db.wallets.forEach(w => {
                 const theme = getWalletTheme(w.name);
+                const displayBalance = isNetWorthHidden ? "₱••••" : formatAmount(w.balance);
                 const card = document.createElement('div');
-                card.className = `${theme.bg} p-5 rounded-3xl shadow-sm border ${theme.border} transition-all flex flex-col justify-between relative group`;
+                card.className = `${theme.cardBg} p-4 rounded-2xl shadow-sm border ${theme.cardBorder} transition-all flex flex-col justify-between relative group`;
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="font-bold text-slate-800 text-base">${w.name}</h3>
-                            <p class="text-xl font-extrabold text-slate-900 mt-2">${formatAmount(w.balance)}</p>
+                            <h3 class="font-bold text-slate-800 text-sm">${w.name}</h3>
+                            <p class="text-base font-extrabold text-slate-900 mt-1">${displayBalance}</p>
                         </div>
-                        <div class="p-2.5 rounded-2xl ${theme.badgeBg} shadow-sm">
+                        <div class="p-2 rounded-xl ${theme.badgeBg} shadow-sm">
                             ${theme.icon}
                         </div>
                     </div>
-                    <div class="mt-6 flex items-center justify-between pt-3 border-t border-slate-100">
-                        <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">PHP</span>
-                        <button onclick="deleteWallet(${w.id})" class="text-slate-300 hover:text-pink-500 transition p-1" title="Delete Wallet">
-                            <i class="fa-solid fa-trash-can text-xs"></i>
+                    <div class="mt-4 flex items-center justify-between pt-2 border-t border-slate-100">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">PHP</span>
+                        <button onclick="deleteWallet(${w.id})" class="text-slate-300 hover:text-pink-500 transition p-1" title="Delete Account">
+                            <i class="fa-solid fa-trash-can text-[10px]"></i>
                         </button>
                     </div>
                 `;
@@ -994,8 +1086,7 @@
 
         function resetAllData() {
             if (confirm("Are you sure you want to reset all data? This cannot be undone.")) {
-                localStorage.removeItem('easy_finance_tracker_php_v3');
-                db = { username: "User", wallets: [{ id: 1, name: "Gcash", balance: 0 }, { id: 2, name: "Maribank", balance: 0 }], budgets: {"Food": 5000, "Bills": 3000}, transactions: [], credit: [], savings: [], recurring: [] };
+                localStorage.removeItem('easy_finance_tracker_php_v4');
                 loadData();
             }
         }
