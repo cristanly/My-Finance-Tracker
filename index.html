@@ -192,14 +192,31 @@
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit transition-colors duration-300">
                 <h2 class="form-title-credit text-lg font-semibold mb-4 text-rose-500">Add Credit / Loan</h2>
                 <form id="form-credit" onsubmit="addEntry(event, 'credit')" class="space-y-4">
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Loan Name / Lender</label><input type="text" id="c-desc" required placeholder="e.g., Bank Car Loan" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none"></div>
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Total Owed Amount</label><input type="text" id="c-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none"></div>
+                    <div>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Loan Name / Lender</label>
+                        <input type="text" id="c-desc" required placeholder="e.g., Bank Car Loan" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Total Owed Amount</label>
+                        <input type="text" id="c-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-rose-400 focus:outline-none">
+                    </div>
                     <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-2.5 rounded-xl text-sm transition shadow-sm">Add Loan Record</button>
                 </form>
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
                 <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Active Credits & Loans</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left table-fixed"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3 w-7/12">Name</th><th class="pb-3 w-4/12 text-right">Amount Owed</th><th class="pb-3 w-1/12 text-center">Action</th></tr></thead><tbody id="list-credit" class="text-sm divide-y"></tbody></table></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left table-fixed">
+                        <thead>
+                            <tr class="table-header-row border-b text-xs font-semibold text-slate-400">
+                                <th class="pb-3 w-7/12">Name</th>
+                                <th class="pb-3 w-4/12 text-right">Amount Owed</th>
+                                <th class="pb-3 w-1/12 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-credit" class="text-sm divide-y"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -208,61 +225,109 @@
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit transition-colors duration-300">
                 <h2 class="form-title-savings text-lg font-semibold mb-4 text-teal-600">Add Savings Goal</h2>
                 <form id="form-savings" onsubmit="addEntry(event, 'savings')" class="space-y-4">
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Goal Name</label><input type="text" id="s-desc" required placeholder="e.g., New Laptop" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-400 focus:outline-none"></div>
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Current Saved Amount</label><input type="text" id="s-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-400 focus:outline-none"></div>
+                    <div>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Goal Name</label>
+                        <input type="text" id="s-desc" required placeholder="e.g., Emergency Fund" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-400 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Target Amount</label>
+                        <input type="text" id="s-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-teal-400 focus:outline-none">
+                    </div>
                     <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2.5 rounded-xl text-sm transition shadow-sm">Add Savings Goal</button>
                 </form>
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
-                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Savings Goals</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left table-fixed"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3 w-7/12">Goal</th><th class="pb-3 w-4/12 text-right">Saved</th><th class="pb-3 w-1/12 text-center">Action</th></tr></thead><tbody id="list-savings" class="text-sm divide-y"></tbody></table></div>
+                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Savings Goals Progress</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left table-fixed">
+                        <thead>
+                            <tr class="table-header-row border-b text-xs font-semibold text-slate-400">
+                                <th class="pb-3 w-5/12">Goal</th>
+                                <th class="pb-3 w-4/12 text-right">Saved / Target</th>
+                                <th class="pb-3 w-2/12 text-center">Add Funds</th>
+                                <th class="pb-3 w-1/12 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-savings" class="text-sm divide-y"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- TAB CONTENT: LENDED MONEY -->
         <div id="tab-lended" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit transition-colors duration-300">
-                <h2 class="form-title-lended text-lg font-semibold mb-4 text-violet-600">Track Lended Money</h2>
+                <h2 class="form-title-lended text-lg font-semibold mb-4 text-violet-600">Add Lended Money</h2>
                 <form id="form-lended" onsubmit="addEntry(event, 'lended')" class="space-y-4">
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Borrower Name</label><input type="text" id="l-desc" required placeholder="e.g., John Doe" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none"></div>
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Amount Lended</label><input type="text" id="l-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none"></div>
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Date Lended</label><input type="date" id="l-date" required class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none"></div>
-                    <button type="submit" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-medium py-2.5 rounded-xl text-sm transition shadow-sm">Add Lended Record</button>
+                    <div>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Borrower Name</label>
+                        <input type="text" id="l-desc" required placeholder="e.g., John Doe" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Amount Lended</label>
+                        <input type="text" id="l-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-violet-400 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-medium py-2.5 rounded-xl text-sm transition shadow-sm">Add Record</button>
                 </form>
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
-                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Money Owed To You</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left table-fixed"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3 w-5/12">Borrower</th><th class="pb-3 w-3/12">Date Lended</th><th class="pb-3 w-3/12 text-right">Amount</th><th class="pb-3 w-1/12 text-center">Action</th></tr></thead><tbody id="list-lended" class="text-sm divide-y"></tbody></table></div>
+                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Money Lended Out</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left table-fixed">
+                        <thead>
+                            <tr class="table-header-row border-b text-xs font-semibold text-slate-400">
+                                <th class="pb-3 w-7/12">Borrower</th>
+                                <th class="pb-3 w-4/12 text-right">Amount</th>
+                                <th class="pb-3 w-1/12 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-lended" class="text-sm divide-y"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- TAB CONTENT: RECURRING & BILLS -->
         <div id="tab-recurring" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit transition-colors duration-300">
-                <h2 class="form-title-recurring text-lg font-semibold mb-4 text-amber-600">Add Recurring Bill / Tx</h2>
+                <h2 class="form-title-recurring text-lg font-semibold mb-4 text-amber-600">Add Recurring Bill</h2>
                 <form id="form-recurring" onsubmit="addEntry(event, 'recurring')" class="space-y-4">
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Bill Name</label><input type="text" id="r-desc" required placeholder="e.g., Netflix / Rent" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none"></div>
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Amount</label><input type="text" id="r-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none"></div>
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Frequency</label><select id="r-freq" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none"><option value="Monthly">Monthly</option><option value="Weekly">Weekly</option><option value="Yearly">Yearly</option></select></div>
-                    <div><label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Next Due Date</label><input type="date" id="r-date" required class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none"></div>
-                    <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2.5 rounded-xl text-sm transition shadow-sm">Add Bill / Recurring</button>
+                    <div>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Bill Name</label>
+                        <input type="text" id="r-desc" required placeholder="e.g., Netflix, Rent" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="theme-label-sm block text-xs font-medium text-slate-600 mb-1">Monthly Amount</label>
+                        <input type="text" id="r-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2.5 rounded-xl text-sm transition shadow-sm">Add Bill</button>
                 </form>
             </div>
             <div class="theme-card bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2 transition-colors duration-300">
-                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Upcoming Bills & Recurring Schedules</h2>
-                <div class="overflow-x-auto"><table class="w-full text-left table-fixed"><thead><tr class="table-header-row border-b text-xs font-semibold text-slate-400"><th class="pb-3 w-4/12">Name</th><th class="pb-3 w-3/12">Frequency</th><th class="pb-3 w-2/12">Due Date</th><th class="pb-3 w-2/12 text-right">Amount</th><th class="pb-3 w-1/12 text-center">Action</th></tr></thead><tbody id="list-recurring" class="text-sm divide-y"></tbody></table></div>
+                <h2 class="table-heading text-lg font-semibold mb-4 text-slate-800">Recurring Bills & Subscriptions</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left table-fixed">
+                        <thead>
+                            <tr class="table-header-row border-b text-xs font-semibold text-slate-400">
+                                <th class="pb-3 w-7/12">Bill Name</th>
+                                <th class="pb-3 w-4/12 text-right">Amount</th>
+                                <th class="pb-3 w-1/12 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-recurring" class="text-sm divide-y"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
     </div>
 
-    <!-- JavaScript Data Logic -->
     <script>
-        let data = JSON.parse(localStorage.getItem('finance_data_balanced')) || {
-            username: 'User',
-            currency: '$',
-            theme: 'light',
-            transaction: [],
+        let db = {
+            username: "User",
+            currency: "$",
+            theme: "light",
+            transactions: [],
             credit: [],
             savings: [],
             lended: [],
@@ -272,558 +337,463 @@
         let expenseChartInstance = null;
         let summaryChartInstance = null;
 
-        function applyTheme(themeName) {
-            if (themeName === 'dream' || themeName === 'default') themeName = 'light';
-            data.theme = themeName || 'light';
-            
-            const body = document.body;
-            const header = document.getElementById('app-header');
-            const welcomeTitle = document.getElementById('welcome-title');
-            const editNameBtn = document.getElementById('edit-name-btn');
-            const headerDesc = document.getElementById('header-desc');
-            const currencyBox = document.getElementById('currency-box');
-            const currencyLabel = document.getElementById('currency-label');
-            const gearBtn = document.getElementById('gear-btn');
-            const dropdown = document.getElementById('settings-dropdown');
-            const navContainer = document.getElementById('nav-container');
-            
-            // Dashboard Value Elements
-            const dashBalance = document.getElementById('dash-balance');
-            const dashIncome = document.getElementById('dash-income');
-            const dashExpense = document.getElementById('dash-expense');
-            const dashSavings = document.getElementById('dash-savings');
-            const dashLended = document.getElementById('dash-lended');
-            const dashRecurring = document.getElementById('dash-recurring');
-            
-            // Dropdown parts
-            const ddHead1 = document.getElementById('dd-head-1');
-            const ddHead2 = document.getElementById('dd-head-2');
-            const ddItemLight = document.getElementById('dd-item-light');
-            const ddItemDark = document.getElementById('dd-item-dark');
-            const ddItemExport = document.getElementById('dd-item-export');
-            const ddItemImport = document.getElementById('dd-item-import');
-            const ddItemReset = document.getElementById('dd-item-reset');
-            const ddDiv1 = document.getElementById('dd-divider-1');
-            const ddDiv2 = document.getElementById('dd-divider-2');
+        function loadData() {
+            const saved = localStorage.getItem('easy_finance_tracker_data');
+            if (saved) {
+                try {
+                    db = JSON.parse(saved);
+                } catch(e) {
+                    console.error("Error parsing stored data", e);
+                }
+            }
+            document.getElementById('currency-select').value = db.currency || "$";
+            updateUsernameDisplay();
+            applyTheme(db.theme || "light");
+            renderAll();
+        }
 
-            const cards = document.querySelectorAll('.theme-card');
-            const labels = document.querySelectorAll('.theme-label');
-            const labelSm = document.querySelectorAll('.theme-label-sm');
-            const inputs = document.querySelectorAll('.theme-input');
-            const tableHeadings = document.querySelectorAll('.table-heading');
-            const tableHeaderRows = document.querySelectorAll('.table-header-row');
-            const chartTitles = document.querySelectorAll('.chart-title');
-            
-            const formTitleT = document.querySelector('.form-title-transaction');
-            const formTitleC = document.querySelector('.form-title-credit');
-            const formTitleS = document.querySelector('.form-title-savings');
-            const formTitleL = document.querySelector('.form-title-lended');
-            const formTitleR = document.querySelector('.form-title-recurring');
+        function saveData() {
+            localStorage.setItem('easy_finance_tracker_data', JSON.stringify(db));
+        }
 
-            if (themeName === 'dark') {
-                body.className = "bg-slate-900 text-slate-100 transition-colors duration-300";
-                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800 p-6 rounded-3xl shadow-md border border-slate-700 transition-colors duration-300";
-                welcomeTitle.className = "text-2xl md:text-3xl font-bold tracking-tight text-slate-100";
-                editNameBtn.className = "w-9 h-9 flex items-center justify-center text-indigo-300 hover:text-white bg-slate-700/80 hover:bg-slate-700 rounded-xl transition shadow-sm border border-slate-600";
-                headerDesc.className = "text-sm text-slate-400 mt-1";
-                currencyBox.className = "flex items-center bg-slate-700/60 border border-slate-600 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300 text-slate-200";
-                currencyLabel.className = "text-xs font-medium text-slate-400 mr-2";
-                gearBtn.className = "w-10 h-10 flex items-center justify-center bg-slate-700/60 text-slate-200 hover:bg-slate-700 rounded-xl transition border border-slate-600 shadow-sm";
-                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-slate-800 border border-slate-700 rounded-2xl shadow-xl py-2 z-50 text-slate-200 transition-colors duration-300";
-                navContainer.className = "flex overflow-x-auto space-x-2 bg-slate-800 p-2 rounded-2xl shadow-md border border-slate-700 mb-8 transition-colors duration-300";
-                
-                if(dashBalance) dashBalance.className = "text-lg font-bold text-slate-100 mt-2 truncate whitespace-nowrap";
-                if(dashIncome) dashIncome.className = "text-lg font-bold text-emerald-400 mt-2 truncate whitespace-nowrap";
-                if(dashExpense) dashExpense.className = "text-lg font-bold text-rose-400 mt-2 truncate whitespace-nowrap";
-                if(dashSavings) dashSavings.className = "text-lg font-bold text-teal-400 mt-2 truncate whitespace-nowrap";
-                if(dashLended) dashLended.className = "text-lg font-bold text-violet-400 mt-2 truncate whitespace-nowrap";
-                if(dashRecurring) dashRecurring.className = "text-lg font-bold text-amber-400 mt-2 truncate whitespace-nowrap";
-
-                ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
-                ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
-                ddItemLight.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 transition flex items-center gap-2";
-                ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 transition flex items-center gap-2";
-                ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-700 transition flex items-center gap-2";
-                ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-700 transition flex items-center gap-2 cursor-pointer";
-                ddItemReset.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-rose-400 hover:bg-rose-950/30 transition flex items-center gap-2";
-                ddDiv1.className = "h-px bg-slate-700 my-1";
-                ddDiv2.className = "h-px bg-slate-700 my-1";
-
-                cards.forEach(card => {
-                    card.className = "theme-card bg-slate-800 p-5 rounded-2xl shadow-md border border-slate-700 transition-all flex flex-col justify-between text-slate-100";
-                });
-                labels.forEach(lbl => lbl.className = "theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider");
-                labelSm.forEach(ls => ls.className = "theme-label-sm block text-xs font-medium text-slate-300 mb-1");
-                inputs.forEach(inp => {
-                    inp.className = "theme-input w-full px-3 py-2 bg-slate-900 border border-slate-700 text-slate-100 rounded-xl text-sm focus:ring-2 focus:ring-sky-400 focus:outline-none placeholder-slate-500";
-                });
-                tableHeadings.forEach(th => th.className = "table-heading text-lg font-semibold mb-4 text-slate-100");
-                tableHeaderRows.forEach(thr => thr.className = "table-header-row border-b border-slate-700 text-xs font-semibold text-slate-400");
-                chartTitles.forEach(ct => ct.className = "chart-title text-sm font-semibold w-full mb-4 text-left text-slate-200");
-                
-                if(formTitleT) formTitleT.className = "form-title-transaction text-lg font-semibold mb-4 text-emerald-400";
-                if(formTitleC) formTitleC.className = "form-title-credit text-lg font-semibold mb-4 text-rose-400";
-                if(formTitleS) formTitleS.className = "form-title-savings text-lg font-semibold mb-4 text-teal-400";
-                if(formTitleL) formTitleL.className = "form-title-lended text-lg font-semibold mb-4 text-violet-400";
-                if(formTitleR) formTitleR.className = "form-title-recurring text-lg font-semibold mb-4 text-amber-400";
-
-            } else {
-                body.className = "bg-slate-50 text-slate-800 transition-colors duration-300";
-                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 transition-colors duration-300";
-                welcomeTitle.className = "text-2xl md:text-3xl font-bold tracking-tight text-slate-900";
-                editNameBtn.className = "w-9 h-9 flex items-center justify-center text-indigo-500 hover:text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition shadow-sm border border-indigo-100/50";
-                headerDesc.className = "text-sm text-slate-500 mt-1";
-                currencyBox.className = "flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300";
-                currencyLabel.className = "text-xs font-medium text-slate-500 mr-2";
-                gearBtn.className = "w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition border border-slate-200 shadow-sm";
-                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300 text-slate-800";
-                navContainer.className = "flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 mb-8 transition-colors duration-300";
-                
-                if(dashBalance) dashBalance.className = "text-lg font-bold text-slate-900 mt-2 truncate whitespace-nowrap";
-                if(dashIncome) dashIncome.className = "text-lg font-bold text-emerald-600 mt-2 truncate whitespace-nowrap";
-                if(dashExpense) dashExpense.className = "text-lg font-bold text-rose-500 mt-2 truncate whitespace-nowrap";
-                if(dashSavings) dashSavings.className = "text-lg font-bold text-teal-600 mt-2 truncate whitespace-nowrap";
-                if(dashLended) dashLended.className = "text-lg font-bold text-violet-600 mt-2 truncate whitespace-nowrap";
-                if(dashRecurring) dashRecurring.className = "text-lg font-bold text-amber-600 mt-2 truncate whitespace-nowrap";
-
-                ddHead1.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
-                ddHead2.className = "px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider";
-                ddItemLight.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2";
-                ddItemDark.className = "w-full text-left px-4 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 transition flex items-center gap-2";
-                ddItemExport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition flex items-center gap-2";
-                ddItemImport.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition flex items-center gap-2 cursor-pointer";
-                ddItemReset.className = "w-full text-left px-4 py-2.5 text-xs font-medium text-rose-500 hover:bg-rose-50 transition flex items-center gap-2";
-                ddDiv1.className = "h-px bg-slate-100 my-1";
-                ddDiv2.className = "h-px bg-slate-100 my-1";
-
-                cards.forEach(card => {
-                    card.className = "theme-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between";
-                });
-                labels.forEach(lbl => lbl.className = "theme-label text-xs font-semibold text-slate-400 uppercase tracking-wider");
-                labelSm.forEach(ls => ls.className = "theme-label-sm block text-xs font-medium text-slate-600 mb-1");
-                inputs.forEach(inp => {
-                    inp.className = "theme-input w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none";
-                });
-                tableHeadings.forEach(th => th.className = "table-heading text-lg font-semibold mb-4 text-slate-800");
-                tableHeaderRows.forEach(thr => thr.className = "table-header-row border-b border-slate-100 text-xs font-semibold text-slate-400");
-                chartTitles.forEach(ct => ct.className = "chart-title text-sm font-semibold w-full mb-4 text-left text-slate-700");
-
-                if(formTitleT) formTitleT.className = "form-title-transaction text-lg font-semibold mb-4 text-emerald-600";
-                if(formTitleC) formTitleC.className = "form-title-credit text-lg font-semibold mb-4 text-rose-500";
-                if(formTitleS) formTitleS.className = "form-title-savings text-lg font-semibold mb-4 text-teal-600";
-                if(formTitleL) formTitleL.className = "form-title-lended text-lg font-semibold mb-4 text-violet-600";
-                if(formTitleR) formTitleR.className = "form-title-recurring text-lg font-semibold mb-4 text-amber-600";
+        function editUsername() {
+            const newName = prompt("Enter your preferred name:", db.username);
+            if (newName !== null && newName.trim() !== "") {
+                db.username = newName.trim();
+                saveData();
+                updateUsernameDisplay();
             }
         }
 
-        function changeTheme(themeName) {
-            applyTheme(themeName);
-            saveAndRefresh();
+        function updateUsernameDisplay() {
+            document.getElementById('welcome-title').innerText = `Hi, ${db.username}! 👋`;
         }
 
-        function toggleSettingsDropdown(event) {
-            event.stopPropagation();
+        function changeCurrency() {
+            db.currency = document.getElementById('currency-select').value;
+            saveData();
+            renderAll();
+        }
+
+        function formatAmount(num) {
+            return `${db.currency}${Number(num).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        function formatInputAmount(input) {
+            let val = input.value.replace(/[^0-9.]/g, '');
+            const parts = val.split('.');
+            if (parts.length > 2) {
+                val = parts[0] + '.' + parts.slice(1).join('');
+            }
+            input.value = val;
+        }
+
+        function toggleSettingsDropdown(e) {
+            e.stopPropagation();
             const dropdown = document.getElementById('settings-dropdown');
             dropdown.classList.toggle('hidden');
         }
 
-        function closeDropdownOutside(event) {
+        function closeDropdownOutside(e) {
             const dropdown = document.getElementById('settings-dropdown');
-            if (dropdown && !dropdown.classList.contains('hidden')) {
+            const gearBtn = document.getElementById('gear-btn');
+            if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(e.target) && !gearBtn.contains(e.target)) {
                 dropdown.classList.add('hidden');
             }
         }
 
-        function editUsername() {
-            let currentName = data.username || 'User';
-            let newName = prompt("Enter your name or nickname:", currentName);
-            if (newName !== null && newName.trim() !== "") {
-                data.username = newName.trim();
-                saveAndRefresh();
-            }
+        function changeTheme(theme) {
+            db.theme = theme;
+            saveData();
+            applyTheme(theme);
+            document.getElementById('settings-dropdown').classList.add('hidden');
         }
 
-        function changeCurrency() {
-            data.currency = document.getElementById('currency-select').value;
-            saveAndRefresh();
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        function applyTheme(theme) {
+            const body = document.body;
+            const isDark = theme === 'dark';
             
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                let isDark = data.theme === 'dark';
-                let defaultHover = isDark ? "text-slate-300 hover:bg-slate-700/60" : "text-slate-600 hover:bg-slate-100";
-                el.className = `tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${defaultHover} whitespace-nowrap`;
+            if (isDark) {
+                body.className = "bg-slate-900 text-slate-100 transition-colors duration-300";
+            } else {
+                body.className = "bg-slate-50 text-slate-800 transition-colors duration-300";
+            }
+
+            const header = document.getElementById('app-header');
+            const dropdown = document.getElementById('settings-dropdown');
+            const currencyBox = document.getElementById('currency-box');
+            const navContainer = document.getElementById('nav-container');
+
+            if (isDark) {
+                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-700 transition-colors duration-300";
+                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-slate-800 border border-slate-700 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300";
+                currencyBox.className = "flex items-center bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300";
+                navContainer.className = "flex overflow-x-auto space-x-2 bg-slate-800 p-2 rounded-2xl shadow-sm border border-slate-700 mb-8 transition-colors duration-300";
+            } else {
+                header.className = "mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 transition-colors duration-300";
+                dropdown.className = "hidden absolute right-0 mt-2 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 transition-colors duration-300";
+                currencyBox.className = "flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm transition-colors duration-300";
+                navContainer.className = "flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 mb-8 transition-colors duration-300";
+            }
+
+            document.querySelectorAll('.theme-card').forEach(card => {
+                if (isDark) {
+                    card.className = card.className.replace(/bg-white|border-slate-100/g, '') + " bg-slate-800 border border-slate-700";
+                } else {
+                    card.className = card.className.replace(/bg-slate-800|border-slate-700/g, '') + " bg-white border border-slate-100";
+                }
             });
 
-            document.getElementById('tab-' + tabId).classList.remove('hidden');
-            const activeBtn = document.getElementById('btn-' + tabId);
-            let isDark = data.theme === 'dark';
-            const activeClass = isDark ? activeBtn.getAttribute('data-dark-class') : activeBtn.getAttribute('data-light-class');
-            activeBtn.className = `tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${activeClass} whitespace-nowrap`;
+            document.querySelectorAll('.theme-input').forEach(inp => {
+                if (isDark) {
+                    inp.className = inp.className.replace(/bg-white|border-slate-200|text-slate-800/g, '') + " bg-slate-900 border-slate-700 text-slate-100";
+                } else {
+                    inp.className = inp.className.replace(/bg-slate-900|border-slate-700|text-slate-100/g, '') + " bg-white border-slate-200 text-slate-800";
+                }
+            });
 
-            if (tabId === 'dashboard') {
-                setTimeout(updateCharts, 50);
-            }
+            updateActiveTabStyling();
         }
 
-        function saveAndRefresh() {
-            localStorage.setItem('finance_data_balanced', JSON.stringify(data));
-            initApp();
+        function switchTab(tabName) {
+            const tabs = ['dashboard', 'transactions', 'credit', 'savings', 'lended', 'recurring'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                if (t === tabName) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+            updateActiveTabStyling();
         }
 
-        function formatInputAmount(input) {
-            let value = input.value.replace(/,/g, '');
-            if (value === '' || isNaN(value)) {
-                input.value = value;
-                return;
-            }
-            let parts = value.split('.');
-            parts[0] = Number(parts[0]).toLocaleString('en-US');
-            input.value = parts.length > 1 ? parts[0] + '.' + parts[1] : parts[0];
-        }
+        function updateActiveTabStyling() {
+            const activeTab = document.querySelectorAll('.tab-content:not(.hidden)')[0]?.id.replace('tab-', '');
+            const isDark = db.theme === 'dark';
 
-        function parseCleanAmount(val) {
-            if (!val) return 0;
-            return parseFloat(String(val).replace(/,/g, '')) || 0;
-        }
-
-        function formatMoney(amount) {
-            return Number(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                const id = btn.id.replace('btn-', '');
+                if (id === activeTab) {
+                    if (isDark) {
+                        btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap bg-slate-700 text-indigo-300 font-semibold border border-slate-600";
+                    } else {
+                        const lightClass = btn.getAttribute('data-light-class');
+                        btn.className = `tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${lightClass}`;
+                    }
+                } else {
+                    if (isDark) {
+                        btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-700/50";
+                    } else {
+                        btn.className = "tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap text-slate-600 hover:text-slate-900 hover:bg-slate-100";
+                    }
+                }
+            });
         }
 
         function addEntry(e, type) {
             e.preventDefault();
-            let newItem = { id: Date.now() };
-            
             if (type === 'transaction') {
-                newItem.desc = document.getElementById('t-desc').value;
-                newItem.amount = parseCleanAmount(document.getElementById('t-amount').value);
-                newItem.txType = document.getElementById('t-type').value;
+                const desc = document.getElementById('t-desc').value.trim();
+                const amount = parseFloat(document.getElementById('t-amount').value);
+                const tType = document.getElementById('t-type').value;
+                if (!desc || isNaN(amount)) return;
+                db.transactions.push({ id: Date.now(), desc, amount, type: tType });
+                document.getElementById('form-transaction').reset();
             } else if (type === 'credit') {
-                newItem.desc = document.getElementById('c-desc').value;
-                newItem.amount = parseCleanAmount(document.getElementById('c-amount').value);
+                const desc = document.getElementById('c-desc').value.trim();
+                const amount = parseFloat(document.getElementById('c-amount').value);
+                if (!desc || isNaN(amount)) return;
+                db.credit.push({ id: Date.now(), desc, amount });
+                document.getElementById('form-credit').reset();
             } else if (type === 'savings') {
-                newItem.desc = document.getElementById('s-desc').value;
-                newItem.amount = parseCleanAmount(document.getElementById('s-amount').value);
+                const desc = document.getElementById('s-desc').value.trim();
+                const amount = parseFloat(document.getElementById('s-amount').value);
+                if (!desc || isNaN(amount)) return;
+                db.savings.push({ id: Date.now(), desc, target: amount, saved: 0 });
+                document.getElementById('form-savings').reset();
             } else if (type === 'lended') {
-                newItem.desc = document.getElementById('l-desc').value;
-                newItem.amount = parseCleanAmount(document.getElementById('l-amount').value);
-                newItem.date = document.getElementById('l-date').value;
+                const desc = document.getElementById('l-desc').value.trim();
+                const amount = parseFloat(document.getElementById('l-amount').value);
+                if (!desc || isNaN(amount)) return;
+                db.lended.push({ id: Date.now(), desc, amount });
+                document.getElementById('form-lended').reset();
             } else if (type === 'recurring') {
-                newItem.desc = document.getElementById('r-desc').value;
-                newItem.amount = parseCleanAmount(document.getElementById('r-amount').value);
-                newItem.freq = document.getElementById('r-freq').value;
-                newItem.date = document.getElementById('r-date').value;
+                const desc = document.getElementById('r-desc').value.trim();
+                const amount = parseFloat(document.getElementById('r-amount').value);
+                if (!desc || isNaN(amount)) return;
+                db.recurring.push({ id: Date.now(), desc, amount });
+                document.getElementById('form-recurring').reset();
             }
-
-            if (!data[type]) data[type] = [];
-            data[type].push(newItem);
-            saveAndRefresh();
-            
-            const formEl = document.getElementById('form-' + type);
-            if (formEl) formEl.reset();
+            saveData();
+            renderAll();
         }
 
-        function deleteItem(type, id) {
-            data[type] = data[type].filter(item => item.id !== id);
-            saveAndRefresh();
+        function deleteEntry(type, id) {
+            db[type] = db[type].filter(item => item.id !== id);
+            saveData();
+            renderAll();
         }
 
-        function resetAllData() {
-            if (confirm("Reset all finance records?")) {
-                let currentName = data.username || 'User';
-                let currentTheme = data.theme || 'light';
-                data = { username: currentName, currency: '$', theme: currentTheme, transaction: [], credit: [], savings: [], lended: [], recurring: [] };
-                saveAndRefresh();
+        function addToSavings(id) {
+            const addAmt = prompt("Enter amount to add to savings goal:");
+            if (addAmt !== null && !isNaN(addAmt) && parseFloat(addAmt) > 0) {
+                const goal = db.savings.find(s => s.id === id);
+                if (goal) {
+                    goal.saved += parseFloat(addAmt);
+                    saveData();
+                    renderAll();
+                }
             }
+        }
+
+        function renderAll() {
+            renderTransactions();
+            renderCredit();
+            renderSavings();
+            renderLended();
+            renderRecurring();
+            updateDashboard();
+        }
+
+        function renderTransactions() {
+            const tbody = document.getElementById('list-transaction');
+            tbody.innerHTML = '';
+            if (db.transactions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-400 text-xs">No transactions recorded yet.</td></tr>`;
+                return;
+            }
+            db.transactions.slice().reverse().forEach(t => {
+                const isInc = t.type === 'income';
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="py-3 truncate pr-2">${escapeHtml(t.desc)}</td>
+                        <td class="py-3 capitalize"><span class="px-2 py-0.5 rounded-full text-xs font-semibold ${isInc ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'}">${t.type}</span></td>
+                        <td class="py-3 text-right font-semibold ${isInc ? 'text-emerald-600' : 'text-rose-500'}">${isInc ? '+' : '-'}${formatAmount(t.amount)}</td>
+                        <td class="py-3 text-center"><button onclick="deleteEntry('transactions', ${t.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-xs"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderCredit() {
+            const tbody = document.getElementById('list-credit');
+            tbody.innerHTML = '';
+            if (db.credit.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="py-4 text-center text-slate-400 text-xs">No loans or credits recorded.</td></tr>`;
+                return;
+            }
+            db.credit.forEach(c => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="py-3 truncate pr-2">${escapeHtml(c.desc)}</td>
+                        <td class="py-3 text-right font-semibold text-rose-500">${formatAmount(c.amount)}</td>
+                        <td class="py-3 text-center"><button onclick="deleteEntry('credit', ${c.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-xs"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderSavings() {
+            const tbody = document.getElementById('list-savings');
+            tbody.innerHTML = '';
+            if (db.savings.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-400 text-xs">No savings goals created yet.</td></tr>`;
+                return;
+            }
+            db.savings.forEach(s => {
+                const pct = s.target > 0 ? Math.min(100, Math.round((s.saved / s.target) * 100)) : 0;
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="py-3 truncate pr-2">
+                            <div class="font-medium">${escapeHtml(s.desc)}</div>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1 overflow-hidden">
+                                <div class="bg-teal-500 h-full rounded-full" style="width: ${pct}%"></div>
+                            </div>
+                        </td>
+                        <td class="py-3 text-right font-semibold text-teal-600">${formatAmount(s.saved)} / ${formatAmount(s.target)} (${pct}%)</td>
+                        <td class="py-3 text-center"><button onclick="addToSavings(${s.id})" class="px-2.5 py-1 bg-teal-50 hover:bg-teal-100 text-teal-600 rounded-lg text-xs font-medium transition"><i class="fa-solid fa-plus mr-1"></i>Add</button></td>
+                        <td class="py-3 text-center"><button onclick="deleteEntry('savings', ${s.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-xs"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderLended() {
+            const tbody = document.getElementById('list-lended');
+            tbody.innerHTML = '';
+            if (db.lended.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="py-4 text-center text-slate-400 text-xs">No lended money recorded.</td></tr>`;
+                return;
+            }
+            db.lended.forEach(l => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="py-3 truncate pr-2">${escapeHtml(l.desc)}</td>
+                        <td class="py-3 text-right font-semibold text-violet-600">${formatAmount(l.amount)}</td>
+                        <td class="py-3 text-center"><button onclick="deleteEntry('lended', ${l.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-xs"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderRecurring() {
+            const tbody = document.getElementById('list-recurring');
+            tbody.innerHTML = '';
+            if (db.recurring.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="py-4 text-center text-slate-400 text-xs">No recurring bills or subscriptions.</td></tr>`;
+                return;
+            }
+            db.recurring.forEach(r => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="py-3 truncate pr-2">${escapeHtml(r.desc)}</td>
+                        <td class="py-3 text-right font-semibold text-amber-600">${formatAmount(r.amount)}/mo</td>
+                        <td class="py-3 text-center"><button onclick="deleteEntry('recurring', ${r.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash text-xs"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateDashboard() {
+            let totalIncome = 0;
+            let totalExpense = 0;
+            db.transactions.forEach(t => {
+                if (t.type === 'income') totalIncome += Number(t.amount);
+                else totalExpense += Number(t.amount);
+            });
+
+            let totalSavings = db.savings.reduce((acc, curr) => acc + Number(curr.saved), 0);
+            let totalLended = db.lended.reduce((acc, curr) => acc + Number(curr.amount), 0);
+            let totalRecurring = db.recurring.reduce((acc, curr) => acc + Number(curr.amount), 0);
+            let netBalance = totalIncome - totalExpense;
+
+            document.getElementById('dash-balance').innerText = formatAmount(netBalance);
+            document.getElementById('dash-income').innerText = "+" + formatAmount(totalIncome);
+            document.getElementById('dash-expense').innerText = "-" + formatAmount(totalExpense);
+            document.getElementById('dash-savings').innerText = formatAmount(totalSavings);
+            document.getElementById('dash-lended').innerText = formatAmount(totalLended);
+            document.getElementById('dash-recurring').innerText = formatAmount(totalRecurring);
+
+            updateCharts(totalIncome, totalExpense, totalSavings, totalLended);
+        }
+
+        function updateCharts(income, expense, savings, lended) {
+            const isDark = db.theme === 'dark';
+            const textColor = isDark ? '#cbd5e1' : '#475569';
+
+            // Doughnut Chart (Expenses, Savings, Lended)
+            const ctx1 = document.getElementById('expenseChart').getContext('2d');
+            if (expenseChartInstance) expenseChartInstance.destroy();
+            expenseChartInstance = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Expenses', 'Savings', 'Lended'],
+                    datasets: [{
+                        data: [expense, savings, lended],
+                        backgroundColor: ['#f43f5e', '#14b8a6', '#8b5cf6'],
+                        borderWidth: isDark ? 2 : 0,
+                        borderColor: isDark ? '#1e293b' : '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Plus Jakarta Sans' } } }
+                    }
+                }
+            });
+
+            // Bar Chart (Income vs Expenses)
+            const ctx2 = document.getElementById('summaryChart').getContext('2d');
+            if (summaryChartInstance) summaryChartInstance.destroy();
+            summaryChartInstance = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Income', 'Expenses'],
+                    datasets: [{
+                        label: 'Amount',
+                        data: [income, expense],
+                        backgroundColor: ['#10b981', '#f43f5e'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { ticks: { color: textColor }, grid: { display: false } },
+                        y: { ticks: { color: textColor }, grid: { color: isDark ? '#334155' : '#f1f5f9' } }
+                    }
+                }
+            });
         }
 
         function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `finance_backup_${new Date().toISOString().slice(0,10)}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "finance_tracker_backup.json");
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+            document.getElementById('settings-dropdown').classList.add('hidden');
         }
 
         function importData(event) {
             const fileReader = new FileReader();
             if (event.target.files[0]) {
                 fileReader.readAsText(event.target.files[0], "UTF-8");
-                fileReader.onload = function(e) {
+                fileReader.onload = e => {
                     try {
-                        const importedData = JSON.parse(e.target.result);
-                        if (importedData && typeof importedData === 'object' && importedData.transaction) {
-                            data = importedData;
-                            if(!data.theme || data.theme === 'dream' || data.theme === 'default') data.theme = 'light';
-                            saveAndRefresh();
-                            alert("Data successfully imported!");
-                        } else {
-                            alert("Invalid backup file format.");
+                        const parsed = JSON.parse(e.target.result);
+                        if (parsed && typeof parsed === 'object') {
+                            db = parsed;
+                            saveData();
+                            document.getElementById('currency-select').value = db.currency || "$";
+                            updateUsernameDisplay();
+                            applyTheme(db.theme || "light");
+                            renderAll();
+                            alert("Backup imported successfully!");
                         }
-                    } catch (error) {
-                        alert("Error reading JSON file.");
+                    } catch(err) {
+                        alert("Invalid JSON backup file.");
                     }
-                    event.target.value = '';
                 };
             }
+            document.getElementById('settings-dropdown').classList.add('hidden');
         }
 
-        function checkRecurringBills() {
-            if (!data.recurring || data.recurring.length === 0) return;
-            
-            let today = new Date();
-            today.setHours(0, 0, 0, 0);
-            let updated = false;
-
-            data.recurring.forEach(bill => {
-                if (!bill.date) return;
-                let dueDate = new Date(bill.date);
-                dueDate.setHours(0, 0, 0, 0);
-
-                while (dueDate <= today) {
-                    data.transaction.push({
-                        id: Date.now() + Math.random(),
-                        desc: `[Auto-Bill] ${bill.desc}`,
-                        amount: bill.amount,
-                        txType: 'expense'
-                    });
-
-                    if (bill.freq === 'Weekly') {
-                        dueDate.setDate(dueDate.getDate() + 7);
-                    } else if (bill.freq === 'Monthly') {
-                        dueDate.setMonth(dueDate.getMonth() + 1);
-                    } else if (bill.freq === 'Yearly') {
-                        dueDate.setFullYear(dueDate.getFullYear() + 1);
-                    } else {
-                        break;
-                    }
-                    updated = true;
-                }
-
-                let year = dueDate.getFullYear();
-                let month = String(dueDate.getMonth() + 1).padStart(2, '0');
-                let day = String(dueDate.getDate()).padStart(2, '0');
-                bill.date = `${year}-${month}-${day}`;
-            });
-
-            if (updated) {
-                localStorage.setItem('finance_data_balanced', JSON.stringify(data));
+        function resetAllData() {
+            if (confirm("Are you sure you want to reset all tracker data? This cannot be undone.")) {
+                db = {
+                    username: "User",
+                    currency: "$",
+                    theme: "light",
+                    transactions: [],
+                    credit: [],
+                    savings: [],
+                    lended: [],
+                    recurring: []
+                };
+                saveData();
+                document.getElementById('currency-select').value = "$";
+                updateUsernameDisplay();
+                applyTheme("light");
+                renderAll();
+                document.getElementById('settings-dropdown').classList.add('hidden');
             }
         }
 
-        function updateCharts() {
-            const cur = data.currency || '$';
-            const isDark = data.theme === 'dark';
-            const totalIncome = (data.transaction || []).filter(t => t.txType === 'income').reduce((acc, t) => acc + t.amount, 0);
-            const totalExpense = (data.transaction || []).filter(t => t.txType === 'expense').reduce((acc, t) => acc + t.amount, 0);
-            const totalSavings = (data.savings || []).reduce((acc, s) => acc + s.amount, 0);
-            const totalCredit = (data.credit || []).reduce((acc, c) => acc + c.amount, 0);
-            const totalLended = (data.lended || []).reduce((acc, l) => acc + l.amount, 0);
-            const totalRecurring = (data.recurring || []).reduce((acc, r) => acc + r.amount, 0);
-
-            // 1. Doughnut Chart
-            const ctxExpense = document.getElementById('expenseChart');
-            if (ctxExpense) {
-                if (expenseChartInstance) expenseChartInstance.destroy();
-                
-                let hasData = totalExpense > 0 || totalSavings > 0 || totalCredit > 0 || totalLended > 0 || totalRecurring > 0;
-                expenseChartInstance = new Chart(ctxExpense, {
-                    type: 'doughnut',
-                    data: {
-                        labels: hasData ? ['Expenses', 'Savings', 'Credits/Loans', 'Lended', 'Bills'] : ['No Data Yet'],
-                        datasets: [{
-                            data: hasData ? [totalExpense, totalSavings, totalCredit, totalLended, totalRecurring] : [1],
-                            backgroundColor: hasData ? ['#fb7185', '#2dd4bf', '#f43f5e', '#a78bfa', '#fbbf24'] : [isDark ? '#475569' : '#e2e8f0'],
-                            borderWidth: 2,
-                            borderColor: isDark ? '#1e293b' : '#ffffff'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { 
-                                    boxWidth: 12, 
-                                    color: isDark ? '#94a3b8' : '#64748b',
-                                    font: { family: "'Plus Jakarta Sans', sans-serif", size: 11 } 
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        if (!hasData) return ' No data';
-                                        let val = context.raw;
-                                        return ` ${context.label}: ${cur}${formatMoney(val)}`;
-                                    }
-                                }
-                            }
-                        },
-                        cutout: '65%'
-                    }
-                });
-            }
-
-            // 2. Bar Chart
-            const ctxSummary = document.getElementById('summaryChart');
-            if (ctxSummary) {
-                if (summaryChartInstance) summaryChartInstance.destroy();
-
-                summaryChartInstance = new Chart(ctxSummary, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Income', 'Expenses', 'Savings', 'Credits', 'Lended', 'Bills'],
-                        datasets: [{
-                            data: [totalIncome, totalExpense, totalSavings, totalCredit, totalLended, totalRecurring],
-                            backgroundColor: ['#34d399', '#fb7185', '#2dd4bf', '#f43f5e', '#a78bfa', '#fbbf24'],
-                            borderRadius: 8,
-                            barThickness: 28
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return ` Amount: ${cur}${formatMoney(context.raw)}`;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: { color: isDark ? '#334155' : '#f1f5f9' },
-                                ticks: { 
-                                    color: isDark ? '#94a3b8' : '#64748b',
-                                    font: { family: "'Plus Jakarta Sans', sans-serif", size: 10 } 
-                                }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { 
-                                    color: isDark ? '#94a3b8' : '#64748b',
-                                    font: { family: "'Plus Jakarta Sans', sans-serif", size: 10, weight: '600' } 
-                                }
-                            }
-                        }
-                    }
-                });
-            }
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        function initApp() {
-            checkRecurringBills();
-            if (data.theme === 'dream' || data.theme === 'default') data.theme = 'light';
-            applyTheme(data.theme || 'light');
-
-            // Set Username
-            const welcomeTitle = document.getElementById('welcome-title');
-            if (welcomeTitle) {
-                welcomeTitle.innerHTML = `Hi, ${data.username || 'User'}! 👋`;
-            }
-
-            const currencySelect = document.getElementById('currency-select');
-            if (currencySelect) currencySelect.value = data.currency;
-            const cur = data.currency || '$';
-            const isDark = data.theme === 'dark';
-
-            // Active Tab Styling
-            const activeContentId = ['dashboard', 'transactions', 'credit', 'savings', 'lended', 'recurring'].find(id => !document.getElementById('tab-' + id).classList.contains('hidden')) || 'dashboard';
-            
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                let defaultHover = isDark ? "text-slate-300 hover:bg-slate-700/60" : "text-slate-600 hover:bg-slate-100";
-                btn.className = `tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${defaultHover} whitespace-nowrap`;
-            });
-
-            const activeBtn = document.getElementById('btn-' + activeContentId);
-            if (activeBtn) {
-                const activeClass = isDark ? activeBtn.getAttribute('data-dark-class') : activeBtn.getAttribute('data-light-class');
-                activeBtn.className = `tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${activeClass} whitespace-nowrap`;
-            }
-
-            // Render Lists Safely
-            ['transaction', 'credit', 'savings', 'lended', 'recurring'].forEach(type => {
-                const tbody = document.getElementById('list-' + type);
-                if (!tbody) return;
-                
-                tbody.innerHTML = '';
-                if (!data[type] || data[type].length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400">No records found.</td></tr>`;
-                } else {
-                    data[type].forEach(item => {
-                        let row = document.createElement('tr');
-                        row.className = isDark ? "border-slate-700" : "border-slate-100";
-                        if (type === 'transaction') {
-                            row.innerHTML = `
-                                <td class="py-3 font-medium truncate">${item.desc}</td>
-                                <td class="py-3"><span class="px-2.5 py-0.5 text-xs rounded-full font-medium ${item.txType === 'income' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}">${item.txType}</span></td>
-                                <td class="py-3 text-right font-semibold ${item.txType === 'income' ? 'text-emerald-500 dark:text-emerald-400' : 'text-rose-500 dark:text-rose-400'}">${item.txType === 'income' ? '+' : '-'}${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('transaction', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
-                        } else if (type === 'credit') {
-                            row.innerHTML = `
-                                <td class="py-3 font-medium truncate">${item.desc}</td>
-                                <td class="py-3 text-right font-semibold text-rose-500 dark:text-rose-400">${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('credit', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
-                        } else if (type === 'savings') {
-                            row.innerHTML = `
-                                <td class="py-3 font-medium truncate">${item.desc}</td>
-                                <td class="py-3 text-right font-semibold text-teal-600 dark:text-teal-400">${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('savings', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
-                        } else if (type === 'lended') {
-                            row.innerHTML = `
-                                <td class="py-3 font-medium truncate">${item.desc}</td>
-                                <td class="py-3 opacity-80 truncate">${item.date || 'N/A'}</td>
-                                <td class="py-3 text-right font-semibold text-violet-600 dark:text-violet-400">${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('lended', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
-                        } else if (type === 'recurring') {
-                            row.innerHTML = `
-                                <td class="py-3 font-medium truncate">${item.desc}</td>
-                                <td class="py-3 opacity-80 truncate">${item.freq}</td>
-                                <td class="py-3 opacity-80 truncate">${item.date}</td>
-                                <td class="py-3 text-right font-semibold text-amber-600 dark:text-amber-400">${cur}${formatMoney(item.amount)}</td>
-                                <td class="py-3 text-center"><button onclick="deleteItem('recurring', ${item.id})" class="text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button></td>`;
-                        }
-                        tbody.appendChild(row);
-                    });
-                }
-            });
-
-            // Calculate Dashboard totals
-            let totalIncome = (data.transaction || []).filter(t => t.txType === 'income').reduce((acc, t) => acc + t.amount, 0);
-            let totalExpense = (data.transaction || []).filter(t => t.txType === 'expense').reduce((acc, t) => acc + t.amount, 0);
-            let totalSavings = (data.savings || []).reduce((acc, s) => acc + s.amount, 0);
-            let totalLended = (data.lended || []).reduce((acc, l) => acc + l.amount, 0);
-            let totalRecurring = (data.recurring || []).reduce((acc, r) => acc + r.amount, 0);
-            let net = totalIncome - totalExpense;
-
-            const dashBalance = document.getElementById('dash-balance');
-            const dashIncome = document.getElementById('dash-income');
-            const dashExpense = document.getElementById('dash-expense');
-            const dashSavings = document.getElementById('dash-savings');
-            const dashLended = document.getElementById('dash-lended');
-            const dashRecurring = document.getElementById('dash-recurring');
-
-            if (dashBalance) dashBalance.textContent = `${net < 0 ? '-' : ''}${cur}${formatMoney(Math.abs(net))}`;
-            if (dashIncome) dashIncome.textContent = `+${cur}${formatMoney(totalIncome)}`;
-            if (dashExpense) dashExpense.textContent = `-${cur}${formatMoney(totalExpense)}`;
-            if (dashSavings) dashSavings.textContent = `${cur}${formatMoney(totalSavings)}`;
-            if (dashLended) dashLended.textContent = `${cur}${formatMoney(totalLended)}`;
-            if (dashRecurring) dashRecurring.textContent = `${cur}${formatMoney(totalRecurring)}`;
-
-            updateCharts();
-        }
-
-        initApp();
+        window.onload = loadData;
     </script>
 </body>
 </html>
