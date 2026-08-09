@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Finance Tracker</title>
+    <title>Easy Finance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -66,7 +66,7 @@
 
         <!-- TAB CONTENT: DASHBOARD -->
         <div id="tab-dashboard" class="space-y-6 tab-content">
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Balance</p>
                     <h2 id="dash-balance" class="text-xl font-bold text-slate-900 mt-1">0.00</h2>
@@ -78,6 +78,10 @@
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Expenses</p>
                     <h2 id="dash-expense" class="text-xl font-bold text-rose-600 mt-1">-0.00</h2>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Savings</p>
+                    <h2 id="dash-savings" class="text-xl font-bold text-teal-600 mt-1">0.00</h2>
                 </div>
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Lended</p>
@@ -258,6 +262,7 @@
         function saveAndRefresh() {
             localStorage.setItem('finance_data_pro', JSON.stringify(data));
             initApp();
+            setTimeout(updateCharts, 50); // Siguraduhing mag-update ang charts agad
         }
 
         function formatInputAmount(input) {
@@ -524,6 +529,7 @@
             // Calculate Dashboard totals
             let totalIncome = (data.transaction || []).filter(t => t.txType === 'income').reduce((acc, t) => acc + t.amount, 0);
             let totalExpense = (data.transaction || []).filter(t => t.txType === 'expense').reduce((acc, t) => acc + t.amount, 0);
+            let totalSavings = (data.savings || []).reduce((acc, s) => acc + s.amount, 0);
             let totalLended = (data.lended || []).reduce((acc, l) => acc + l.amount, 0);
             let totalRecurring = (data.recurring || []).reduce((acc, r) => acc + r.amount, 0);
             let net = totalIncome - totalExpense;
@@ -531,12 +537,14 @@
             const dashBalance = document.getElementById('dash-balance');
             const dashIncome = document.getElementById('dash-income');
             const dashExpense = document.getElementById('dash-expense');
+            const dashSavings = document.getElementById('dash-savings');
             const dashLended = document.getElementById('dash-lended');
             const dashRecurring = document.getElementById('dash-recurring');
 
             if (dashBalance) dashBalance.textContent = `${net < 0 ? '-' : ''}${cur}${formatMoney(Math.abs(net))}`;
             if (dashIncome) dashIncome.textContent = `+${cur}${formatMoney(totalIncome)}`;
             if (dashExpense) dashExpense.textContent = `-${cur}${formatMoney(totalExpense)}`;
+            if (dashSavings) dashSavings.textContent = `${cur}${formatMoney(totalSavings)}`;
             if (dashLended) dashLended.textContent = `${cur}${formatMoney(totalLended)}`;
             if (dashRecurring) dashRecurring.textContent = `${cur}${formatMoney(totalRecurring)}`;
 
