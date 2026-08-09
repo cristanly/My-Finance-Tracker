@@ -3,187 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Finance Tracker</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Advanced Finance Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-50 font-sans text-slate-800">
 
-    <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto px-4 py-8">
         <!-- App Header -->
-        <header class="mb-8 flex justify-between items-center">
+        <header class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900">Finance Tracker</h1>
-                <p class="text-sm text-slate-500">Manage your income and expenses effortlessly.</p>
+                <h1 class="text-3xl font-bold text-slate-900">Finance Tracker Pro</h1>
+                <p class="text-sm text-slate-500">Manage income, expenses, debts, savings, and bills in one place.</p>
             </div>
-            <button onclick="resetData()" class="text-xs bg-red-100 text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-200 transition">
-                <i class="fa-solid fa-trash-can mr-1"></i> Reset Data
-            </button>
+            <div class="flex items-center gap-3">
+                <!-- Currency Selector -->
+                <div class="flex items-center bg-white border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm">
+                    <label class="text-xs font-medium text-slate-500 mr-2">Currency:</label>
+                    <select id="currency-select" onchange="changeCurrency()" class="text-sm font-semibold bg-transparent focus:outline-none">
+                        <option value="$">$ (USD)</option>
+                        <option value="€">€ (EUR)</option>
+                        <option value="£">£ (GBP)</option>
+                        <option value="₱">₱ (PHP)</option>
+                        <option value="¥">¥ (JPY)</option>
+                    </select>
+                </div>
+                <button onclick="resetAllData()" class="text-xs bg-red-50 text-red-600 px-3 py-2 rounded-xl border border-red-100 hover:bg-red-100 transition">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Reset Data
+                </button>
+            </div>
         </header>
 
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <p class="text-sm font-medium text-slate-500">Total Balance</p>
-                <h2 id="net-balance" class="text-2xl font-bold text-slate-900 mt-1">$0.00</h2>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <p class="text-sm font-medium text-slate-500">Total Income</p>
-                <h2 id="total-income" class="text-2xl font-bold text-emerald-600 mt-1">+$0.00</h2>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <p class="text-sm font-medium text-slate-500">Total Expenses</p>
-                <h2 id="total-expense" class="text-2xl font-bold text-rose-600 mt-1">-$0.00</h2>
+        <!-- Navigation Tabs -->
+        <div class="flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 mb-8">
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition bg-indigo-600 text-white whitespace-nowrap">Dashboard</button>
+            <button onclick="switchTab('transactions')" id="btn-transactions" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Transactions</button>
+            <button onclick="switchTab('credit')" id="btn-credit" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Credit & Loans</button>
+            <button onclick="switchTab('savings')" id="btn-savings" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Savings Goals</button>
+            <button onclick="switchTab('lended')" id="btn-lended" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Lended Money</button>
+            <button onclick="switchTab('recurring')" id="btn-recurring" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50 whitespace-nowrap">Recurring & Bills</button>
+        </div>
+
+        <!-- TAB CONTENT: DASHBOARD -->
+        <div id="tab-dashboard" class="space-y-6 tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <p class="text-sm font-medium text-slate-500">Total Net Balance</p>
+                    <h2 id="dash-balance" class="text-2xl font-bold text-slate-900 mt-1">0.00</h2>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <p class="text-sm font-medium text-slate-500">Total Income</p>
+                    <h2 id="dash-income" class="text-2xl font-bold text-emerald-600 mt-1">+0.00</h2>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <p class="text-sm font-medium text-slate-500">Total Expenses</p>
+                    <h2 id="dash-expense" class="text-2xl font-bold text-rose-600 mt-1">-0.00</h2>
+                </div>
             </div>
         </div>
 
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <!-- Add Transaction Form -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-1 h-fit">
-                <h2 class="text-lg font-semibold mb-4 text-slate-900">Add Transaction</h2>
-                <form id="transaction-form" onsubmit="addTransaction(event)" class="space-y-4">
+        <!-- TAB CONTENT: TRANSACTIONS -->
+        <div id="tab-transactions" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <h2 class="text-lg font-semibold mb-4">Add Transaction</h2>
+                <form onsubmit="addEntry(event, 'transaction')" class="space-y-4">
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">Description</label>
-                        <input type="text" id="description" required placeholder="e.g., Grocery Shopping" 
-                            class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="text" id="t-desc" required placeholder="e.g., Grocery" class="w-full px-3 py-2 border rounded-xl text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-600 mb-1">Amount ($)</label>
-                        <input type="number" step="0.01" id="amount" required placeholder="0.00" 
-                            class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Amount</label>
+                        <input type="number" step="0.01" id="t-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">Type</label>
-                        <select id="type" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <select id="t-type" class="w-full px-3 py-2 border rounded-xl text-sm">
                             <option value="income">Income</option>
                             <option value="expense">Expense</option>
                         </select>
                     </div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-indigo-700 transition">
-                        Add Transaction
-                    </button>
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm hover:bg-indigo-700">Add Transaction</button>
                 </form>
             </div>
-
-            <!-- Transaction History List -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
-                <h2 class="text-lg font-semibold mb-4 text-slate-900">Transaction History</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-slate-100 text-xs font-semibold text-slate-400">
-                                <th class="pb-3">Description</th>
-                                <th class="pb-3">Type</th>
-                                <th class="pb-3 text-right">Amount</th>
-                                <th class="pb-3 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transaction-list" class="text-sm divide-y divide-slate-50">
-                            <!-- Transactions populated via JS -->
-                        </tbody>
-                    </table>
-                    <p id="empty-state" class="text-center text-slate-400 text-sm py-8 hidden">No transactions recorded yet.</p>
-                </div>
+                <h2 class="text-lg font-semibold mb-4">Transaction History</h2>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Description</th><th class="pb-3">Type</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-transactions" class="text-sm divide-y"></tbody></table></div>
             </div>
-
         </div>
+
+        <!-- TAB CONTENT: CREDIT & LOANS -->
+        <div id="tab-credit" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <h2 class="text-lg font-semibold mb-4">Add Credit / Loan</h2>
+                <form onsubmit="addEntry(event, 'credit')" class="space-y-4">
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Loan Name / Lender</label><input type="text" id="c-desc" required placeholder="e.g., Bank Car Loan" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Total Owed Amount</label><input type="number" step="0.01" id="c-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Loan Record</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
+                <h2 class="text-lg font-semibold mb-4">Active Credits & Loans</h2>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Name</th><th class="pb-3 text-right">Amount Owed</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-credit" class="text-sm divide-y"></tbody></table></div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT: SAVINGS -->
+        <div id="tab-savings" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <h2 class="text-lg font-semibold mb-4">Add Savings Goal</h2>
+                <form onsubmit="addEntry(event, 'savings')" class="space-y-4">
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Goal Name</label><input type="text" id="s-desc" required placeholder="e.g., New Laptop" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Current Saved Amount</label><input type="number" step="0.01" id="s-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Savings Goal</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
+                <h2 class="text-lg font-semibold mb-4">Savings Goals</h2>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Goal</th><th class="pb-3 text-right">Saved</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-savings" class="text-sm divide-y"></tbody></table></div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT: LENDED MONEY -->
+        <div id="tab-lended" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <h2 class="text-lg font-semibold mb-4">Track Lended Money</h2>
+                <form onsubmit="addEntry(event, 'lended')" class="space-y-4">
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Borrower Name</label><input type="text" id="l-desc" required placeholder="e.g., John Doe" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount Lended</label><input type="number" step="0.01" id="l-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Lended Record</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
+                <h2 class="text-lg font-semibold mb-4">Money Owed To You</h2>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Borrower</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-lended" class="text-sm divide-y"></tbody></table></div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT: RECURRING & BILLS -->
+        <div id="tab-recurring" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-fit">
+                <h2 class="text-lg font-semibold mb-4">Add Recurring Bill / Tx</h2>
+                <form onsubmit="addEntry(event, 'recurring')" class="space-y-4">
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Bill Name</label><input type="text" id="r-desc" required placeholder="e.g., Netflix / Rent" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Amount</label><input type="number" step="0.01" id="r-amount" required placeholder="0.00" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Frequency</label><select id="r-freq" class="w-full px-3 py-2 border rounded-xl text-sm"><option value="Monthly">Monthly</option><option value="Weekly">Weekly</option><option value="Yearly">Yearly</option></select></div>
+                    <div><label class="block text-xs font-medium text-slate-600 mb-1">Next Due Date</label><input type="date" id="r-date" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Add Bill / Recurring</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 md:col-span-2">
+                <h2 class="text-lg font-semibold mb-4">Upcoming Bills & Recurring Schedules</h2>
+                <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b text-xs font-semibold text-slate-400"><th class="pb-3">Name</th><th class="pb-3">Frequency</th><th class="pb-3">Due Date</th><th class="pb-3 text-right">Amount</th><th class="pb-3 text-center">Action</th></tr></thead><tbody id="list-recurring" class="text-sm divide-y"></tbody></table></div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Data Logic -->
     <script>
-        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        let data = JSON.parse(localStorage.getItem('finance_data_pro')) || {
+            currency: '$',
+            transaction: [],
+            credit: [],
+            savings: [],
+            lended: [],
+            recurring: []
+        };
+
+        function changeCurrency() {
+            data.currency = document.getElementById('currency-select').value;
+            saveAndRefresh();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-indigo-600', 'text-white');
+                el.classList.add('text-slate-600', 'hover:bg-slate-50');
+            });
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('bg-indigo-600', 'text-white');
+            activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+        }
 
         function saveAndRefresh() {
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-            init();
+            localStorage.setItem('finance_data_pro', JSON.stringify(data));
+            initApp();
         }
 
-        function addTransaction(e) {
+        function addEntry(e, type) {
             e.preventDefault();
-            const description = document.getElementById('description').value;
-            const amount = parseFloat(document.getElementById('amount').value);
-            const type = document.getElementById('type').value;
+            let newItem = { id: Date.now() };
+            if (type === 'transaction') {
+                newItem.desc = document.getElementById('t-desc').value;
+                newItem.amount = parseFloat(document.getElementById('t-amount').value);
+                newItem.txType = document.getElementById('t-type').value;
+            } else if (type === 'credit') {
+                newItem.desc = document.getElementById('c-desc').value;
+                newItem.amount = parseFloat(document.getElementById('c-amount').value);
+            } else if (type === 'savings') {
+                newItem.desc = document.getElementById('s-desc').value;
+                newItem.amount = parseFloat(document.getElementById('s-amount').value);
+            } else if (type === 'lended') {
+                newItem.desc = document.getElementById('l-desc').value;
+                newItem.amount = parseFloat(document.getElementById('l-amount').value);
+            } else if (type === 'recurring') {
+                newItem.desc = document.getElementById('r-desc').value;
+                newItem.amount = parseFloat(document.getElementById('r-amount').value);
+                newItem.freq = document.getElementById('r-freq').value;
+                newItem.date = document.getElementById('r-date').value;
+            }
 
-            const newTransaction = {
-                id: Date.now(),
-                description,
-                amount,
-                type
-            };
-
-            transactions.push(newTransaction);
+            data[type].push(newItem);
             saveAndRefresh();
-            document.getElementById('transaction-form').reset();
+            e.target.reset();
         }
 
-        function deleteTransaction(id) {
-            transactions = transactions.filter(t => t.id !== id);
+        function deleteItem(type, id) {
+            data[type] = data[type].filter(item => item.id !== id);
             saveAndRefresh();
         }
 
-        function resetData() {
-            if (confirm("Are you sure you want to clear all transaction history?")) {
-                transactions = [];
+        function resetAllData() {
+            if (confirm("Reset all finance records?")) {
+                data = { currency: '$', transaction: [], credit: [], savings: [], lended: [], recurring: [] };
                 saveAndRefresh();
             }
         }
 
-        function init() {
-            const listEl = document.getElementById('transaction-list');
-            const emptyState = document.getElementById('empty-state');
-            const netBalanceEl = document.getElementById('net-balance');
-            const totalIncomeEl = document.getElementById('total-income');
-            const totalExpenseEl = document.getElementById('total-expense');
+        function initApp() {
+            document.getElementById('currency-select').value = data.currency;
+            const cur = data.currency;
 
-            listEl.innerHTML = '';
+            // Render Lists
+            ['transaction', 'credit', 'savings', 'lended', 'recurring'].forEach(type => {
+                const tbody = document.getElementById('list-' + type);
+                tbody.innerHTML = '';
+                if (data[type].length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400">No records found.</td></tr>`;
+                } else {
+                    data[type].forEach(item => {
+                        let row = document.createElement('tr');
+                        if (type === 'transaction') {
+                            row.innerHTML = `<td class="py-3 font-medium">${item.desc}</td><td class="py-3"><span class="px-2 py-0.5 text-xs rounded-full font-medium ${item.txType === 'income' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">${item.txType}</span></td><td class="py-3 text-right font-semibold ${item.txType === 'income' ? 'text-emerald-600' : ''}">${item.txType === 'income' ? '+' : '-'}${cur}${item.amount.toFixed(2)}</td><td class="py-3 text-center"><button onclick="deleteItem('transaction', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid xmark"></i><i class="fa-solid fa-trash"></i></button></td>`;
+                        } else if (type === 'credit') {
+                            row.innerHTML = `<td class="py-3 font-medium">${item.desc}</td><td class="py-3 text-right font-semibold text-rose-600">${cur}${item.amount.toFixed(2)}</td><td class="py-3 text-center"><button onclick="deleteItem('credit', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
+                        } else if (type === 'savings') {
+                            row.innerHTML = `<td class="py-3 font-medium">${item.desc}</td><td class="py-3 text-right font-semibold text-emerald-600">${cur}${item.amount.toFixed(2)}</td><td class="py-3 text-center"><button onclick="deleteItem('savings', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
+                        } else if (type === 'lended') {
+                            row.innerHTML = `<td class="py-3 font-medium">${item.desc}</td><td class="py-3 text-right font-semibold text-indigo-600">${cur}${item.amount.toFixed(2)}</td><td class="py-3 text-center"><button onclick="deleteItem('lended', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
+                        } else if (type === 'recurring') {
+                            row.innerHTML = `<td class="py-3 font-medium">${item.desc}</td><td class="py-3 text-slate-500">${item.freq}</td><td class="py-3 text-slate-500">${item.date}</td><td class="py-3 text-right font-semibold">${cur}${item.amount.toFixed(2)}</td><td class="py-3 text-center"><button onclick="deleteItem('recurring', ${item.id})" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash"></i></button></td>`;
+                        }
+                        tbody.appendChild(row);
+                    });
+                }
+            });
 
-            let income = 0;
-            let expense = 0;
+            // Calculate Dashboard
+            let totalIncome = data.transaction.filter(t => t.txType === 'income').reduce((acc, t) => acc + t.amount, 0);
+            let totalExpense = data.transaction.filter(t => t.txType === 'expense').reduce((acc, t) => acc + t.amount, 0);
+            let net = totalIncome - totalExpense;
 
-            if (transactions.length === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-                transactions.forEach(t => {
-                    if (t.type === 'income') {
-                        income += t.amount;
-                    } else {
-                        expense += t.amount;
-                    }
-
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="py-3 font-medium text-slate-800">${t.description}</td>
-                        <td class="py-3">
-                            <span class="px-2.5 py-1 text-xs rounded-full font-medium ${t.type === 'income' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">
-                                ${t.type.charAt(0).toUpperCase() + t.type.slice(1)}
-                            </span>
-                        </td>
-                        <td class="py-3 text-right font-semibold ${t.type === 'income' ? 'text-emerald-600' : 'text-slate-800'}">
-                            ${t.type === 'income' ? '+' : '-'}$${t.amount.toFixed(2)}
-                        </td>
-                        <td class="py-3 text-center">
-                            <button onclick="deleteTransaction(${t.id})" class="text-slate-400 hover:text-rose-600 transition">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                        </td>
-                    `;
-                    listEl.appendChild(row);
-                });
-            }
-
-            const net = income - expense;
-            netBalanceEl.textContent = `${net < 0 ? '-' : ''}$${Math.abs(net).toFixed(2)}`;
-            totalIncomeEl.textContent = `+$${income.toFixed(2)}`;
-            totalExpenseEl.textContent = `-$${expense.toFixed(2)}`;
+            document.getElementById('dash-balance').textContent = `${net < 0 ? '-' : ''}${cur}${Math.abs(net).toFixed(2)}`;
+            document.getElementById('dash-income').textContent = `+${cur}${totalIncome.toFixed(2)}`;
+            document.getElementById('dash-expense').textContent = `-${cur}${totalExpense.toFixed(2)}`;
         }
 
-        // Run on load
-        init();
+        initApp();
     </script>
 </body>
 </html>
