@@ -30,7 +30,7 @@
                         <i class="fa-solid fa-pen text-xs"></i>
                     </button>
                 </div>
-                <p id="header-desc" class="text-sm text-slate-500 mt-1">Track your salary, wallets, budget limits, and expenses in one place.</p>
+                <p id="header-desc" class="text-sm text-slate-500 mt-1">Track your salary, wallets, budget limits, and expenses in Philippine Pesos.</p>
             </div>
             <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end flex-wrap">
                 <div class="flex items-center bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2 shadow-sm">
@@ -137,7 +137,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Category</label>
-                        <select id="t-category" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none text-slate-800 cursor-pointer">
+                        <select id="t-category" onchange="handleCategoryChange('t')" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none text-slate-800 cursor-pointer">
                             <option value="Salary">Salary / Sahod</option>
                             <option value="Food">Food & Groceries</option>
                             <option value="Bills">Bills & Utilities</option>
@@ -146,6 +146,10 @@
                             <option value="Entertainment">Entertainment</option>
                             <option value="Other">Other</option>
                         </select>
+                    </div>
+                    <div id="t-custom-category-box" class="hidden">
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Custom Category Name</label>
+                        <input type="text" id="t-custom-category" placeholder="e.g., Pet Expenses, Tuition" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none text-slate-800">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Dawas sa Wallet / Account</label>
@@ -220,7 +224,7 @@
                 <form id="form-budget" onsubmit="saveBudget(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Category</label>
-                        <select id="b-category" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-800 cursor-pointer">
+                        <select id="b-category" onchange="handleCategoryChange('b')" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-800 cursor-pointer">
                             <option value="Food">Food & Groceries</option>
                             <option value="Bills">Bills & Utilities</option>
                             <option value="Transport">Transportation</option>
@@ -228,6 +232,10 @@
                             <option value="Entertainment">Entertainment</option>
                             <option value="Other">Other</option>
                         </select>
+                    </div>
+                    <div id="b-custom-category-box" class="hidden">
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Custom Category Name</label>
+                        <input type="text" id="b-custom-category" placeholder="e.g., Pet Expenses, Tuition" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-800">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Monthly Limit (₱)</label>
@@ -496,6 +504,21 @@
             });
         }
 
+        function handleCategoryChange(prefix) {
+            const select = document.getElementById(`${prefix}-category`);
+            const customBox = document.getElementById(`${prefix}-custom-category-box`);
+            const customInput = document.getElementById(`${prefix}-custom-category`);
+            
+            if (select.value === 'Other') {
+                customBox.classList.remove('hidden');
+                customInput.setAttribute('required', 'true');
+            } else {
+                customBox.classList.add('hidden');
+                customInput.removeAttribute('required');
+                customInput.value = '';
+            }
+        }
+
         function addWallet(e) {
             e.preventDefault();
             const name = document.getElementById('w-name').value.trim();
@@ -518,12 +541,20 @@
 
         function saveBudget(e) {
             e.preventDefault();
-            const cat = document.getElementById('b-category').value;
+            const catSelect = document.getElementById('b-category').value;
+            const customCatInput = document.getElementById('b-custom-category').value.trim();
             const limit = parseFloat(document.getElementById('b-limit').value);
+            
+            let cat = catSelect;
+            if (catSelect === 'Other' && customCatInput) {
+                cat = customCatInput;
+            }
+
             if (isNaN(limit)) return;
 
             db.budgets[cat] = limit;
             document.getElementById('form-budget').reset();
+            document.getElementById('b-custom-category-box').classList.add('hidden');
             saveData();
             renderAll();
         }
@@ -540,9 +571,15 @@
                 const desc = document.getElementById('t-desc').value.trim();
                 const amount = parseFloat(document.getElementById('t-amount').value);
                 const ttype = document.getElementById('t-type').value;
-                const category = document.getElementById('t-category').value;
+                const catSelect = document.getElementById('t-category').value;
+                const customCatInput = document.getElementById('t-custom-category').value.trim();
                 const walletName = document.getElementById('t-wallet').value;
                 const date = document.getElementById('t-date').value;
+
+                let category = catSelect;
+                if (catSelect === 'Other' && customCatInput) {
+                    category = customCatInput;
+                }
 
                 if (!desc || isNaN(amount)) return;
 
@@ -555,6 +592,7 @@
 
                 db.transactions.push({ id: Date.now(), desc, amount, type: ttype, category, wallet: walletName, date });
                 document.getElementById('form-transaction').reset();
+                document.getElementById('t-custom-category-box').classList.add('hidden');
                 document.getElementById('t-date').value = new Date().toISOString().split('T')[0];
             } else if (type === 'credit') {
                 const desc = document.getElementById('c-desc').value.trim();
@@ -820,7 +858,7 @@
                     labels: expLabels.length > 0 ? expLabels : ['No Expenses yet'],
                     datasets: [{
                         data: expData.length > 0 ? expData : [1],
-                        backgroundColor: expData.length > 0 ? ['#ec4899', '#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'] : ['#e2e8f0'],
+                        backgroundColor: expData.length > 0 ? ['#ec4899', '#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4', '#eab308'] : ['#e2e8f0'],
                         borderWidth: 0
                     }]
                 },
