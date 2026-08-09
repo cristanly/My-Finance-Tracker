@@ -25,6 +25,11 @@
                 transform: translateY(0);
             }
         }
+        /* Custom styling para lumitaw ang calendar icon nang maayos sa dark mode */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100" onclick="closeDropdownOutside(event)">
@@ -298,7 +303,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Frequency / Schedule</label>
-                        <select id="r-frequency" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none text-slate-100">
+                        <select id="r-frequency" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-amber-400 focus:outline-none text-slate-100 cursor-pointer">
                             <option value="Monthly">Monthly</option>
                             <option value="Twice a Month">Twice a Month</option>
                             <option value="Weekly">Weekly</option>
@@ -352,7 +357,8 @@
                 }
             }
             document.getElementById('currency-select').value = db.currency || "$";
-            // Default date for lended form to today if empty
+            
+            // Default date para sa lended form na naka-set ngayon
             const today = new Date().toISOString().split('T')[0];
             const lDateEl = document.getElementById('l-date');
             if(lDateEl) lDateEl.value = today;
