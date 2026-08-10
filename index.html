@@ -132,30 +132,7 @@
     <label class="block text-xs font-medium text-slate-500 mb-2">Type</label>
 
     <!-- Hidden input stores the selected transaction type -->
-    <input type="hidden" id="t-type" value="income">
-
-    <div class="grid grid-cols-2 gap-3">
-        <button
-            type="button"
-            id="btn-income"
-            onclick="selectTransactionType('income')"
-            class="py-2.5 rounded-xl text-sm font-semibold transition bg-emerald-500 text-white shadow-sm"
-        >
-            <i class="fa-solid fa-arrow-trend-up mr-1.5"></i>
-            Income
-        </button>
-
-        <button
-            type="button"
-            id="btn-expense"
-            onclick="selectTransactionType('expense')"
-            class="py-2.5 rounded-xl text-sm font-semibold transition bg-slate-100 text-slate-500 border border-slate-200 hover:bg-pink-50 hover:text-pink-500"
-        >
-            <i class="fa-solid fa-arrow-trend-down mr-1.5"></i>
-            Expense
-        </button>
-    </div>
-</div>
+    
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Category</label>
                         <select id="t-category" onchange="handleCategoryChange('t')" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none text-slate-800 cursor-pointer">
@@ -474,69 +451,27 @@
 
     <script>
 
-    function selectTransactionType(type) {
-        const transactionType = document.getElementById('t-type');
-        const incomeBtn = document.getElementById('btn-income');
-        const expenseBtn = document.getElementById('btn-expense');
+   function selectTransactionType(type) {
+    const transactionType = document.getElementById('t-type');
+    const incomeBtn = document.getElementById('btn-income');
+    const expenseBtn = document.getElementById('btn-expense');
 
-        transactionType.value = type;
+    transactionType.value = type;
 
-        incomeBtn.classList.remove(
-            'bg-emerald-500',
-            'text-white',
-            'shadow-sm'
-        );
+    if (type === 'income') {
+        incomeBtn.className =
+            "py-2.5 rounded-xl text-sm font-semibold transition bg-emerald-500 text-white shadow-sm border border-transparent";
 
-        incomeBtn.classList.add(
-            'bg-slate-100',
-            'text-slate-500',
-            'border',
-            'border-slate-200'
-        );
+        expenseBtn.className =
+            "py-2.5 rounded-xl text-sm font-semibold transition bg-slate-100 text-slate-500 border border-slate-200 hover:bg-pink-50 hover:text-pink-500";
+    } else {
+        incomeBtn.className =
+            "py-2.5 rounded-xl text-sm font-semibold transition bg-slate-100 text-slate-500 border border-slate-200 hover:bg-emerald-50 hover:text-emerald-600";
 
-        expenseBtn.classList.remove(
-            'bg-pink-500',
-            'text-white',
-            'shadow-sm'
-        );
-
-        expenseBtn.classList.add(
-            'bg-slate-100',
-            'text-slate-500',
-            'border',
-            'border-slate-200'
-        );
-
-        if (type === 'income') {
-            incomeBtn.classList.remove(
-                'bg-slate-100',
-                'text-slate-500',
-                'border',
-                'border-slate-200'
-            );
-
-            incomeBtn.classList.add(
-                'bg-emerald-500',
-                'text-white',
-                'shadow-sm'
-            );
-        }
-
-        if (type === 'expense') {
-            expenseBtn.classList.remove(
-                'bg-slate-100',
-                'text-slate-500',
-                'border',
-                'border-slate-200'
-            );
-
-            expenseBtn.classList.add(
-                'bg-pink-500',
-                'text-white',
-                'shadow-sm'
-            );
-        }
+        expenseBtn.className =
+            "py-2.5 rounded-xl text-sm font-semibold transition bg-pink-500 text-white shadow-sm border border-transparent";
     }
+}
 
     let db = {
         username: "User",
