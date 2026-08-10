@@ -18,7 +18,7 @@
         input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800" onclick="closeAllDropdowns(event)">
+<body class="bg-slate-50 text-slate-800">
 
     <div class="max-w-7xl mx-auto px-4 py-8">
         <!-- App Header -->
@@ -26,7 +26,7 @@
             <div>
                 <div class="flex items-center gap-3">
                     <h1 id="welcome-title" class="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Hi, User! 👋</h1>
-                    <button onclick="editUsername()" id="edit-name-btn" class="w-9 h-9 flex items-center justify-center text-cyan-600 hover:text-cyan-700 bg-cyan-50 hover:bg-cyan-100 rounded-xl transition shadow-sm border border-cyan-100" title="Edit Name">
+                    <button type="button" onclick="editUsername()" id="edit-name-btn" class="w-9 h-9 flex items-center justify-center text-cyan-600 hover:text-cyan-700 bg-cyan-50 hover:bg-cyan-100 rounded-xl transition shadow-sm border border-cyan-100" title="Edit Name">
                         <i class="fa-solid fa-pen text-xs"></i>
                     </button>
                 </div>
@@ -37,12 +37,12 @@
                     <span class="text-xs font-semibold text-emerald-700"><i class="fa-solid fa-peso-sign mr-1"></i> Currency: Philippine Peso (₱)</span>
                 </div>
                 <div class="relative">
-                    <button onclick="toggleSettingsDropdown(event)" id="gear-btn" class="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition border border-slate-200 shadow-sm" title="Settings & Backup">
+                    <button type="button" onclick="toggleSettingsDropdown(event)" id="gear-btn" class="w-10 h-10 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition border border-slate-200 shadow-sm" title="Settings & Backup">
                         <i class="fa-solid fa-gear"></i>
                     </button>
                     <div id="settings-dropdown" class="hidden absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 z-50">
                         <div class="px-4 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Data Management</div>
-                        <button onclick="exportData()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-600 hover:bg-cyan-50 hover:text-cyan-600 transition flex items-center gap-2">
+                        <button type="button" onclick="exportData()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-600 hover:bg-cyan-50 hover:text-cyan-600 transition flex items-center gap-2">
                             <i class="fa-solid fa-download w-4 text-cyan-500"></i> Export Backup
                         </button>
                         <label class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 transition flex items-center gap-2 cursor-pointer">
@@ -50,7 +50,7 @@
                             <input type="file" id="import-file" accept=".json" onchange="importData(event)" class="hidden">
                         </label>
                         <div class="h-px bg-slate-100 my-1"></div>
-                        <button onclick="resetAllData()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-pink-600 hover:bg-pink-50 transition flex items-center gap-2">
+                        <button type="button" onclick="resetAllData()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-pink-600 hover:bg-pink-50 transition flex items-center gap-2">
                             <i class="fa-solid fa-trash-can w-4 text-pink-500"></i> Reset Data
                         </button>
                     </div>
@@ -60,63 +60,17 @@
 
         <!-- Navigation Tabs -->
         <div id="nav-container" class="flex overflow-x-auto space-x-2 bg-white p-2 rounded-2xl shadow-sm border border-slate-200/80 mb-8">
-            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-chart-pie mr-1.5"></i> Dashboard</button>
-            <button onclick="switchTab('transactions')" id="btn-transactions" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-wallet mr-1.5"></i> Transactions</button>
-            <button onclick="switchTab('wallets')" id="btn-wallets" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-credit-card mr-1.5"></i> Accounts</button>
-            <button onclick="switchTab('budgets')" id="btn-budgets" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-bullseye mr-1.5"></i> Budget Limits</button>
-            <button onclick="switchTab('credit')" id="btn-credit" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-file-invoice-dollar mr-1.5"></i> Loans</button>
-            <button onclick="switchTab('savings')" id="btn-savings" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-piggy-bank mr-1.5"></i> Savings Goals</button>
-            <button onclick="switchTab('recurring')" id="btn-recurring" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-receipt mr-1.5"></i> Recurring Bills</button>
-        </div>
-
-        <!-- TAB CONTENT: DASHBOARD -->
-        <div id="tab-dashboard" class="space-y-6 tab-content">
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 hover:border-cyan-400 transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Net Balance</p>
-                    <h2 id="dash-balance" class="text-lg font-bold text-cyan-600 mt-2 truncate whitespace-nowrap">₱0.00</h2>
-                </div>
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 hover:border-emerald-400 transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Income</p>
-                    <h2 id="dash-income" class="text-lg font-bold text-emerald-600 mt-2 truncate whitespace-nowrap">+₱0.00</h2>
-                </div>
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 hover:border-pink-400 transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Expenses</p>
-                    <h2 id="dash-expense" class="text-lg font-bold text-pink-500 mt-2 truncate whitespace-nowrap">-₱0.00</h2>
-                </div>
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 hover:border-teal-400 transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Savings</p>
-                    <h2 id="dash-savings" class="text-lg font-bold text-teal-600 mt-2 truncate whitespace-nowrap">₱0.00</h2>
-                </div>
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 hover:border-violet-400 transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Wallets Total</p>
-                    <h2 id="dash-wallets" class="text-lg font-bold text-violet-600 mt-2 truncate whitespace-nowrap">₱0.00</h2>
-                </div>
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 hover:border-amber-400 transition-all flex flex-col justify-between">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Upcoming Bills</p>
-                    <h2 id="dash-recurring" class="text-lg font-bold text-amber-600 mt-2 truncate whitespace-nowrap">₱0.00</h2>
-                </div>
-            </div>
-
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col items-center">
-                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-pie mr-2 text-pink-500"></i> Expenses by Category</h3>
-                    <div class="relative w-full h-48 flex justify-center items-center">
-                        <canvas id="expenseChart"></canvas>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col items-center">
-                    <h3 class="text-sm font-semibold text-slate-700 w-full mb-4 text-left"><i class="fa-solid fa-chart-column mr-2 text-cyan-600"></i> Overall Financial Breakdown</h3>
-                    <div class="relative w-full h-48 flex justify-center items-center">
-                        <canvas id="summaryChart"></canvas>
-                    </div>
-                </div>
-            </div>
+            <button type="button" onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-chart-pie mr-1.5"></i> Dashboard</button>
+            <button type="button" onclick="switchTab('transactions')" id="btn-transactions" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-wallet mr-1.5"></i> Transactions</button>
+            <button type="button" onclick="switchTab('wallets')" id="btn-wallets" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-credit-card mr-1.5"></i> Accounts</button>
+            <button type="button" onclick="switchTab('budgets')" id="btn-budgets" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-bullseye mr-1.5"></i> Budget Limits</button>
+            <button type="button" onclick="switchTab('credit')" id="btn-credit" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-file-invoice-dollar mr-1.5"></i> Loans</button>
+            <button type="button" onclick="switchTab('savings')" id="btn-savings" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-piggy-bank mr-1.5"></i> Savings Goals</button>
+            <button type="button" onclick="switchTab('recurring')" id="btn-recurring" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap"><i class="fa-solid fa-receipt mr-1.5"></i> Recurring Bills</button>
         </div>
 
         <!-- TAB CONTENT: TRANSACTIONS -->
-        <div id="tab-transactions" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div id="tab-transactions" class="tab-content grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 h-fit">
                 <h2 class="text-lg font-semibold mb-4 text-emerald-600">Add Transaction</h2>
                 <form id="form-transaction" onsubmit="addEntry(event, 'transaction')" class="space-y-4">
@@ -133,10 +87,10 @@
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Type</label>
                         <div class="grid grid-cols-2 gap-2">
-                            <button type="button" onclick="setTransactionType('income')" id="btn-type-income" class="py-2 px-3 rounded-xl text-xs font-bold transition border border-emerald-300 bg-emerald-500 text-white shadow-sm">
+                            <button type="button" id="btn-type-income" class="py-2 px-3 rounded-xl text-xs font-bold transition border border-emerald-300 bg-emerald-500 text-white shadow-sm">
                                 <i class="fa-solid fa-arrow-down-long mr-1"></i> Income
                             </button>
-                            <button type="button" onclick="setTransactionType('expense')" id="btn-type-expense" class="py-2 px-3 rounded-xl text-xs font-bold transition border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100">
+                            <button type="button" id="btn-type-expense" class="py-2 px-3 rounded-xl text-xs font-bold transition border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100">
                                 <i class="fa-solid fa-arrow-up-long mr-1"></i> Expense
                             </button>
                         </div>
@@ -155,255 +109,17 @@
                             <option value="Other">Other</option>
                         </select>
                     </div>
-                    <div id="t-custom-category-box" class="hidden">
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Custom Category Name</label>
-                        <input type="text" id="t-custom-category" placeholder="e.g., Pet Expenses, Tuition" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none text-slate-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Dawas sa Wallet / Account</label>
-                        <select id="t-wallet" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none text-slate-800 cursor-pointer">
-                            <!-- Populated dynamically -->
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Date</label>
-                        <input type="date" id="t-date" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none text-slate-800 cursor-pointer">
-                    </div>
                     <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Add Transaction</button>
                 </form>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 md:col-span-2">
-                <h2 class="text-lg font-semibold mb-4 text-slate-800">Transaction History</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left min-w-[600px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 text-xs font-semibold text-slate-400">
-                                <th class="pb-3 w-3/12">Description</th>
-                                <th class="pb-3 w-2/12">Category</th>
-                                <th class="pb-3 w-2/12">Wallet</th>
-                                <th class="pb-3 w-2/12">Date</th>
-                                <th class="pb-3 w-2/12 text-right">Amount</th>
-                                <th class="pb-3 w-1/12 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="list-transaction" class="text-sm divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB CONTENT: ACCOUNTS / WALLETS -->
-        <div id="tab-wallets" class="tab-content hidden space-y-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Accounts</h2>
-                    <p class="text-sm text-slate-500 mt-1">See every account at a glance before drilling into transactions.</p>
-                </div>
-                <button onclick="toggleAddAccountModal()" class="bg-teal-900 hover:bg-teal-950 text-white font-semibold px-5 py-2.5 rounded-full text-sm transition shadow-sm flex items-center gap-2">
-                    <i class="fa-solid fa-plus text-xs"></i> Add Account
-                </button>
-            </div>
-
-            <div class="space-y-1">
-                <div class="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    <span>Combined Net Worth</span>
-                    <button onclick="toggleMaskNetWorth()" class="text-slate-400 hover:text-slate-600 transition" title="Toggle visibility">
-                        <i id="eye-icon" class="fa-solid fa-eye text-xs"></i>
-                    </button>
-                </div>
-                <h3 id="combined-net-worth" class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">₱0.00</h3>
-            </div>
-
-            <div class="space-y-4 pt-2">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-slate-900"></span>
-                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Cash & Cash Equivalents</h4>
-                    </div>
-                    <span id="cash-group-total" class="text-xs font-bold text-cyan-800">₱0.00</span>
-                </div>
-                <div id="list-wallets" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"></div>
-            </div>
-
-            <!-- Add Wallet Modal Drawer -->
-            <div id="add-wallet-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                <div class="bg-white p-6 rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full relative animate-fadeInSlide">
-                    <button onclick="toggleAddAccountModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-                    <h3 class="text-lg font-bold text-slate-900 mb-4">Add New Account</h3>
-                    <form id="form-wallet" onsubmit="addWallet(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500 mb-1">Account Name</label>
-                            <input type="text" id="w-name" required placeholder="e.g., Gcash, Maribank, Gotyme" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500 mb-1">Initial Balance (₱)</label>
-                            <input type="text" id="w-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500 mb-1">Option A: Upload Custom Image</label>
-                            <input type="file" id="w-image" accept="image/*" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 cursor-pointer">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500 mb-1">Option B: Or Select an Emoji Icon</label>
-                            <input type="text" id="w-emoji" placeholder="e.g., 💳, 🏦, 💵" maxlength="5" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-800">
-                        </div>
-                        <p class="text-[11px] text-slate-400 italic">* Kung walang piliin, awtomatikong ide-detect online ang logo batay sa Account Name.</p>
-                        <button type="submit" class="w-full bg-teal-900 hover:bg-teal-950 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Save Account</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Edit Wallet Modal Drawer -->
-            <div id="edit-wallet-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                <div class="bg-white p-6 rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full relative animate-fadeInSlide">
-                    <button onclick="closeEditWalletModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-                    <h3 class="text-lg font-bold text-slate-900 mb-4">Edit Account</h3>
-                    <form id="form-edit-wallet" onsubmit="saveEditWallet(event)" class="space-y-4">
-                        <input type="hidden" id="edit-w-id">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500 mb-1">Account Name</label>
-                            <input type="text" id="edit-w-name" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500 mb-1">Upload New Custom Image (Optional)</label>
-                            <input type="file" id="edit-w-image" accept="image/*" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 cursor-pointer">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-500 mb-1">Or Update Emoji Icon (Optional)</label>
-                            <input type="text" id="edit-w-emoji" placeholder="e.g., 💳, 🏦, 💵" maxlength="5" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-500 focus:outline-none text-slate-800">
-                        </div>
-                        <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Update Account</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB CONTENT: BUDGET LIMITS -->
-        <div id="tab-budgets" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 h-fit">
-                <h2 class="text-lg font-semibold mb-4 text-cyan-600">Set Category Budget</h2>
-                <form id="form-budget" onsubmit="saveBudget(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Category</label>
-                        <select id="b-category" onchange="handleCategoryChange('b')" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-800 cursor-pointer">
-                            <option value="Food">Food & Groceries</option>
-                            <option value="Bills">Bills & Utilities</option>
-                            <option value="Transport">Transportation</option>
-                            <option value="Shopping">Shopping & Wants</option>
-                            <option value="Entertainment">Entertainment</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div id="b-custom-category-box" class="hidden">
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Custom Category Name</label>
-                        <input type="text" id="b-custom-category" placeholder="e.g., Pet Expenses, Tuition" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Monthly Limit (₱)</label>
-                        <input type="text" id="b-limit" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-cyan-400 focus:outline-none text-slate-800">
-                    </div>
-                    <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Save Budget Limit</button>
-                </form>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 md:col-span-2">
-                <h2 class="text-lg font-semibold mb-4 text-slate-800">Monthly Budget Limits & Spending</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left min-w-[500px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 text-xs font-semibold text-slate-400">
-                                <th class="pb-3 w-5/12">Category</th>
-                                <th class="pb-3 w-5/12 text-right">Spent / Limit</th>
-                                <th class="pb-3 w-1/12 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="list-budgets" class="text-sm divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB CONTENT: CREDIT & LOANS -->
-        <div id="tab-credit" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 h-fit">
-                <h2 class="text-lg font-semibold mb-4 text-pink-500">Add Loan Record</h2>
-                <form id="form-credit" onsubmit="addEntry(event, 'credit')" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Loan Name / Lender</label>
-                        <input type="text" id="c-desc" required placeholder="e.g., SSS Loan, Utang" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-400 focus:outline-none text-slate-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Total Owed Amount (₱)</label>
-                        <input type="text" id="c-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-400 focus:outline-none text-slate-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Date</label>
-                        <input type="date" id="c-date" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-pink-400 focus:outline-none text-slate-800 cursor-pointer">
-                    </div>
-                    <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Add Loan</button>
-                </form>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 md:col-span-2">
-                <h2 class="text-lg font-semibold mb-4 text-slate-800">Active Loans</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left min-w-[500px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 text-xs font-semibold text-slate-400">
-                                <th class="pb-3 w-4/12">Name</th>
-                                <th class="pb-3 w-3/12">Date</th>
-                                <th class="pb-3 w-4/12 text-right">Amount Owed</th>
-                                <th class="pb-3 w-1/12 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="list-credit" class="text-sm divide-y divide-slate-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB CONTENT: SAVINGS -->
-        <div id="tab-savings" class="tab-content hidden grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 h-fit">
-                <h2 class="text-lg font-semibold mb-4 text-teal-600">Add Savings Goal</h2>
-                <form id="form-savings" onsubmit="addEntry(event, 'savings')" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Goal Name</label>
-                        <input type="text" id="s-desc" required placeholder="e.g., Emergency Fund" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 focus:outline-none text-slate-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Target Amount (₱)</label>
-                        <input type="text" id="s-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 focus:outline-none text-slate-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Date Created</label>
-                        <input type="date" id="s-date" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-400 focus:outline-none text-slate-800 cursor-pointer">
-                    </div>
-                    <button type="submit" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Add Goal</button>
-                </form>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 md:col-span-2">
-                <h2 class="text-lg font-semibold mb-4 text-slate-800">Savings Goals Progress</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left min-w-[550px]">
-                        <thead>
-                            <tr class="border-b border-slate-100 text-xs font-semibold text-slate-400">
-                                <th class="pb-3 w-4/12">Goal</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT FUNCTION PARA SA BUTTONS -->
+    <!-- SCRIPT PARA SA BUTTONS NA SIGURADONG GAGANA -->
     <script>
         function setTransactionType(type) {
             const inputType = document.getElementById('t-type');
-            if(inputType) inputType.value = type;
+            if (inputType) inputType.value = type;
 
             const btnIncome = document.getElementById('btn-type-income');
             const btnExpense = document.getElementById('btn-type-expense');
@@ -418,6 +134,19 @@
                 btnIncome.className = "py-2 px-3 rounded-xl text-xs font-bold transition border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100";
             }
         }
+
+        // Event listeners para siguradong gagana kahit i-click
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnIncome = document.getElementById('btn-type-income');
+            const btnExpense = document.getElementById('btn-type-expense');
+
+            if (btnIncome) {
+                btnIncome.addEventListener('click', () => setTransactionType('income'));
+            }
+            if (btnExpense) {
+                btnExpense.addEventListener('click', () => setTransactionType('expense'));
+            }
+        });
     </script>
 </body>
 </html>
