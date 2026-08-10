@@ -129,7 +129,7 @@
                         <input type="text" id="t-amount" required placeholder="0.00" oninput="formatInputAmount(this)" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none text-slate-800">
                     </div>
                     
-                    <!-- PINALITANG BUTTONS PARA SA TYPE -->
+                    <!-- INCOME & EXPENSE BUTTONS -->
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Type</label>
                         <div class="grid grid-cols-2 gap-2">
@@ -399,14 +399,16 @@
         </div>
     </div>
 
-    <!-- SCRIPT PARA SA BUTTON TYPE AT IBA PA -->
+    <!-- JAVASCRIPT FUNCTION PARA SA BUTTONS -->
     <script>
         function setTransactionType(type) {
             const inputType = document.getElementById('t-type');
-            inputType.value = type;
+            if(inputType) inputType.value = type;
 
             const btnIncome = document.getElementById('btn-type-income');
             const btnExpense = document.getElementById('btn-type-expense');
+
+            if (!btnIncome || !btnExpense) return;
 
             if (type === 'income') {
                 btnIncome.className = "py-2 px-3 rounded-xl text-xs font-bold transition border border-emerald-300 bg-emerald-500 text-white shadow-sm";
